@@ -1,5 +1,13 @@
-<h1>Bienvenido a mi app</h1>
 
-<app-registro></app-registro>
-<app-listado-usuarios></app-listado-usuarios>
-<app-consultas></app-consultas>
+<!-- Botones para cambiar de sección -->
+<button (click)="mostrarSeccion('registro')">Registro</button>
+<button (click)="mostrarSeccion('listado')">Listado de Usuarios</button>
+<button (click)="mostrarSeccion('consultas')">Consultas</button>
+
+<!-- Mostrar componente según la selección -->
+<app-registro *ngIf="seccionActual === 'registro'"></app-registro>
+<app-listado-usuarios *ngIf="seccionActual === 'listado'"></app-listado-usuarios>
+<app-consultas *ngIf="seccionActual === 'consultas'"></app-consultas>
+
+
+
