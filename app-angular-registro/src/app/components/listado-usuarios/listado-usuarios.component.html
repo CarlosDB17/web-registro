@@ -21,10 +21,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of usuarios">
-          <td><input [(ngModel)]="user.nombre" (change)="actualizarUsuario(user)"></td>
-          <td><input [(ngModel)]="user.email" (change)="actualizarUsuario(user)"></td>
+          <td><input [(ngModel)]="user.nombre"></td>
+          <td><input [(ngModel)]="user.email"></td>
           <td>{{ user.dni }}</td>
-          <td><input [(ngModel)]="user.fecha_nacimiento" (change)="actualizarUsuario(user)"></td>
+          <td><input [(ngModel)]="user.fecha_nacimiento"></td>
           <td>
             <button (click)="actualizarUsuario(user)">Actualizar</button>
             <button (click)="eliminarUsuario(user.dni)">Eliminar</button>
@@ -33,4 +33,3 @@
       </tbody>
     </table>
   </div>
-  
