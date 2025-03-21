@@ -1,1 +1,53 @@
-<p>consultas works!</p>
+<div class="listado-container">
+    <h2>Consulta de Usuarios</h2>
+  
+    <form (ngSubmit)="buscar()">
+      <select [(ngModel)]="tipoBusqueda" name="tipoBusqueda">
+        <option value="dni">Buscar por DNI</option>
+        <option value="nombre">Buscar por Nombre</option>
+        <option value="email">Buscar por Email</option>
+      </select>
+      
+      <input 
+        type="text" 
+        [(ngModel)]="terminoBusqueda" 
+        name="terminoBusqueda" 
+        placeholder="Introduce el término de búsqueda..."
+        [attr.aria-label]="'Buscar por ' + tipoBusqueda"
+      >
+      
+      <button type="submit">Buscar</button>
+      <button type="button" (click)="limpiarResultados()">Limpiar</button>
+    </form>
+  
+    <div *ngIf="mensajeError" class="error-message">
+      {{ mensajeError }}
+    </div>
+  
+    <div *ngIf="buscando" class="loading">
+      Buscando usuarios...
+    </div>
+  
+    <div *ngIf="usuarios.length > 0" class="results-container">
+      <h3>Resultados ({{ usuarios.length }} encontrados)</h3>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Fecha de Nacimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios">
+            <td>{{ usuario.dni }}</td>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ formatearFecha(usuario.fecha_nacimiento) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

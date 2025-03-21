@@ -1,3 +1,4 @@
+// usuarios.service.ts (updated)
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -36,5 +37,20 @@ export class UsuariosService {
   // Eliminar usuario
   eliminarUsuario(dni: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${dni}`);
+  }
+
+  // Buscar usuario por DNI
+  buscarPorDNI(dni: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.API_URL}/${dni}`);
+  }
+
+  // Buscar usuario por nombre
+  buscarPorNombre(nombre: string): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${this.API_URL}/nombre/${nombre}`);
+  }
+
+  // Buscar usuario por email
+  buscarPorEmail(email: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.API_URL}/email/${email}`);
   }
 }
