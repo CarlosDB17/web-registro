@@ -95,6 +95,13 @@ export class ConsultasComponent implements OnInit {
     this.terminoBusqueda = '';
   }
 
+  limpiarTerminoBusqueda() {
+    this.terminoBusqueda = '';
+    this.usuarios = [];
+    this.mensajeError = '';
+  }
+  
+
   formatearFecha(fecha: string): string {
     if (!fecha) return 'N/A';
     

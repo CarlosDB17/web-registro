@@ -2,7 +2,7 @@
     <h2>Consulta de Usuarios</h2>
   
     <form (ngSubmit)="buscar()">
-      <select [(ngModel)]="tipoBusqueda" name="tipoBusqueda">
+      <select [(ngModel)]="tipoBusqueda" name="tipoBusqueda" (change)="limpiarTerminoBusqueda()">
         <option value="dni">Buscar por DNI</option>
         <option value="nombre">Buscar por Nombre</option>
         <option value="email">Buscar por Email</option>

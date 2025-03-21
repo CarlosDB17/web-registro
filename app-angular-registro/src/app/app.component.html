@@ -1,13 +1,16 @@
-
-<!-- Botones para cambiar de sección -->
-<button (click)="mostrarSeccion('registro')">Registro</button>
-<button (click)="mostrarSeccion('listado')">Listado de Usuarios</button>
-<button (click)="mostrarSeccion('consultas')">Consultas</button>
-
-<!-- Mostrar componente según la selección -->
-<app-registro *ngIf="seccionActual === 'registro'"></app-registro>
-<app-listado-usuarios *ngIf="seccionActual === 'listado'"></app-listado-usuarios>
-<app-consultas *ngIf="seccionActual === 'consultas'"></app-consultas>
-
-
-
+<div class="container">
+    <div class="header-container">
+      <h2>Web de Registro Carlos DB</h2>
+      <div class="navigation-buttons">
+        <button (click)="mostrarSeccion('registro')" [class.active]="seccionActual === 'registro'">Registro</button>
+        <button (click)="mostrarSeccion('listado')" [class.active]="seccionActual === 'listado'">Listado de Usuarios</button>
+        <button (click)="mostrarSeccion('consultas')" [class.active]="seccionActual === 'consultas'">Consultas</button>
+      </div>
+    </div>
+  
+    <div class="content-container">
+      <app-registro *ngIf="seccionActual === 'registro'"></app-registro>
+      <app-listado-usuarios *ngIf="seccionActual === 'listado'"></app-listado-usuarios>
+      <app-consultas *ngIf="seccionActual === 'consultas'"></app-consultas>
+    </div>
+  </div>
