@@ -1,18 +1,18 @@
 <div class="registro-container">
-  <form (ngSubmit)="registrarUsuario()" class="registro-form" #form="ngForm">
+  <form [class.shake]="error" (ngSubmit)="registrarUsuario()" class="registro-form" #form="ngForm">
     <h2>Registro</h2>
     
     <label for="nombre">Nombre</label>
-    <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" required>
+    <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" required  placeholder="Carlos">
     
     <label for="email">Email</label>
-    <input type="email" id="email" [(ngModel)]="email" name="email" required>
+    <input type="email" id="email" [(ngModel)]="email" name="email" required placeholder="carlos@gmail.com">
     
     <label for="dni">DNI</label>
-    <input type="text" id="dni" [(ngModel)]="dni" name="dni" required>
+    <input type="text" id="dni" [(ngModel)]="dni" name="dni" required placeholder="80696069V">
     
     <label for="fechaNacimiento">Fecha de Nacimiento</label>
-    <input type="date" id="fechaNacimiento" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+    <input type="date" id="fechaNacimiento" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required placeholder="dd/mm/aaaa" value="2001-04-17">
     
     <button type="submit" [disabled]="cargando">
       {{ cargando ? 'Registrando...' : 'Registrarse' }}
