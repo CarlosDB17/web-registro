@@ -9,6 +9,13 @@
       <button type="submit">Registrar</button>
     </form>
   
+    <div *ngIf="mensaje"  class="alert alert-success">
+      {{ mensaje }}
+    </div>
+    <div *ngIf="error" style="color: red;" class="alert alert-danger">
+      {{ error }}
+    </div>
+
     <table>
       <thead>
         <tr>

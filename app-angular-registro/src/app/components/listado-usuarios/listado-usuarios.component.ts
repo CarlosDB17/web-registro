@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UsuariosService } from "../../services/usuarios.service";
 
 interface Usuario {
+  mensaje: string;
   usuario: any;
   nombre: string;
   email: string;
@@ -19,64 +20,113 @@ interface Usuario {
   styleUrls: ['./listado-usuarios.component.scss']
 })
 export class ListadoUsuariosComponent implements OnInit {
-  usuarios: Usuario[] = [];
+  usuarios: Usuario[] = []; // lista de usuarios
+  mensaje: string = ''; // mensaje de exito
+  error: string = ''; // mensaje de error
 
   constructor(private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
+    // se ejecuta al inicializar el componente y carga los usuarios
     this.cargarUsuarios();
   }
 
   cargarUsuarios(): void {
+    // obtiene la lista de usuarios desde el servicio
     this.usuariosService.obtenerUsuarios().subscribe(
-      (data) => this.usuarios = data,
-      (error) => console.error('error al obtener usuarios', error)
+      (data) => {
+        this.usuarios = data; // asigna los usuarios obtenidos
+        this.mensaje = 'usuarios cargados correctamente';
+        this.error = '';
+      },
+      (error) => {
+        console.error('error al obtener usuarios', error);
+        this.error = error.error?.detail ?? 'error al cargar usuarios';
+        this.mensaje = '';
+      }
     );
   }
 
   registrarUsuario(form: any): void {
+    // registra un nuevo usuario con los datos del formulario
     const userData: Usuario = form.value;
     this.usuariosService.registrarUsuario(userData).subscribe(
       (response) => {
-        console.log('usuario registrado:', response); // verifica que datos devuelve el backend
-        const nuevoUsuario = response.usuario; // extrae el objeto usuario de la respuesta
-        this.usuarios.push(nuevoUsuario); // añade el usuario al arreglo
-        alert('usuario registrado correctamente'); // alerta de exito
-        form.reset(); // limpia el formulario despues de registrar
+        console.log('usuario registrado:', response);
+        const nuevoUsuario = response.usuario; // obtiene el usuario registrado
+        this.usuarios.push(nuevoUsuario); // agrega el nuevo usuario a la lista
+        this.mensaje = response?.mensaje ?? 'usuario registrado correctamente';
+        this.error = '';
+        form.reset(); // limpia el formulario
       },
       (error) => {
         console.error('error al registrar usuario', error);
-        alert('error al registrar usuario'); // alerta de error
+        this.error = error.error?.detail ?? 'error al registrar usuario';
+        this.mensaje = '';
       }
     );
   }
 
   actualizarUsuario(usuario: Usuario): void {
-    this.usuariosService.actualizarUsuario(usuario.dni, usuario).subscribe(
-      () => {
-        const index = this.usuarios.findIndex(u => u.dni === usuario.dni);
-        if (index !== -1) {
-          this.usuarios[index] = usuario; // actualiza el usuario en el arreglo
+    // actualiza un usuario existente enviando solo los cambios detectados
+    this.usuariosService.buscarPorDNI(usuario.dni).subscribe(
+      (usuarioOriginal) => {
+        // detecta los cambios comparando con el usuario original
+        const cambios: Partial<Usuario> = {};
+        Object.keys(usuario).forEach((key) => {
+          const k = key as keyof Usuario;
+          if (usuario[k] !== usuarioOriginal[k]) {
+            cambios[k] = usuario[k];
+          }
+        });
+  
+        // si no hay cambios, no realiza la peticion
+        if (Object.keys(cambios).length === 0) {
+          this.mensaje = '';
+          this.error = 'no se han realizado cambios.';
+          return;
         }
-        console.log('usuario actualizado');
-        alert('usuario actualizado correctamente'); // alerta de exito
+  
+        // envia los cambios al servicio para actualizar el usuario
+        this.usuariosService.actualizarUsuario(usuario.dni, cambios).subscribe(
+          (response) => {
+            // actualiza la lista local con los cambios realizados
+            const index = this.usuarios.findIndex(u => u.dni === usuario.dni);
+            if (index !== -1) {
+              this.usuarios[index] = { ...this.usuarios[index], ...cambios };
+            }
+            console.log('usuario actualizado correctamente');
+            this.mensaje = response?.mensaje ?? 'usuario actualizado correctamente';
+            this.error = '';
+          },
+          (error) => {
+            console.error('error al actualizar usuario', error);
+            this.mensaje = '';
+            this.error = error.error?.detail ?? 'error al actualizar usuario';
+          }
+        );
       },
       (error) => {
-        console.error('error al actualizar usuario', error);
-        alert('error al actualizar usuario'); // alerta de error
+        console.error('error al obtener el usuario original', error);
+        this.mensaje = '';
+        this.error = error.error?.detail ?? 'error al obtener el usuario original';
       }
     );
   }
-
+  
   eliminarUsuario(dni: string): void {
+    // elimina un usuario por su dni
     this.usuariosService.eliminarUsuario(dni).subscribe(
       () => {
+        // elimina el usuario de la lista local
         this.usuarios = this.usuarios.filter(user => user.dni !== dni);
-        alert('usuario eliminado correctamente'); // alerta de exito
+        this.mensaje = 'usuario eliminado correctamente';
+        this.error = '';
       },
       (error) => {
         console.error('error al eliminar usuario', error);
-        alert('error al eliminar usuario'); // alerta de error
+        this.error = error.error?.detail ?? 'error al eliminar usuario';
+        this.mensaje = '';
       }
     );
   }

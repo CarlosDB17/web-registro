@@ -38,19 +38,21 @@ export class RegistroComponent {
       nombre: this.nombre,
       email: this.email,
       dni: this.dni,
-      fecha_nacimiento: this.fechaNacimiento
+      fecha_nacimiento: this.fechaNacimiento,
+      mensaje: '' 
     };
 
     this.usuariosService.registrarUsuario(usuario).subscribe({
       next: (respuesta) => {
         console.log('Usuario registrado:', respuesta);
-        this.mensaje = 'Usuario registrado correctamente';
+        this.mensaje = (respuesta as any)?.mensaje || 'Usuario registrado correctamente'; // Mostrar mensaje de éxito de la API
         this.limpiarFormulario();
         this.cargando = false;
       },
       error: (err) => {
         console.error('Error al registrar:', err);
-        this.error = err.error?.message || 'Error al registrar usuario. Por favor intente nuevamente.';
+        // mostrar el mensaje exacto de la API si esta disponible
+        this.error = err.error?.detail ?? 'Error al registrar usuario. Por favor intente nuevamente.';
         this.cargando = false;
       }
     });

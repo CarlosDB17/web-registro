@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 interface Usuario {
+  mensaje: string;
   usuario: any;
   nombre: string;
   email: string;
@@ -15,7 +16,10 @@ interface Usuario {
   providedIn: 'root'
 })
 export class UsuariosService {
-  private API_URL = "https://pf25-carlos-db-302016834907.europe-west1.run.app/usuarios";
+  //private API_URL = "https://pf25-carlos-db-302016834907.europe-west1.run.app/usuarios";
+  //private API_URL = "https://pf25-carlos-db-v2-302016834907.europe-west1.run.app/usuarios";
+  private API_URL = "https://pf25-carlos-db-v3-302016834907.europe-west1.run.app/usuarios";
+ // private API_URL = "http://127.0.0.1:8000/usuarios";
 
   constructor(private http: HttpClient) {}
 
@@ -33,6 +37,7 @@ export class UsuariosService {
   actualizarUsuario(dni: string, updatedData: Partial<Usuario>): Observable<Usuario> {
     return this.http.patch<Usuario>(`${this.API_URL}/${dni}`, updatedData);
   }
+  
 
   // Eliminar usuario
   eliminarUsuario(dni: string): Observable<void> {

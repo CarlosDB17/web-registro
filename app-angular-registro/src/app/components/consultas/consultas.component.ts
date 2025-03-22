@@ -19,20 +19,22 @@ interface Usuario {
   imports: [CommonModule, FormsModule]
 })
 export class ConsultasComponent implements OnInit {
-  tipoBusqueda: string = 'dni';
-  terminoBusqueda: string = '';
-  usuarios: Usuario[] = [];
-  mensajeError: string = '';
-  buscando: boolean = false;
+  tipoBusqueda: string = 'dni'; // tipo de busqueda seleccionado
+  terminoBusqueda: string = ''; // termino ingresado para buscar
+  usuarios: Usuario[] = []; // lista de usuarios encontrados
+  mensajeError: string = ''; // mensaje de error
+  buscando: boolean = false; // indica si se esta buscando
 
   constructor(private usuariosService: UsuariosService) { }
 
   ngOnInit(): void {
+    // metodo que se ejecuta al inicializar el componente
   }
 
   buscar(): void {
+    // realiza la busqueda segun el tipo seleccionado
     if (!this.terminoBusqueda.trim()) {
-      this.mensajeError = 'Por favor, introduce un término de búsqueda';
+      this.mensajeError = 'por favor, introduce un termino de busqueda';
       return;
     }
 
@@ -41,6 +43,7 @@ export class ConsultasComponent implements OnInit {
     
     switch (this.tipoBusqueda) {
       case 'dni':
+        // busca usuario por dni
         this.usuariosService.buscarPorDNI(this.terminoBusqueda).subscribe({
           next: (usuario) => {
             this.usuarios = [usuario];
@@ -53,6 +56,7 @@ export class ConsultasComponent implements OnInit {
         break;
       
       case 'nombre':
+        // busca usuarios por nombre
         this.usuariosService.buscarPorNombre(this.terminoBusqueda).subscribe({
           next: (usuarios) => {
             this.usuarios = usuarios;
@@ -65,9 +69,11 @@ export class ConsultasComponent implements OnInit {
         break;
       
       case 'email':
+        // busca usuarios por email
         this.usuariosService.buscarPorEmail(this.terminoBusqueda).subscribe({
-          next: (usuario) => {
-            this.usuarios = [usuario];
+          next: (usuarios) => {
+            console.log('respuesta del servicio:', usuarios); 
+            this.usuarios = Array.isArray(usuarios) ? usuarios : [usuarios]; // asegura que siempre sea un array
             this.buscando = false;
           },
           error: (error) => {
@@ -79,23 +85,26 @@ export class ConsultasComponent implements OnInit {
   }
 
   manejarError(error: any): void {
+    // maneja los errores de la busqueda
     this.buscando = false;
     if (error.status === 404) {
-      this.mensajeError = 'No se encontraron usuarios con ese criterio';
+      this.mensajeError = 'no se encontraron usuarios con ese criterio';
       this.usuarios = [];
     } else {
-      this.mensajeError = 'Error al buscar usuarios: ' + (error.message || 'Error desconocido');
+      this.mensajeError = 'error al buscar usuarios: ' + (error.message || 'error desconocido');
     }
-    console.error('Error en la búsqueda:', error);
+    console.error('error en la busqueda:', error);
   }
 
   limpiarResultados(): void {
+    // limpia los resultados de la busqueda
     this.usuarios = [];
     this.mensajeError = '';
     this.terminoBusqueda = '';
   }
 
   limpiarTerminoBusqueda() {
+    // limpia el termino de busqueda y los resultados
     this.terminoBusqueda = '';
     this.usuarios = [];
     this.mensajeError = '';
@@ -103,7 +112,8 @@ export class ConsultasComponent implements OnInit {
   
 
   formatearFecha(fecha: string): string {
-    if (!fecha) return 'N/A';
+    // formatea una fecha en formato legible
+    if (!fecha) return 'n/a';
     
     try {
       const fechaObj = new Date(fecha);
