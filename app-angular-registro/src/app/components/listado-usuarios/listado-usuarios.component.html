@@ -31,26 +31,20 @@
         </tr>
       </thead>
       <tbody>
-        <!-- fila para cada usuario en la lista -->
         <tr *ngFor="let user of usuarios">
-          <td>
-            <!-- campo editable para el nombre del usuario -->
+          <td data-label="Nombre">
             <input [(ngModel)]="user.nombre" placeholder="Nombre" required>
           </td>
-          <td>
-            <!-- campo editable para el email del usuario -->
+          <td data-label="Email">
             <input [(ngModel)]="user.email" type="email" placeholder="Email" required>
           </td>
-          <td>
-            <!-- muestra el dni del usuario (no editable) -->
+          <td data-label="DNI">
             {{ user.dni }}
           </td>
-          <td>
-            <!-- campo editable para la fecha de nacimiento del usuario -->
+          <td data-label="Fecha de Nacimiento">
             <input [(ngModel)]="user.fecha_nacimiento" type="date" required>
           </td>
-          <td>
-            <!-- botones para actualizar o eliminar al usuario -->
+          <td data-label="Acciones">
             <button (click)="actualizarUsuario(user)">Actualizar</button>
             <button (click)="eliminarUsuario(user.dni)" class="btn-danger">Eliminar</button>
           </td>
@@ -58,4 +52,3 @@
       </tbody>
     </table>
   </div>
-</div>
