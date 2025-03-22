@@ -1,47 +1,53 @@
 body {
-    background-color: #ffffff;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  
-  .listado-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 900px;
-    width: 90%;
-    margin: 2rem auto;
-    padding: 2rem 3rem;
-    background: #FFFFFF;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    margin-bottom: 1.5rem;
-    color: #0197F6;
-    text-align: center;
-  }
-  
-  form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 2rem;
-    
-    input {
+  // estilos generales para el cuerpo de la pagina
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.listado-container {
+  // contenedor principal para el listado de usuarios
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  width: 90%;
+  margin: 2rem auto;
+  padding: 2rem 3rem;
+  background: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  // estilos para el titulo principal
+  margin-bottom: 1.5rem;
+  color: #0197F6;
+  text-align: center;
+}
+
+form {
+  // estilos para el formulario de registro
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 2rem;
+
+  input {
+      // estilos para los campos de entrada del formulario
       flex: 1;
       min-width: 200px;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
-    }
-    
-    button {
+  }
+
+  button {
+      // estilos para el boton de registro
       background-color: #0197F6;
       color: white;
       border: none;
@@ -49,47 +55,60 @@ body {
       border-radius: 5px;
       cursor: pointer;
       font-size: 16px;
-      
+
       &:hover {
-        background-color: #0175C2;
+          // efecto hover para el boton
+          background-color: #0175C2;
       }
-    }
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    
-    th, td {
+}
+
+/* contenedor para hacer la tabla desplazable en pantallas pequeñas */
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  // estilos generales para la tabla
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+  th, td {
+      // estilos para las celdas de la tabla
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #ddd;
-    }
-    
-    th {
+  }
+
+  th {
+      // estilos para los encabezados de la tabla
       background-color: #f5f5f5;
       color: #333;
       font-weight: bold;
-    }
-    
-    tr:hover {
+  }
+
+  tr:hover {
+      // efecto hover para las filas de la tabla
       background-color: #f9f9f9;
-    }
-    
-    input {
+  }
+
+  input {
+      // estilos para los campos de entrada dentro de la tabla
       width: 100%;
       padding: 8px;
       border: 1px solid #ddd;
       border-radius: 4px;
-      
+
       &:focus {
-        border-color: #0197F6;
-        outline: none;
+          // estilos para el campo de entrada cuando esta enfocado
+          border-color: #0197F6;
+          outline: none;
       }
-    }
-    
-    button {
+  }
+
+  button {
+      // estilos para los botones dentro de la tabla
       background-color: #0197F6;
       color: white;
       border: none;
@@ -97,17 +116,45 @@ body {
       margin-right: 5px;
       border-radius: 4px;
       cursor: pointer;
-      
+
       &:hover {
-        background-color: #0175C2;
+          // efecto hover para los botones
+          background-color: #0175C2;
       }
-      
+
       &:last-child {
-        background-color: #e74c3c;
-        
-        &:hover {
-          background-color: #c0392b;
-        }
+          // estilos para el boton de eliminar
+          background-color: #e74c3c;
+
+          &:hover {
+              // efecto hover para el boton de eliminar
+              background-color: #c0392b;
+          }
       }
-    }
   }
+}
+
+/* estilos para pantallas pequeñas */
+@media (max-width: 768px) {
+  .listado-container {
+      // reduce el padding del contenedor en pantallas pequeñas
+      padding: 1rem;
+  }
+
+  table th, table td {
+      // reduce el tamaño de fuente y el padding en la tabla
+      font-size: 14px;
+      padding: 8px;
+  }
+
+  form input {
+      // ajusta el ancho de los campos de entrada en pantallas pequeñas
+      min-width: 100%;
+  }
+
+  form button {
+      // ajusta el ancho de los botones en pantallas pequeñas
+      width: 100%;
+      text-align: center;
+  }
+}
