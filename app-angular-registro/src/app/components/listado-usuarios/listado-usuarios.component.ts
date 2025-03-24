@@ -8,7 +8,7 @@ interface Usuario {
   usuario: any;
   nombre: string;
   email: string;
-  dni: string;
+  documento_identidad: string; // Cambiado de dni a documento_identidad
   fecha_nacimiento: string;
 }
 
@@ -72,7 +72,7 @@ export class ListadoUsuariosComponent implements OnInit {
 
   actualizarUsuario(usuario: Usuario): void {
     // actualiza un usuario existente enviando solo los cambios detectados
-    this.usuariosService.buscarPorDNI(usuario.dni).subscribe(
+    this.usuariosService.buscarPorDocumentoIdentidad(usuario.documento_identidad).subscribe(
       (usuarioOriginal) => {
         // detecta los cambios comparando con el usuario original
         const cambios: Partial<Usuario> = {};
@@ -91,10 +91,10 @@ export class ListadoUsuariosComponent implements OnInit {
         }
   
         // envia los cambios al servicio para actualizar el usuario
-        this.usuariosService.actualizarUsuario(usuario.dni, cambios).subscribe(
+        this.usuariosService.actualizarUsuario(usuario.documento_identidad, cambios).subscribe(
           (response) => {
             // actualiza la lista local con los cambios realizados
-            const index = this.usuarios.findIndex(u => u.dni === usuario.dni);
+            const index = this.usuarios.findIndex(u => u.documento_identidad === usuario.documento_identidad);
             if (index !== -1) {
               this.usuarios[index] = { ...this.usuarios[index], ...cambios };
             }
@@ -117,12 +117,12 @@ export class ListadoUsuariosComponent implements OnInit {
     );
   }
   
-  eliminarUsuario(dni: string): void {
-    // elimina un usuario por su dni
-    this.usuariosService.eliminarUsuario(dni).subscribe(
+  eliminarUsuario(documento_identidad: string): void {
+    // elimina un usuario por su documento_identidad
+    this.usuariosService.eliminarUsuario(documento_identidad).subscribe(
       () => {
         // elimina el usuario de la lista local
-        this.usuarios = this.usuarios.filter(user => user.dni !== dni);
+        this.usuarios = this.usuarios.filter(user => user.documento_identidad !== documento_identidad);
         this.mensaje = 'usuario eliminado correctamente';
         this.error = '';
       },

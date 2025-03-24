@@ -30,7 +30,7 @@
         <tr>
           <th>Nombre</th>
           <th>Email</th>
-          <th>DNI</th>
+          <th>Documento de identidad</th>
           <th>Fecha de Nacimiento</th>
           <th>Acciones</th>
         </tr>
@@ -43,15 +43,15 @@
           <td data-label="Email">
             <input [(ngModel)]="user.email" type="email" placeholder="Email" required>
           </td>
-          <td data-label="DNI">
-            {{ user.dni }}
+          <td data-label="Documento de identidad">
+            {{ user.documento_identidad }}
           </td>
           <td data-label="Fecha de Nacimiento">
             <input [(ngModel)]="user.fecha_nacimiento" type="date" required>
           </td>
           <td data-label="Acciones">
             <button (click)="actualizarUsuario(user)">Actualizar</button>
-            <button (click)="eliminarUsuario(user.dni)" class="btn-danger">Eliminar</button>
+            <button (click)="eliminarUsuario(user.documento_identidad)" class="btn-danger">Eliminar</button>
           </td>
         </tr>
       </tbody>

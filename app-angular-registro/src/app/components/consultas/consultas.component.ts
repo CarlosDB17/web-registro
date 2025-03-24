@@ -7,7 +7,7 @@ interface Usuario {
   usuario: any;
   nombre: string;
   email: string;
-  dni: string;
+  documento_identidad: string; // Cambiado de dni a documento_identidad
   fecha_nacimiento: string;
 }
 
@@ -19,7 +19,7 @@ interface Usuario {
   imports: [CommonModule, FormsModule]
 })
 export class ConsultasComponent implements OnInit {
-  tipoBusqueda: string = 'dni'; // tipo de busqueda seleccionado
+  tipoBusqueda: string = 'documento_identidad'; // Cambiado de dni a documento_identidad
   terminoBusqueda: string = ''; // termino ingresado para buscar
   usuarios: Usuario[] = []; // lista de usuarios encontrados
   mensajeError: string = ''; // mensaje de error
@@ -44,18 +44,18 @@ export class ConsultasComponent implements OnInit {
     const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
 
     switch (this.tipoBusqueda) {
-      case 'dni':
-      // busca usuario por dni
-      this.usuariosService.buscarPorDNI(terminoBusquedaMayusculas).subscribe({
-        next: (usuario) => {
-        this.usuarios = [usuario];
-        this.buscando = false;
-        },
-        error: (error) => {
-        this.manejarError(error);
-        }
-      });
-      break;
+      case 'documento_identidad': // Cambiado de dni a documento_identidad
+        // busca usuario por documento_identidad
+        this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas).subscribe({
+          next: (usuario) => {
+            this.usuarios = [usuario];
+            this.buscando = false;
+          },
+          error: (error) => {
+            this.manejarError(error);
+          }
+        });
+        break;
       
       case 'nombre':
         // busca usuarios por nombre

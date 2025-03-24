@@ -3,7 +3,7 @@
   
     <form (ngSubmit)="buscar()">
       <select [(ngModel)]="tipoBusqueda" name="tipoBusqueda" (change)="limpiarTerminoBusqueda()">
-        <option value="dni">Buscar por DNI</option>
+        <option value="documento_identidad">Buscar por Documento de identidad</option>
         <option value="nombre">Buscar por Nombre</option>
         <option value="email">Buscar por Email</option>
       </select>
@@ -34,7 +34,7 @@
       <table>
         <thead>
           <tr>
-            <th>DNI</th>
+            <th>Documento de identidad</th>
             <th>Nombre</th>
             <th>Email</th>
             <th>Fecha de Nacimiento</th>
@@ -42,7 +42,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let usuario of usuarios">
-            <td>{{ usuario.dni }}</td>
+            <td>{{ usuario.documento_identidad }}</td>
             <td>{{ usuario.nombre }}</td>
             <td>{{ usuario.email }}</td>
             <td>{{ formatearFecha(usuario.fecha_nacimiento) }}</td>

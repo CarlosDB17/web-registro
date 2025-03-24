@@ -8,7 +8,7 @@ interface Usuario {
   usuario: any;
   nombre: string;
   email: string;
-  dni: string;
+  documento_identidad: string; // cambiado de dni a documento_identidad
   fecha_nacimiento: string;
 }
 
@@ -16,10 +16,7 @@ interface Usuario {
   providedIn: 'root'
 })
 export class UsuariosService {
-  //private API_URL = "https://pf25-carlos-db-302016834907.europe-west1.run.app/usuarios";
-  //private API_URL = "https://pf25-carlos-db-v2-302016834907.europe-west1.run.app/usuarios";
-  private API_URL = "https://pf25-carlos-db-v3-302016834907.europe-west1.run.app/usuarios";
- // private API_URL = "http://127.0.0.1:8000/usuarios";
+  private API_URL = "https://pf25-carlos-db-v4-302016834907.europe-west1.run.app/usuarios";
 
   constructor(private http: HttpClient) {}
 
@@ -34,19 +31,18 @@ export class UsuariosService {
   }
 
   // Actualizar usuario
-  actualizarUsuario(dni: string, updatedData: Partial<Usuario>): Observable<Usuario> {
-    return this.http.patch<Usuario>(`${this.API_URL}/${dni}`, updatedData);
+  actualizarUsuario(documento_identidad: string, updatedData: Partial<Usuario>): Observable<Usuario> {
+    return this.http.patch<Usuario>(`${this.API_URL}/${documento_identidad}`, updatedData); // Cambiado dni a documento_identidad
   }
-  
 
   // Eliminar usuario
-  eliminarUsuario(dni: string): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${dni}`);
+  eliminarUsuario(documento_identidad: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${documento_identidad}`); // Cambiado dni a documento_identidad
   }
 
-  // Buscar usuario por DNI
-  buscarPorDNI(dni: string): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.API_URL}/${dni}`);
+  // Buscar usuario por documento_identidad
+  buscarPorDocumentoIdentidad(documento_identidad: string): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.API_URL}/${documento_identidad}`); // Cambiado dni a documento_identidad
   }
 
   // Buscar usuario por nombre

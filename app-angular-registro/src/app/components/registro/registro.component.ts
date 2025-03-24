@@ -14,7 +14,7 @@ import { UsuariosService } from '../../services/usuarios.service';
 export class RegistroComponent {
   nombre: string = '';
   email: string = '';
-  dni: string = '';
+  documento_identidad: string = ''; // cambiado de dni a documentoIdentidad
   fechaNacimiento: string = '';
   mensaje: string = '';
   error: string = '';
@@ -23,7 +23,7 @@ export class RegistroComponent {
   constructor(private usuariosService: UsuariosService) {}
 
   registrarUsuario() {
-    if (!this.nombre || !this.email || !this.dni || !this.fechaNacimiento) {
+    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento) { // cambiado dni a documentoIdentidad
       this.error = 'Por favor complete todos los campos';
 
       // reinicia la clase shake para que la animacion se reproduzca nuevamente
@@ -36,10 +36,10 @@ export class RegistroComponent {
     this.error = '';
 
     const usuario = {
-      usuario: this.dni, // usando el dni como nombre de usuario
+      usuario: this.documento_identidad, // usando documento_identidad como nombre de usuario
       nombre: this.nombre,
       email: this.email.toLowerCase(),
-      dni: this.dni.toUpperCase(),
+      documento_identidad: this.documento_identidad.toUpperCase(), // cambiado dni a documento_identidad
       fecha_nacimiento: this.fechaNacimiento,
       mensaje: ''
     };
@@ -74,7 +74,7 @@ export class RegistroComponent {
   limpiarFormulario() {
     this.nombre = '';
     this.email = '';
-    this.dni = '';
+    this.documento_identidad = ''; // cambiado dni a documento_identidad
     this.fechaNacimiento = '';
   }
 }
