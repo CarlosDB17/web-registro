@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { UsuariosService } from '../../services/usuarios.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-qr-scanner',
   standalone: true,
-  imports: [ZXingScannerModule, CommonModule],
+  imports: [ZXingScannerModule, CommonModule, FormsModule],
   templateUrl: './qr-scanner.component.html',
   styleUrls: ['./qr-scanner.component.scss']
 })
@@ -20,7 +21,7 @@ export class QrScannerComponent implements OnInit {
   constructor(private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
-    // Obtener la lista de dispositivos de cámara
+    // obtener la lista de dispositivos de cámara
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       this.availableDevices = devices.filter((device) => device.kind === 'videoinput');
       if (this.availableDevices.length > 0) {
