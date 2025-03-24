@@ -5,11 +5,12 @@ import { RegistroComponent } from './components/registro/registro.component';
 import { ListadoUsuariosComponent } from './components/listado-usuarios/listado-usuarios.component';
 import { ConsultasComponent } from './components/consultas/consultas.component';
 import { FormsModule } from '@angular/forms';
+import { QrScannerComponent } from './components/qr-scanner/qr-scanner.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RegistroComponent, ListadoUsuariosComponent, ConsultasComponent, FormsModule], 
+  imports: [CommonModule, RouterOutlet, RegistroComponent, ListadoUsuariosComponent, ConsultasComponent, FormsModule,QrScannerComponent], 
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
