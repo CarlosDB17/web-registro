@@ -41,19 +41,21 @@ export class ConsultasComponent implements OnInit {
     this.mensajeError = '';
     this.buscando = true;
     
+    const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
+
     switch (this.tipoBusqueda) {
       case 'dni':
-        // busca usuario por dni
-        this.usuariosService.buscarPorDNI(this.terminoBusqueda).subscribe({
-          next: (usuario) => {
-            this.usuarios = [usuario];
-            this.buscando = false;
-          },
-          error: (error) => {
-            this.manejarError(error);
-          }
-        });
-        break;
+      // busca usuario por dni
+      this.usuariosService.buscarPorDNI(terminoBusquedaMayusculas).subscribe({
+        next: (usuario) => {
+        this.usuarios = [usuario];
+        this.buscando = false;
+        },
+        error: (error) => {
+        this.manejarError(error);
+        }
+      });
+      break;
       
       case 'nombre':
         // busca usuarios por nombre

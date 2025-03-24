@@ -26,7 +26,7 @@ export class RegistroComponent {
     if (!this.nombre || !this.email || !this.dni || !this.fechaNacimiento) {
       this.error = 'Por favor complete todos los campos';
 
-      // reinicia la clase "shake" para que la animacion se reproduzca nuevamente
+      // reinicia la clase shake para que la animacion se reproduzca nuevamente
       this.activarShake();
       return;
     }
@@ -38,8 +38,8 @@ export class RegistroComponent {
     const usuario = {
       usuario: this.dni, // usando el dni como nombre de usuario
       nombre: this.nombre,
-      email: this.email,
-      dni: this.dni,
+      email: this.email.toLowerCase(),
+      dni: this.dni.toUpperCase(),
       fecha_nacimiento: this.fechaNacimiento,
       mensaje: ''
     };
@@ -56,7 +56,7 @@ export class RegistroComponent {
         this.error = err.error?.detail ?? 'Error al registrar usuario. Por favor intente nuevamente.';
         this.cargando = false;
 
-        // reinicia la clase "shake" para que la animacion se reproduzca nuevamente
+        // reinicia la clase shake para que la animacion se reproduzca nuevamente
         this.activarShake();
       }
     });
