@@ -23,6 +23,7 @@ export class ListadoUsuariosComponent implements OnInit {
   usuarios: Usuario[] = []; // lista de usuarios
   mensaje: string = ''; // mensaje de exito
   error: string = ''; // mensaje de error
+  cargando: boolean = false; // indica si se estan cargando los usuarios
 
   constructor(private usuariosService: UsuariosService) {}
 
@@ -32,17 +33,19 @@ export class ListadoUsuariosComponent implements OnInit {
   }
 
   cargarUsuarios(): void {
-    // obtiene la lista de usuarios desde el servicio
+    this.cargando = true; // activa el indicador de carga
     this.usuariosService.obtenerUsuarios().subscribe(
       (data) => {
         this.usuarios = data; // asigna los usuarios obtenidos
         this.mensaje = 'usuarios cargados correctamente';
         this.error = '';
+        this.cargando = false; // desactiva el indicador de carga
       },
       (error) => {
         console.error('error al obtener usuarios', error);
         this.error = error.error?.detail ?? 'error al cargar usuarios';
         this.mensaje = '';
+        this.cargando = false; // desactiva el indicador de carga
       }
     );
   }

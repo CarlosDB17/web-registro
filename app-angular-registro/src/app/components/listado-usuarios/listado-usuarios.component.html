@@ -18,8 +18,13 @@
     {{ error }}
   </div>
 
+  <!-- mensaje de carga -->
+  <div *ngIf="cargando" class="loading-message">
+    Cargando usuarios...
+  </div>
+
   <!-- contenedor responsivo para la tabla -->
-  <div class="table-responsive">
+  <div *ngIf="!cargando" class="table-responsive">
     <table>
       <thead>
         <tr>
@@ -52,3 +57,4 @@
       </tbody>
     </table>
   </div>
+</div>

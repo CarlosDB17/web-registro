@@ -89,12 +89,14 @@ export class ConsultasComponent implements OnInit {
   manejarError(error: any): void {
     // maneja los errores de la busqueda
     this.buscando = false;
-    if (error.status === 404) {
+
+    if (error.status === 404 || (error.status === 500 && error.error?.detail?.includes('404'))) {
       this.mensajeError = 'no se encontraron usuarios con ese criterio';
       this.usuarios = [];
     } else {
       this.mensajeError = 'error al buscar usuarios: ' + (error.message || 'error desconocido');
     }
+
     console.error('error en la busqueda:', error);
   }
 
