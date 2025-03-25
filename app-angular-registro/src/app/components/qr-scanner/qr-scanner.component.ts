@@ -13,48 +13,66 @@ import { BarcodeFormat } from '@zxing/library';
   styleUrls: ['./qr-scanner.component.scss']
 })
 export class QrScannerComponent implements OnInit {
+  // formatos de codigo de barras soportados (en este caso solo qr)
   formats = [BarcodeFormat.QR_CODE];
+
+  // mensaje para mostrar al usuario (exito o error)
   mensaje: string | null = null;
+
+  // lista de dispositivos de camara disponibles
   availableDevices: MediaDeviceInfo[] = [];
+
+  // dispositivo de camara seleccionado
   selectedDevice: MediaDeviceInfo | undefined;
 
   constructor(private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
-    // obtener la lista de dispositivos de cámara
+    // obtiene la lista de dispositivos de camara disponibles
     navigator.mediaDevices.enumerateDevices().then((devices) => {
+      // filtra los dispositivos para obtener solo los de tipo "videoinput" (camaras)
       this.availableDevices = devices.filter((device) => device.kind === 'videoinput');
+
+      // selecciona la primera camara disponible por defecto
       if (this.availableDevices.length > 0) {
-        this.selectedDevice = this.availableDevices[0]; // Seleccionar la primera cámara por defecto
+        this.selectedDevice = this.availableDevices[0];
       }
     });
   }
 
+  // metodo que se ejecuta cuando se escanea un codigo qr
   onCodeResult(result: string): void {
     try {
+      // intenta parsear el contenido del qr como un objeto json
       const userData = JSON.parse(result);
 
-      if (userData.nombre && userData.email && userData.dni && userData.fecha_nacimiento) {
+      // verifica que el objeto contenga los campos necesarios
+      if (userData.nombre && userData.email && userData.documento_identidad && userData.fecha_nacimiento) {
+        // registra al usuario usando el servicio de usuarios
         this.usuariosService.registrarUsuario(userData).subscribe({
           next: (response) => {
-            console.log('Usuario registrado con éxito:', response);
-            this.mensaje = 'Usuario registrado con éxito';
-            setTimeout(() => (this.mensaje = null), 5000);
+            console.log('usuario registrado con exito:', response);
+            this.mensaje = 'Usuario registrado con exito';
+            // limpia el mensaje despues de 10 segundos
+            setTimeout(() => (this.mensaje = null), 10000);
           },
           error: (error) => {
-            console.error('Error al registrar usuario:', error);
-            this.mensaje = 'Error al registrar usuario';
-            setTimeout(() => (this.mensaje = null), 5000);
+            console.error('error al registrar usuario:', error);
+            this.mensaje = 'error al registrar usuario';
+            // limpia el mensaje despues de 10 segundos
+            setTimeout(() => (this.mensaje = null), 10000);
           }
         });
       } else {
-        this.mensaje = 'El QR no contiene datos válidos';
-        setTimeout(() => (this.mensaje = null), 5000);
+        // muestra un mensaje si el qr no contiene datos validos
+        this.mensaje = 'El QR no contiene datos validos';
+        setTimeout(() => (this.mensaje = null), 10000);
       }
     } catch (error) {
-      console.error('Error al procesar el QR:', error);
+      // maneja errores si el contenido del qr no es un json valido
+      console.error('error al procesar el qr:', error);
       this.mensaje = 'El QR no es válido';
-      setTimeout(() => (this.mensaje = null), 5000);
+      setTimeout(() => (this.mensaje = null), 10000);
     }
   }
 }
