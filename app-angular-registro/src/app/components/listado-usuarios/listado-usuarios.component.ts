@@ -24,6 +24,8 @@ export class ListadoUsuariosComponent implements OnInit {
   mensaje: string = ''; // mensaje de exito
   error: string = ''; // mensaje de error
   cargando: boolean = false; // indica si se estan cargando los usuarios
+  formularioEnviado: boolean = false; // propiedad para saber si se intento enviar el formulario
+
 
   constructor(private usuariosService: UsuariosService) {}
 
@@ -37,7 +39,7 @@ export class ListadoUsuariosComponent implements OnInit {
     this.usuariosService.obtenerUsuarios().subscribe(
       (data) => {
         this.usuarios = data; // asigna los usuarios obtenidos
-        this.mensaje = 'usuarios cargados correctamente';
+        this.mensaje = 'Usuarios cargados correctamente';
         this.error = '';
         this.cargando = false; // desactiva el indicador de carga
       },
@@ -51,14 +53,20 @@ export class ListadoUsuariosComponent implements OnInit {
   }
 
   registrarUsuario(form: any): void {
-    // registra un nuevo usuario con los datos del formulario
+    if (!form.valid) {
+      this.error = 'Completa todos los campos.'; // Mensaje de error si el formulario no es válido
+      this.mensaje = '';
+      return;
+    }
+  
+    // Si el formulario es válido, continúa con el registro
     const userData: Usuario = form.value;
     this.usuariosService.registrarUsuario(userData).subscribe(
       (response) => {
         console.log('usuario registrado:', response);
         const nuevoUsuario = response.usuario; // obtiene el usuario registrado
         this.usuarios.push(nuevoUsuario); // agrega el nuevo usuario a la lista
-        this.mensaje = response?.mensaje ?? 'usuario registrado correctamente';
+        this.mensaje = response?.mensaje ?? 'Usuario registrado correctamente';
         this.error = '';
         form.reset(); // limpia el formulario
       },
@@ -99,7 +107,7 @@ export class ListadoUsuariosComponent implements OnInit {
               this.usuarios[index] = { ...this.usuarios[index], ...cambios };
             }
             console.log('usuario actualizado correctamente');
-            this.mensaje = response?.mensaje ?? 'usuario actualizado correctamente';
+            this.mensaje = response?.mensaje ?? 'Usuario actualizado correctamente';
             this.error = '';
           },
           (error) => {
@@ -112,7 +120,7 @@ export class ListadoUsuariosComponent implements OnInit {
       (error) => {
         console.error('error al obtener el usuario original', error);
         this.mensaje = '';
-        this.error = error.error?.detail ?? 'error al obtener el usuario original';
+        this.error = error.error?.detail ?? 'Error al obtener el usuario original';
       }
     );
   }
@@ -128,7 +136,7 @@ export class ListadoUsuariosComponent implements OnInit {
       },
       (error) => {
         console.error('error al eliminar usuario', error);
-        this.error = error.error?.detail ?? 'error al eliminar usuario';
+        this.error = error.error?.detail ?? 'Error al eliminar usuario';
         this.mensaje = '';
       }
     );

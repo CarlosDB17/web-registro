@@ -1,18 +1,22 @@
+<div class="scanner-title">
+  <h2>Aún en desarrollo</h2>
+</div>
+
 <div class="scanner-container">
-    <select *ngIf="availableDevices.length > 1" [(ngModel)]="selectedDevice">
-      <option *ngFor="let device of availableDevices" [ngValue]="device">
-        {{ device.label || 'Cámara desconocida' }}
-      </option>
-    </select>
-  
-    <zxing-scanner
-      [formats]="formats"
-      [device]="selectedDevice"
-      (scanSuccess)="onCodeResult($event)"
-      [enable]="true">
-    </zxing-scanner>
-  </div>
-  
-  <div *ngIf="mensaje" class="mensaje">
-    {{ mensaje }}
-  </div>
+  <select *ngIf="availableDevices.length > 1" [(ngModel)]="selectedDevice">
+    <option *ngFor="let device of availableDevices" [ngValue]="device">
+      {{ device.label || 'Cámara desconocida' }}
+    </option>
+  </select>
+
+  <zxing-scanner
+    [formats]="formats"
+    [device]="selectedDevice"
+    (scanSuccess)="onCodeResult($event)"
+    [enable]="true">
+  </zxing-scanner>
+</div>
+
+<div *ngIf="mensaje" class="mensaje">
+  {{ mensaje }}
+</div>
