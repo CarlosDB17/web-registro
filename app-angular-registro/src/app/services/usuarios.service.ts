@@ -17,6 +17,7 @@ interface Usuario {
 })
 export class UsuariosService {
   private API_URL = "https://pf25-carlos-db-v4-302016834907.europe-west1.run.app/usuarios";
+  //private API_URL = "http://127.0.0.1:8000/usuarios";
 
   constructor(private http: HttpClient) {}
 
@@ -42,7 +43,7 @@ export class UsuariosService {
 
   // Buscar usuario por documento_identidad
   buscarPorDocumentoIdentidad(documento_identidad: string): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.API_URL}/${documento_identidad}`); // Cambiado dni a documento_identidad
+    return this.http.get<Usuario>(`${this.API_URL}/documento/${documento_identidad}`); // Cambiado dni a documento_identidad
   }
 
   // Buscar usuario por nombre

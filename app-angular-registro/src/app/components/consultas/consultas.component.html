@@ -34,17 +34,17 @@
       <table>
         <thead>
           <tr>
-            <th>Documento de identidad</th>
             <th>Nombre</th>
             <th>Email</th>
+            <th>Documento de identidad</th>
             <th>Fecha de Nacimiento</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let usuario of usuarios">
-            <td>{{ usuario.documento_identidad }}</td>
             <td>{{ usuario.nombre }}</td>
             <td>{{ usuario.email }}</td>
+            <td>{{ usuario.documento_identidad }}</td>
             <td>{{ formatearFecha(usuario.fecha_nacimiento) }}</td>
           </tr>
         </tbody>

@@ -40,20 +40,20 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of usuarios">
-          <td data-label="Nombre">
+          <td data-label="Nombre" (click)="almacenarDatosOriginales(user)">
             <input [(ngModel)]="user.nombre" placeholder="Nombre" required>
           </td>
-          <td data-label="Email">
+          <td data-label="Email" (click)="almacenarDatosOriginales(user)">
             <input [(ngModel)]="user.email" type="email" placeholder="Email" required>
           </td>
-          <td data-label="Documento de identidad">
-            {{ user.documento_identidad }}
+          <td data-label="Documento de identidad" (click)="almacenarDatosOriginales(user)">
+            <input [(ngModel)]="user.documento_identidad" placeholder="Documento de identidad" required>
           </td>
-          <td data-label="Fecha de Nacimiento">
+          <td data-label="Fecha de Nacimiento" (click)="almacenarDatosOriginales(user)">
             <input [(ngModel)]="user.fecha_nacimiento" type="date" required>
           </td>
           <td data-label="Acciones">
-            <button (click)="actualizarUsuario(user)">Actualizar</button>
+            <button (click)="iniciarActualizacionUsuario(user)">Actualizar</button>
             <button (click)="eliminarUsuario(user.documento_identidad)" class="btn-danger">Eliminar</button>
           </td>
         </tr>

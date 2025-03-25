@@ -44,18 +44,18 @@ export class ConsultasComponent implements OnInit {
     const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
 
     switch (this.tipoBusqueda) {
-      case 'documento_identidad': // Cambiado de dni a documento_identidad
-        // busca usuario por documento_identidad
-        this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas).subscribe({
-          next: (usuario) => {
-            this.usuarios = [usuario];
-            this.buscando = false;
-          },
-          error: (error) => {
-            this.manejarError(error);
-          }
-        });
-        break;
+      case 'documento_identidad': // cambiado de dni a documento_identidad
+      // busca usuarios por documento_identidad
+      this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas).subscribe({
+        next: (usuarios) => {
+        this.usuarios = Array.isArray(usuarios) ? usuarios : [usuarios]; // me aseguro que siempre sea un array
+        this.buscando = false;
+        },
+        error: (error) => {
+        this.manejarError(error);
+        }
+      });
+      break;
       
       case 'nombre':
         // busca usuarios por nombre

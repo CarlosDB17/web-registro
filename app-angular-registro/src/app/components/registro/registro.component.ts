@@ -36,7 +36,7 @@ export class RegistroComponent {
     this.error = '';
 
     const usuario = {
-      usuario: this.documento_identidad, // usando documento_identidad como nombre de usuario
+      usuario: this.documento_identidad, // usando documento_identidad como nombre de usuario / clave primaria
       nombre: this.nombre,
       email: this.email.toLowerCase(),
       documento_identidad: this.documento_identidad.toUpperCase(), // cambiado dni a documento_identidad
