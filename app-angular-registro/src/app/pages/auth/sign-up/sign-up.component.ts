@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from '../../../services/usuarios-services/usuarios.service';
+import { AuthService, Credential } from '../../../services/auth-services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,6 +14,7 @@ import { UsuariosService } from '../../../services/usuarios-services/usuarios.se
 export class SignUpComponent {
   nombre: string = '';
   email: string = '';
+  password: string = '';
   documento_identidad: string = ''; // cambiado de dni a documentoIdentidad
   fechaNacimiento: string = '';
   mensaje: string = '';
@@ -20,6 +22,7 @@ export class SignUpComponent {
   cargando: boolean = false;
 
   constructor(private usuariosService: UsuariosService) {}
+  private authService = inject(AuthService);
 
   registrarUsuario() {
     if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento) { // cambiado dni a documentoIdentidad
@@ -38,13 +41,25 @@ export class SignUpComponent {
       usuario: this.documento_identidad, // usando documento_identidad como nombre de usuario / clave primaria
       nombre: this.nombre,
       email: this.email.toLowerCase(),
+      password: this.password,
       documento_identidad: this.documento_identidad.toUpperCase(), // cambiado dni a documento_identidad
       fecha_nacimiento: this.fechaNacimiento,
       mensaje: ''
     };
 
-    this.usuariosService.registrarUsuario(usuario).subscribe({
+    const credential : Credential = {
+      email: usuario.email || '',
+      password: usuario.password || ''
+    };
+
+    this.authService.signUpWithEmailAndPassword(credential);
+    console.log('Usuario a registrar:', usuario);
+    console.log('Credenciales:', credential);
+    console.log('UsuarioService:', this.usuariosService);
+
+    const UserCredential = this.usuariosService.registrarUsuario(usuario).subscribe({
       next: (respuesta) => {
+        console.log('UserCredential:', UserCredential);
         console.log('Usuario registrado:', respuesta);
         this.mensaje = (respuesta as any)?.mensaje || 'Usuario registrado correctamente';
         this.limpiarFormulario();
@@ -75,5 +90,8 @@ export class SignUpComponent {
     this.email = '';
     this.documento_identidad = ''; // cambiado dni a documento_identidad
     this.fechaNacimiento = '';
+    this.password = '';
   }
+
+
 }
