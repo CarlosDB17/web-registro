@@ -1,1 +1,45 @@
-<p>log-in works!</p>
+<div class="login-container">
+    <form [class.shake]="error" (ngSubmit)="iniciarSesion()" class="login-form" #form="ngForm">
+      <h2>Iniciar sesión</h2>
+      
+      <label for="email">Email</label>
+      <div class="email-input-container">
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="email" 
+          name="email" 
+          required 
+          placeholder="carlos@gmail.com"
+        >
+      </div>
+      
+      <label for="contrasena">Contraseña</label>
+      <div class="password-input-container">
+        <input
+          [type]="mostrarContrasena ? 'text' : 'password'"
+          id="contrasena"
+          [(ngModel)]="contrasena"
+          name="contrasena"
+          required
+          placeholder="********"
+        >
+        <img
+          [src]="mostrarContrasena ? 'https://img.freepik.com/vector-premium/diseno-simbolos-ilustracion-vectorial-icono-vista-ojo_1240970-28096.jpg' : 'https://cdn-icons-png.flaticon.com/512/6684/6684701.png'"
+          (click)="togglePasswordVisibility()"
+          class="password-visibility-icon"
+          alt="Toggle Password Visibility"
+        >
+      </div>
+      
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Iniciando sesión...' : 'Iniciar sesión' }}
+      </button>
+      
+      <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+      
+      <div class="no-cuenta">
+        <p>¿No tienes cuenta aún? <a routerLink="/registro">Regístrate</a></p>
+      </div>
+    </form>
+  </div>

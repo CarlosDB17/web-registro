@@ -1,1 +1,24 @@
-<p>sign-up works!</p>
+<div class="registro-container">
+    <form [class.shake]="error" (ngSubmit)="registrarUsuario()" class="registro-form" #form="ngForm">
+      <h2>Registro</h2>
+      
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" required  placeholder="Carlos">
+      
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="email" name="email" required placeholder="carlos@gmail.com">
+      
+      <label for="documento_identidad">Documento de identidad</label>
+      <input type="text" id="documento_identidad" [(ngModel)]="documento_identidad" name="documento_identidad" required placeholder="Puede ser DNI, NIE, etc."> 
+      
+      <label for="fechaNacimiento">Fecha de Nacimiento</label>
+      <input type="date" id="fechaNacimiento" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required placeholder="dd/mm/aaaa" value="2001-04-17">
+      
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Registrando...' : 'Registrarse' }}
+      </button>
+      
+      <div class="mensaje-exito" *ngIf="mensaje">{{ mensaje }}</div>
+      <div class="mensaje-error" *ngIf="error">{{ error }}</div>
+    </form>
+  </div>
