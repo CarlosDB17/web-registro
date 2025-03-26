@@ -27,5 +27,9 @@ export default class HomeComponent {
     this.seccionActual = seccion;
   }
 
-  
+// metodo para cerrar sesion
+logOut(): void {
+
+}
+
 }
