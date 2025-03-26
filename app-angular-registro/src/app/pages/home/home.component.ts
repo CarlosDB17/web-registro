@@ -7,6 +7,8 @@ import { ConsultasComponent } from '../../components/consultas/consultas.compone
 import { FormsModule } from '@angular/forms';
 import { QrScannerComponent } from '../../components/qr-scanner/qr-scanner.component';
 import { AuthService } from '../../services/auth-services/auth.service';
+import { Router } from '@angular/router';
+// importa el servicio router para manejar la navegacion
 
 @Component({
   selector: 'app-home',
@@ -25,6 +27,8 @@ export default class HomeComponent {
 
   private authservice = inject(AuthService);
   // inyecta el servicio de autenticacion
+  private router = inject(Router);
+  // inyecta el servicio router
 
   logOut(): void {
     // metodo para cerrar sesion
@@ -32,6 +36,8 @@ export default class HomeComponent {
       .then(() => {
         console.log('sesion cerrada');
         // muestra un mensaje en consola al cerrar sesion
+        this.router.navigate(['/auth/log-in']);
+        // redirige al usuario a la pagina de inicio de sesion
       })
       .catch((error) => {
         console.error('error al cerrar sesion:', error);

@@ -56,14 +56,6 @@ export class UsuariosService {
     return this.http.get<Usuario>(`${this.API_URL}/email/${email}`);
   }
 
-// Método ficticio para autenticar usuarios
-iniciarSesion(usuario: { email: string; contrasena: string }): Observable<any> {
-  // Simulación de autenticación
-  if (usuario.email === 'admin@example.com' && usuario.contrasena === '123456') {
-    return of({ mensaje: 'Inicio de sesión exitoso', usuario: { id: 1, nombre: 'Admin' } });
-  } else {
-    return throwError({ error: { detail: 'Credenciales incorrectas' } });
-  }
-}
+
 
 }
