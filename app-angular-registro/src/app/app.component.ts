@@ -12,7 +12,8 @@ import { QrScannerComponent } from './components/qr-scanner/qr-scanner.component
   standalone: true,
   imports: [CommonModule, RouterOutlet, RegistroComponent, ListadoUsuariosComponent, ConsultasComponent, FormsModule,QrScannerComponent], 
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
+  
 })
 export class AppComponent {
   title = 'app-angular-registro';
