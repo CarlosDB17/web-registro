@@ -10,37 +10,46 @@ import { AuthService } from '../../services/auth-services/auth.service';
 
 @Component({
   selector: 'app-home',
+  // define el selector del componente
   standalone: true,
+  // indica que el componente es independiente
   imports: [CommonModule, RouterOutlet, RegistroComponent, ListadoUsuariosComponent, ConsultasComponent, FormsModule, QrScannerComponent], 
+  // define los modulos y componentes que se importan en este componente
   templateUrl: './home.component.html',
+  // define la ruta del archivo html del componente
   styleUrls: ['./home.component.scss']
+  // define la ruta del archivo de estilos del componente
 })
 export default class HomeComponent {
+  // define la clase del componente home
 
-  // metodo para cerrar sesion
-private authservice = inject(AuthService);
+  private authservice = inject(AuthService);
+  // inyecta el servicio de autenticacion
+
   logOut(): void {
-  this.authservice.logOut()
-    .then(() => {
-      console.log('Sesión cerrada');
-    })
-    .catch((error) => {
-      console.error('Error al cerrar sesión:', error);
-    });
-  
-}
-
-  title = 'app-angular-registro';
-  
-  // Sección por defecto
-  seccionActual: string = 'listado';
-
-  // Método para cambiar de sección
-  mostrarSeccion(seccion: string) {
-    console.log('Cambiando a:', seccion); 
-    this.seccionActual = seccion;
+    // metodo para cerrar sesion
+    this.authservice.logOut()
+      .then(() => {
+        console.log('sesion cerrada');
+        // muestra un mensaje en consola al cerrar sesion
+      })
+      .catch((error) => {
+        console.error('error al cerrar sesion:', error);
+        // muestra un mensaje de error en consola si falla el cierre de sesion
+      });    
   }
 
+  title = 'app-angular-registro';
+  // define el titulo de la aplicacion
 
+  seccionActual: string = 'listado';
+  // define la seccion actual por defecto
 
+  mostrarSeccion(seccion: string) {
+    // metodo para cambiar de seccion
+    console.log('cambiando a:', seccion); 
+    // muestra en consola la seccion a la que se cambia
+    this.seccionActual = seccion;
+    // actualiza la seccion actual
+  }
 }
