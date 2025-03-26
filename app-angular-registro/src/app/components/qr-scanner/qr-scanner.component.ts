@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { UsuariosService } from '../../services/usuarios.service';
+import { UsuariosService } from '../../services/usuarios-services/usuarios.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BarcodeFormat } from '@zxing/library';

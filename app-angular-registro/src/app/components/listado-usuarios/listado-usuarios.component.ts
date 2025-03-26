@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UsuariosService } from "../../services/usuarios.service";
+import { UsuariosService } from "../../services/usuarios-services/usuarios.service";
 
 interface Usuario {
   mensaje: string;

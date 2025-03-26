@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router'; // Para redirigir al registro si es necesario
-import { UsuariosService } from '../../../services/usuarios.service'; // Asegúrate de tener el servicio de usuarios
+import { UsuariosService } from '../../../services/usuarios-services/usuarios.service'; // Asegúrate de tener el servicio de usuarios
 import { CommonModule } from '@angular/common'; // Importar CommonModule
 import { FormsModule } from '@angular/forms'; // Importar FormsModule
 
