@@ -4,13 +4,14 @@ import { UsuariosService } from '../../../services/usuarios-services/usuarios.se
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth-services/auth.service';
+import { ButtonProvidersComponent } from '../../../components/button-providers/button-providers.component';
 
 @Component({
   selector: 'app-log-in',
   // define el selector del componente
   standalone: true,
   // indica que el componente es independiente
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ButtonProvidersComponent],
   // define los modulos que se importan en este componente
   templateUrl: './log-in.component.html',
   // define la ruta del archivo html del componente
