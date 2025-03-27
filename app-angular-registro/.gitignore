@@ -45,6 +45,6 @@ Thumbs.db
 .firebase
 *-debug.log
 .runtimeconfig.json
-/firebase.config.ts
-
+firebase.config.ts
+.cloudbuild.yaml
 
