@@ -1,7 +1,7 @@
 # usa una imagen oficial de node.js para construir angular
 FROM node:18 AS build
 
-# Define argumentos para la configuración de Firebase
+# define argumentos para la configuracion de firebase
 ARG FIREBASE_PROJECT_ID
 ARG FIREBASE_APP_ID
 ARG FIREBASE_STORAGE_BUCKET

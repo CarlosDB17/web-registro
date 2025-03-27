@@ -7,7 +7,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  height: auto;
+  padding-bottom: 0px; // Reduce el padding inferior si es necesario
+  margin-top: 7%;
+  margin-bottom: 35px; // Ajusta el espacio debajo del componente
 }
 
 .login-form {
