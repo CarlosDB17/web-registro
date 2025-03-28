@@ -3,7 +3,7 @@
     <h2>Registro</h2>
     
     <label for="nombre">Nombre</label>
-    <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" required  placeholder="Carlos">
+    <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" required placeholder="Carlos">
     
     <label for="email">Email</label>
     <input type="email" id="email" [(ngModel)]="email" name="email" required placeholder="carlos@gmail.com">
@@ -13,6 +13,35 @@
     
     <label for="fechaNacimiento">Fecha de Nacimiento</label>
     <input type="date" id="fechaNacimiento" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required placeholder="dd/mm/aaaa" value="2001-04-17">
+    
+    <div class="foto-container">
+        <label for="foto">Foto</label>
+        <div class="input-camera-container">
+            <input type="file" id="foto" (change)="onFileSelected($event)" accept="image/*">
+            <img src="/ic_camara.png" alt="Abrir Cámara" class="icono-camara" (click)="abrirCamara()">
+        </div>
+    </div>
+    
+    <div class="camera-container">
+      <!-- Mostrar la cámara si está activa -->
+      <div *ngIf="mostrarCamara">
+        <video #videoElement autoplay playsinline></video>
+        <canvas #canvasElement style="display: none;"></canvas>
+        <div class="camera-controls">
+          <button type="button" (click)="capturarFoto()">Capturar Foto</button>
+          <button type="button" (click)="cerrarCamara()">Cerrar Cámara</button>
+        </div>
+      </div>
+    
+      <!-- Mostrar la foto capturada si la cámara está desactivada y la foto fue capturada -->
+      <div *ngIf="!mostrarCamara && fotoCapturada">
+        <h3>Foto capturada:</h3>
+        <img id="fotoPreview" [src]="" alt="Foto capturada" style="max-width: 100%; height: auto; border: 1px solid #ccc; margin-top: 10px;">
+        <div class="camera-controls">
+          <button type="button" (click)="abrirCamara()">Volver a tomar foto</button>
+        </div>
+      </div>
+    </div>
     
     <button type="submit" [disabled]="cargando">
       {{ cargando ? 'Registrando...' : 'Registrarse' }}

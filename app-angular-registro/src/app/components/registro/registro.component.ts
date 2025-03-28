@@ -1,8 +1,9 @@
 // registro.component.ts
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from '../../services/usuarios-services/usuarios.service'; 
+
 
 @Component({
   selector: 'app-registro',
@@ -18,12 +19,21 @@ export class RegistroComponent {
   fechaNacimiento: string = '';
   mensaje: string = '';
   error: string = '';
+  foto: File | null = null;
+  fotoCapturada: boolean = false; // Indica si la foto fue capturada desde la cámara
+
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
+
+  mostrarCamara: boolean = false;
+  stream: MediaStream | null = null;
+
   cargando: boolean = false;
 
   constructor(private usuariosService: UsuariosService) {}
 
   registrarUsuario() {
-    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento) { // cambiado dni a documentoIdentidad
+    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento ||!this.foto) { // cambiado dni a documentoIdentidad
       this.error = 'Por favor complete todos los campos';
 
       // reinicia la clase shake para que la animacion se reproduzca nuevamente
@@ -41,6 +51,7 @@ export class RegistroComponent {
       email: this.email.toLowerCase(),
       documento_identidad: this.documento_identidad.toUpperCase(), // cambiado dni a documento_identidad
       fecha_nacimiento: this.fechaNacimiento,
+      foto: this.foto,
       mensaje: ''
     };
 
@@ -77,4 +88,79 @@ export class RegistroComponent {
     this.documento_identidad = ''; // cambiado dni a documento_identidad
     this.fechaNacimiento = '';
   }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.foto = input.files[0];
+      this.fotoCapturada = false; // Marcar que la foto no fue capturada desde la cámara
+      console.log('Archivo seleccionado:', this.foto);
+    }
+  }
+
+  async abrirCamara(): Promise<void> {
+    try {
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: 640,
+          height: 480
+        }
+      });
+      
+      this.mostrarCamara = true;
+      
+      // Esperar a que el DOM se actualice
+      setTimeout(() => {
+        if (this.videoElement && this.videoElement.nativeElement) {
+          this.videoElement.nativeElement.srcObject = this.stream;
+        }
+      });
+    } catch (error) {
+      console.error('Error al acceder a la cámara:', error);
+      alert('No se pudo acceder a la cámara. Por favor, asegúrese de dar los permisos necesarios.');
+    }
+  }
+
+  capturarFoto(): void {
+    if (this.videoElement && this.canvasElement) {
+      const video = this.videoElement.nativeElement;
+      const canvas = this.canvasElement.nativeElement;
+  
+      // Configurar el canvas con las dimensiones del video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+  
+      // Dibujar el frame actual del video en el canvas
+      const context = canvas.getContext('2d');
+      if (context) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+        // Convertir el canvas a un archivo
+        canvas.toBlob((blob) => {
+          if (blob) {
+            this.foto = new File([blob], 'foto.jpg', { type: 'image/jpeg' });
+            this.fotoCapturada = true; // Marcar que la foto fue capturada desde la cámara
+            console.log('Foto capturada:', this.foto);
+  
+            // Crear un enlace temporal para mostrar la imagen
+            const url = URL.createObjectURL(blob);
+            this.mostrarCamara = false; // Ocultar la cámara
+            const imgElement = document.querySelector('#fotoPreview') as HTMLImageElement;
+            if (imgElement) {
+              imgElement.src = url; // Asignar la URL al elemento <img>
+            }
+          }
+        }, 'image/jpeg', 0.95);
+      }
+    }
+  }
+
+  cerrarCamara(): void {
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => track.stop());
+      this.stream = null;
+    }
+    this.mostrarCamara = false;
+  }
+
 }

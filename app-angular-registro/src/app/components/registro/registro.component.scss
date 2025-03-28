@@ -11,11 +11,12 @@ body {
   }
   
   .registro-form {
+    padding-top: 20px;
     background: #FFFFFF;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
+    width: 550px;
     text-align: center;
   }
   
@@ -65,4 +66,66 @@ body {
   
   .shake {
     animation: shake 0.5s ease;
+  }
+
+
+  .btn-camara {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 10px;
+  }
+  
+
+
+  .foto-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input-camera-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px; 
+  }
+
+  .icono-camara {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin-bottom: 0; 
+    padding: 4px 0; 
+  }
+
+
+  .camera-container {
+    position: relative;
+    text-align: center;
+  
+    video, img {
+      max-width: 100%;
+      border-radius: 4px;
+    }
+  
+    .camera-controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+  
+      button {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        background: #007bff;
+        color: white;
+        cursor: pointer;
+  
+        &:hover {
+          background: #0056b3;
+        }
+      }
+    }
   }

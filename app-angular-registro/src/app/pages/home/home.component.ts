@@ -48,7 +48,7 @@ export default class HomeComponent {
   title = 'app-angular-registro';
   // define el titulo de la aplicacion
 
-  seccionActual: string = 'listado';
+  seccionActual: string = 'registro';
   // define la seccion actual por defecto
 
   mostrarSeccion(seccion: string) {
