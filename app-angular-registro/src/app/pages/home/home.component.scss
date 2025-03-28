@@ -71,7 +71,15 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    padding-top: 20px; 
+    transition: padding-top 0.3s ease; /* Transición suave entre estados */
+
+    &.camara-activa {
+      padding-top: 220px; /* Espacio adicional cuando la cámara está activa */
+    }
+
+    &:not(.camara-activa) {
+      padding-top: 20px; /* Espacio normal cuando la cámara no está activa */
+    }
   }
   
   

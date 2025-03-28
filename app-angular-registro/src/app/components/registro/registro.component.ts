@@ -1,5 +1,5 @@
 // registro.component.ts
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from '../../services/usuarios-services/usuarios.service'; 
@@ -25,6 +25,10 @@ export class RegistroComponent {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
 
+  @Output() activarCamara = new EventEmitter<void>();
+  @Output() desactivarCamara = new EventEmitter<void>();
+
+
   mostrarCamara: boolean = false;
   stream: MediaStream | null = null;
 
@@ -33,7 +37,7 @@ export class RegistroComponent {
   constructor(private usuariosService: UsuariosService) {}
 
   registrarUsuario() {
-    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento ||!this.foto) { // cambiado dni a documentoIdentidad
+    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento ||!this.foto) {
       this.error = 'Por favor complete todos los campos';
 
       // reinicia la clase shake para que la animacion se reproduzca nuevamente
@@ -85,8 +89,10 @@ export class RegistroComponent {
   limpiarFormulario() {
     this.nombre = '';
     this.email = '';
-    this.documento_identidad = ''; // cambiado dni a documento_identidad
+    this.documento_identidad = ''; 
     this.fechaNacimiento = '';
+    this.foto = null; // Limpia la foto seleccionada o capturada
+    this.fotoCapturada = false; // Reinicia el estado de la foto capturada
   }
 
   onFileSelected(event: Event): void {
@@ -100,14 +106,17 @@ export class RegistroComponent {
 
   async abrirCamara(): Promise<void> {
     try {
+      
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
           width: 640,
           height: 480
         }
+        
       });
-      
+      this.activarCamara.emit(); // Notifica al componente padre que la cámara está activa
       this.mostrarCamara = true;
+      
       
       // Esperar a que el DOM se actualice
       setTimeout(() => {
@@ -159,6 +168,8 @@ export class RegistroComponent {
     if (this.stream) {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
+      this.desactivarCamara.emit(); // Notifica al componente padre que la cámara está desactivada
+
     }
     this.mostrarCamara = false;
   }

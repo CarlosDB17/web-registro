@@ -30,6 +30,8 @@ export default class HomeComponent {
   private router = inject(Router);
   // inyecta el servicio router
 
+  
+
   logOut(): void {
     // metodo para cerrar sesion
     this.authservice.logOut()
@@ -50,12 +52,26 @@ export default class HomeComponent {
 
   seccionActual: string = 'registro';
   // define la seccion actual por defecto
+  camaraActiva: boolean = false; // Indica si la cámara está activa
 
-  mostrarSeccion(seccion: string) {
+  mostrarSeccion(seccion: string): void {
     // metodo para cambiar de seccion
     console.log('cambiando a:', seccion); 
     // muestra en consola la seccion a la que se cambia
     this.seccionActual = seccion;
     // actualiza la seccion actual
+
+    // Si la sección activa es "registro", verifica si la cámara está activa
+    if (seccion === 'registro') {
+      this.camaraActiva = false; // Por defecto, la cámara no está activa
+    }
+  }
+
+  activarCamara(): void {
+    this.camaraActiva = true; // Activa la cámara
+  }
+
+  desactivarCamara(): void {
+    this.camaraActiva = false; // Desactiva la cámara
   }
 }
