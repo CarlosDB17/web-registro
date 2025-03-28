@@ -23,6 +23,8 @@ export class RegistroComponent {
 
   fotoUrl: string | null = null; // Almacena la URL de la foto capturada
 
+  
+
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
   @ViewChild('fotoPreview') fotoPreview!: ElementRef;
