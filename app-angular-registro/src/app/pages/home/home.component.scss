@@ -74,7 +74,8 @@
     transition: padding-top 0.3s ease; /* Transición suave entre estados */
 
     &.camara-activa {
-      padding-top: 220px; /* Espacio adicional cuando la cámara está activa */
+      padding-top: 100px; /* Espacio adicional cuando la cámara está activa */
+      
     }
 
     &:not(.camara-activa) {

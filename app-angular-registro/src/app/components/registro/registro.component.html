@@ -23,7 +23,6 @@
     </div>
     
     <div class="camera-container">
-      <!-- Mostrar la cámara si está activa -->
       <div *ngIf="mostrarCamara">
         <video #videoElement autoplay playsinline></video>
         <canvas #canvasElement style="display: none;"></canvas>
@@ -33,19 +32,24 @@
         </div>
       </div>
     
-      <!-- Mostrar la foto capturada si la cámara está desactivada y la foto fue capturada -->
       <div *ngIf="!mostrarCamara && fotoCapturada">
-        <h3>Foto capturada:</h3>
-        <img id="fotoPreview" [src]="" alt="Foto capturada" style="max-width: 100%; height: auto; border: 1px solid #ccc; margin-top: 10px;">
+        <h2>Foto capturada:</h2>
+        <img 
+          #fotoPreview
+          [src]="fotoUrl" 
+          alt="Foto capturada" 
+          class="foto-preview">
         <div class="camera-controls">
           <button type="button" (click)="abrirCamara()">Volver a tomar foto</button>
         </div>
       </div>
     </div>
     
-    <button type="submit" [disabled]="cargando">
-      {{ cargando ? 'Registrando...' : 'Registrarse' }}
-    </button>
+    <div class="registro-boton-container">
+      <button type="submit" [disabled]="cargando">
+        {{ cargando ? 'Registrando...' : 'Registrarse' }}
+      </button>
+    </div>
     
     <div class="mensaje-exito" *ngIf="mensaje">{{ mensaje }}</div>
     <div class="mensaje-error" *ngIf="error">{{ error }}</div>

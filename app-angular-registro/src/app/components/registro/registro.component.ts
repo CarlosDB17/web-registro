@@ -1,9 +1,8 @@
 // registro.component.ts
-import { Component, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { Component, ViewChild, ElementRef, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from '../../services/usuarios-services/usuarios.service'; 
-
 
 @Component({
   selector: 'app-registro',
@@ -22,19 +21,22 @@ export class RegistroComponent {
   foto: File | null = null;
   fotoCapturada: boolean = false; // Indica si la foto fue capturada desde la cámara
 
+  fotoUrl: string | null = null; // Almacena la URL de la foto capturada
+
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('fotoPreview') fotoPreview!: ElementRef;
+
 
   @Output() activarCamara = new EventEmitter<void>();
   @Output() desactivarCamara = new EventEmitter<void>();
-
 
   mostrarCamara: boolean = false;
   stream: MediaStream | null = null;
 
   cargando: boolean = false;
 
-  constructor(private usuariosService: UsuariosService) {}
+  constructor(private usuariosService: UsuariosService, private cdr: ChangeDetectorRef) {}
 
   registrarUsuario() {
     if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento ||!this.foto) {
@@ -105,23 +107,42 @@ export class RegistroComponent {
   }
 
   async abrirCamara(): Promise<void> {
+    console.log('Intentando abrir la cámara...');
     try {
-      
+      // Limpiar la foto anterior
+      if (this.fotoUrl) {
+        console.log('Liberando URL de la foto anterior:', this.fotoUrl);
+        URL.revokeObjectURL(this.fotoUrl); // Liberar la URL anterior
+        this.fotoUrl = null; // Limpiar la URL de la foto
+      }
+  
+      // Forzar la limpieza del atributo src del <img>
+      if (this.fotoPreview && this.fotoPreview.nativeElement) {
+        this.fotoPreview.nativeElement.src = ''; // Limpiar el atributo src
+        console.log('Atributo src del <img> limpiado.');
+      }
+  
+      this.fotoCapturada = false; // Reiniciar el estado de la foto capturada
+      this.mostrarCamara = true; // Mostrar la cámara
+      this.cdr.detectChanges(); // Forzar la actualización del DOM
+      console.log('Estado después de limpiar: fotoUrl =', this.fotoUrl, ', fotoCapturada =', this.fotoCapturada);
+  
+      // Acceder a la cámara
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
           width: 640,
           height: 480
         }
-        
       });
+      console.log('Cámara abierta con éxito, stream:', this.stream);
+  
       this.activarCamara.emit(); // Notifica al componente padre que la cámara está activa
-      this.mostrarCamara = true;
-      
-      
+  
       // Esperar a que el DOM se actualice
       setTimeout(() => {
         if (this.videoElement && this.videoElement.nativeElement) {
           this.videoElement.nativeElement.srcObject = this.stream;
+          console.log('Stream asignado al elemento <video>.');
         }
       });
     } catch (error) {
@@ -131,6 +152,7 @@ export class RegistroComponent {
   }
 
   capturarFoto(): void {
+    console.log('Intentando capturar foto...');
     if (this.videoElement && this.canvasElement) {
       const video = this.videoElement.nativeElement;
       const canvas = this.canvasElement.nativeElement;
@@ -138,11 +160,13 @@ export class RegistroComponent {
       // Configurar el canvas con las dimensiones del video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
+      console.log('Canvas configurado: width =', canvas.width, ', height =', canvas.height);
   
       // Dibujar el frame actual del video en el canvas
       const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        console.log('Frame dibujado en el canvas.');
   
         // Convertir el canvas a un archivo
         canvas.toBlob((blob) => {
@@ -153,25 +177,42 @@ export class RegistroComponent {
   
             // Crear un enlace temporal para mostrar la imagen
             const url = URL.createObjectURL(blob);
-            this.mostrarCamara = false; // Ocultar la cámara
-            const imgElement = document.querySelector('#fotoPreview') as HTMLImageElement;
-            if (imgElement) {
-              imgElement.src = url; // Asignar la URL al elemento <img>
+            console.log('URL generada para la foto:', url);
+  
+            // Asignar la URL a la propiedad fotoUrl
+            if (this.fotoUrl) {
+              console.log('Liberando URL anterior:', this.fotoUrl);
+              URL.revokeObjectURL(this.fotoUrl); // Liberar la URL anterior
             }
+            this.fotoUrl = url;
+            console.log('Nueva fotoUrl asignada:', this.fotoUrl);
+  
+            // Cerrar la cámara después de capturar la foto
+            this.cerrarCamara();
+          } else {
+            console.error('No se pudo generar el blob de la foto.');
           }
         }, 'image/jpeg', 0.95);
+      } else {
+        console.error('No se pudo obtener el contexto del canvas.');
       }
+    } else {
+      console.error('Elementos videoElement o canvasElement no disponibles.');
     }
   }
 
   cerrarCamara(): void {
+    console.log('Intentando cerrar la cámara...');
     if (this.stream) {
+      console.log('Deteniendo tracks del stream...');
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
+      console.log('Stream detenido.');
       this.desactivarCamara.emit(); // Notifica al componente padre que la cámara está desactivada
-
     }
-    this.mostrarCamara = false;
+    this.mostrarCamara = false; // Asegúrate de que esta propiedad se actualice
+    console.log('Estado después de cerrar la cámara: mostrarCamara =', this.mostrarCamara);
+    this.cdr.detectChanges(); // Forzar la detección de cambios
   }
 
 }
