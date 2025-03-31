@@ -151,20 +151,23 @@ export class ListadoUsuariosComponent implements OnInit {
 
   onFotoSeleccionada(event: Event): void {
     const input = event.target as HTMLInputElement;
-
+  
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image.heic', 'image.heif'];
-
+  
       if (!allowedTypes.includes(file.type)) {
         this.error = 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.';
         this.fotoSeleccionadaArchivo = null;
+        console.log('Formato de archivo no permitido:', file.type);
         return;
       }
-
+  
       this.fotoSeleccionadaArchivo = file; // Guardar el archivo seleccionado
-      console.log('Foto seleccionada:', file);
+      console.log('Foto seleccionada correctamente:', file.name, 'Tamaño:', file.size, 'Tipo:', file.type);
       this.error = ''; // Limpiar cualquier mensaje de error previo
+    } else {
+      console.log('No se seleccionó ningún archivo.');
     }
   }
 
@@ -347,15 +350,11 @@ export class ListadoUsuariosComponent implements OnInit {
       }
     );
   }
-
 limpiarFormulario(): void {
-  // Comprobar si fileInput existe antes de intentar acceder a nativeElement
-  if (this.fileInput && this.fileInput.nativeElement) {
-    this.fileInput.nativeElement.value = null; // Limpiar el input de archivo
-  }
-  this.fotoSeleccionadaArchivo = null; // Limpiar la foto seleccionada
-  this.mensaje = ''; // Limpiar el mensaje de éxito
-  this.error = ''; // Limpiar el mensaje de error
+  this.fileInput.nativeElement.value = ''; // Limpiar el input de archivo
+  this.fotoSeleccionadaArchivo = null;
+  this.mensaje = '';
+  this.error = '';
 }
 
   seleccionarFoto(fileInput: HTMLInputElement): void {
