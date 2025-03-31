@@ -60,7 +60,7 @@ export class UsuariosService {
   // Subir o actualizar foto del usuario
   subirFoto(documento_identidad: string, foto: File): Observable<any> {
     const formData = new FormData();
-    formData.append('foto', foto);
+    formData.append('file', foto);
     return this.http.post(`${this.API_URL}/${documento_identidad}/foto`, formData);
   }
 

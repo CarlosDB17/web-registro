@@ -70,32 +70,7 @@ export class RegistroComponent {
 
         // Si hay una foto seleccionada, subirla
         if (this.foto) {
-          this.usuariosService.subirFoto(this.documento_identidad, this.foto).subscribe({
-            next: (fotoResponse) => {
-              console.log('Foto subida:', fotoResponse);
-
-              // Actualizar el campo foto del usuario con la URL devuelta
-              const updatedData = { foto: fotoResponse.foto };
-              this.usuariosService.actualizarUsuario(this.documento_identidad, updatedData).subscribe({
-                next: () => {
-                  console.log('Campo foto actualizado correctamente');
-                  this.mensaje = 'Usuario registrado correctamente con foto';
-                  this.limpiarFormulario();
-                  this.cargando = false;
-                },
-                error: (err) => {
-                  console.error('Error al actualizar el campo foto:', err);
-                  this.error = 'Usuario registrado, pero hubo un error al asociar la foto.';
-                  this.cargando = false;
-                }
-              });
-            },
-            error: (err) => {
-              console.error('Error al subir la foto:', err);
-              this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
-              this.cargando = false;
-            }
-          });
+          this.subirFotoUsuario();
         } else {
           this.mensaje = 'Usuario registrado correctamente';
           this.limpiarFormulario();
@@ -109,6 +84,35 @@ export class RegistroComponent {
 
         // reinicia la clase shake para que la animacion se reproduzca nuevamente
         this.activarShake();
+      }
+    });
+  }
+
+  subirFotoUsuario() {
+    this.usuariosService.subirFoto(this.documento_identidad.toUpperCase(), this.foto!).subscribe({
+      next: (fotoResponse) => {
+        console.log('Foto subida:', fotoResponse);
+
+        // Actualizar el campo foto del usuario con la URL devuelta
+        const updatedData = { foto: fotoResponse.foto };
+        this.usuariosService.actualizarUsuario(this.documento_identidad, updatedData).subscribe({
+          next: () => {
+            console.log('Campo foto actualizado correctamente');
+            this.mensaje = 'Usuario registrado correctamente con foto';
+            this.limpiarFormulario();
+            this.cargando = false;
+          },
+          error: (err) => {
+            console.error('Error al actualizar el campo foto:', err);
+            this.error = 'Usuario registrado, pero hubo un error al asociar la foto.';
+            this.cargando = false;
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error al subir la foto:', err);
+        this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
+        this.cargando = false;
       }
     });
   }
