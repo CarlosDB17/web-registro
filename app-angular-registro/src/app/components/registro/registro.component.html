@@ -20,7 +20,15 @@
             <input type="file" id="foto" (change)="onFileSelected($event)" accept="image/*">
             <img src="/ic_camara.png" alt="Abrir Cámara" class="icono-camara" (click)="abrirCamara()">
         </div>
+
+        <!-- boton para eliminar -->
+        <div *ngIf="foto">
+          <button type="button" (click)="eliminarFoto()" class="btn-eliminar-foto">Eliminar Foto</button>
+        </div>
     </div>
+
+
+    
     
     <div class="camera-container">
       <div *ngIf="mostrarCamara">

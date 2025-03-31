@@ -41,7 +41,7 @@ export class RegistroComponent {
   constructor(private usuariosService: UsuariosService, private cdr: ChangeDetectorRef) {}
 
   registrarUsuario() {
-    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento ||!this.foto) {
+    if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento) {
       this.error = 'Por favor complete todos los campos';
 
       // reinicia la clase shake para que la animacion se reproduzca nuevamente
@@ -53,22 +53,54 @@ export class RegistroComponent {
     this.mensaje = '';
     this.error = '';
 
+    // Registrar al usuario sin la foto
     const usuario = {
       usuario: this.documento_identidad, // usando documento_identidad como nombre de usuario / clave primaria
       nombre: this.nombre,
       email: this.email.toLowerCase(),
       documento_identidad: this.documento_identidad.toUpperCase(), // cambiado dni a documento_identidad
       fecha_nacimiento: this.fechaNacimiento,
-      foto: this.foto,
+      foto: '', // Inicialmente vacío
       mensaje: ''
     };
 
     this.usuariosService.registrarUsuario(usuario).subscribe({
       next: (respuesta) => {
         console.log('Usuario registrado:', respuesta);
-        this.mensaje = (respuesta as any)?.mensaje || 'Usuario registrado correctamente';
-        this.limpiarFormulario();
-        this.cargando = false;
+
+        // Si hay una foto seleccionada, subirla
+        if (this.foto) {
+          this.usuariosService.subirFoto(this.documento_identidad, this.foto).subscribe({
+            next: (fotoResponse) => {
+              console.log('Foto subida:', fotoResponse);
+
+              // Actualizar el campo foto del usuario con la URL devuelta
+              const updatedData = { foto: fotoResponse.foto };
+              this.usuariosService.actualizarUsuario(this.documento_identidad, updatedData).subscribe({
+                next: () => {
+                  console.log('Campo foto actualizado correctamente');
+                  this.mensaje = 'Usuario registrado correctamente con foto';
+                  this.limpiarFormulario();
+                  this.cargando = false;
+                },
+                error: (err) => {
+                  console.error('Error al actualizar el campo foto:', err);
+                  this.error = 'Usuario registrado, pero hubo un error al asociar la foto.';
+                  this.cargando = false;
+                }
+              });
+            },
+            error: (err) => {
+              console.error('Error al subir la foto:', err);
+              this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
+              this.cargando = false;
+            }
+          });
+        } else {
+          this.mensaje = 'Usuario registrado correctamente';
+          this.limpiarFormulario();
+          this.cargando = false;
+        }
       },
       error: (err) => {
         console.error('Error al registrar:', err);
@@ -108,8 +140,13 @@ export class RegistroComponent {
     }
   }
 
-  async abrirCamara(): Promise<void> {
+  abrirCamara(): Promise<void> {
     console.log('Intentando abrir la cámara...');
+    if (this.foto) {
+      alert('Ya hay una foto seleccionada. Por favor, elimínela antes de abrir la cámara.');
+      return Promise.resolve(); // Salir del método si ya hay una foto seleccionada
+    }
+  
     try {
       // Limpiar la foto anterior
       if (this.fotoUrl) {
@@ -130,27 +167,43 @@ export class RegistroComponent {
       console.log('Estado después de limpiar: fotoUrl =', this.fotoUrl, ', fotoCapturada =', this.fotoCapturada);
   
       // Acceder a la cámara
-      this.stream = await navigator.mediaDevices.getUserMedia({
+      return navigator.mediaDevices.getUserMedia({
         video: {
           width: 640,
           height: 480
         }
-      });
-      console.log('Cámara abierta con éxito, stream:', this.stream);
+      }).then((stream) => {
+        console.log('Cámara abierta con éxito, stream:', stream);
+        this.stream = stream;
   
-      this.activarCamara.emit(); // Notifica al componente padre que la cámara está activa
+        this.activarCamara.emit(); // Notifica al componente padre que la cámara está activa
   
-      // Esperar a que el DOM se actualice
-      setTimeout(() => {
-        if (this.videoElement && this.videoElement.nativeElement) {
-          this.videoElement.nativeElement.srcObject = this.stream;
-          console.log('Stream asignado al elemento <video>.');
-        }
+        // Esperar a que el DOM se actualice
+        setTimeout(() => {
+          if (this.videoElement && this.videoElement.nativeElement) {
+            this.videoElement.nativeElement.srcObject = this.stream;
+            console.log('Stream asignado al elemento <video>.');
+          }
+        });
+      }).catch((error) => {
+        console.error('Error al acceder a la cámara:', error);
+        alert('No se pudo acceder a la cámara. Por favor, asegúrese de dar los permisos necesarios.');
       });
     } catch (error) {
-      console.error('Error al acceder a la cámara:', error);
-      alert('No se pudo acceder a la cámara. Por favor, asegúrese de dar los permisos necesarios.');
+      console.error('Error inesperado al abrir la cámara:', error);
+      return Promise.reject(error);
     }
+  }
+  
+  eliminarFoto(): void {
+    if (this.fotoUrl) {
+      console.log('Liberando URL de la foto:', this.fotoUrl);
+      URL.revokeObjectURL(this.fotoUrl); // Liberar la URL de la foto
+      this.fotoUrl = null;
+    }
+    this.foto = null; // Eliminar la foto seleccionada
+    this.fotoCapturada = false; // Reiniciar el estado de la foto capturada
+    console.log('Foto eliminada.');
   }
 
   capturarFoto(): void {

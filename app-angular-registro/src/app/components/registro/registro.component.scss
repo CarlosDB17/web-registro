@@ -145,3 +145,18 @@ body {
     margin-top: 10px; /* Espacio adicional entre el botón y los controles de la cámara */
     text-align: center; /* Centrar el botón */
   }
+
+
+  .btn-eliminar-foto {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #c0392b;
+    }
+  }
