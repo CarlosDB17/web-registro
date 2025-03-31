@@ -35,6 +35,7 @@ export class ListadoUsuariosComponent implements OnInit {
   // set para rastrear usuarios cuyos datos originales ya se han almacenado
   usuariosConDatosOriginales: Set<string> = new Set();
   fotoSeleccionada: string | undefined;
+  fotoSeleccionadaArchivo: File | null = null;
 
   constructor(private usuariosService: UsuariosService) {}
 
@@ -91,10 +92,11 @@ export class ListadoUsuariosComponent implements OnInit {
       console.error('Formulario inválido:', form.value);
       return;
     }
-
+  
     const userData: Usuario = form.value;
     console.log('Datos enviados al servidor:', userData);
-
+  
+    // Registrar el usuario sin la foto
     this.usuariosService.registrarUsuario(userData).subscribe(
       (response) => {
         console.log('Usuario registrado:', response);
@@ -102,6 +104,30 @@ export class ListadoUsuariosComponent implements OnInit {
         this.usuarios.push(nuevoUsuario);
         this.mensaje = response?.mensaje ?? 'Usuario registrado correctamente';
         this.error = '';
+  
+        // Verificar si hay una foto seleccionada
+        if (this.fotoSeleccionadaArchivo) {
+          console.log('Intentando subir la foto:', this.fotoSeleccionadaArchivo);
+  
+          this.usuariosService.subirFoto(nuevoUsuario.documento_identidad, this.fotoSeleccionadaArchivo).subscribe(
+            (fotoResponse) => {
+              console.log('Foto subida:', fotoResponse);
+              // Actualizar el campo foto del usuario en la lista local
+              const index = this.usuarios.findIndex(u => u.documento_identidad === nuevoUsuario.documento_identidad);
+              if (index !== -1) {
+                this.usuarios[index].foto = fotoResponse.foto; // Asume que el servidor devuelve la URL de la foto
+              }
+              this.mensaje = 'Usuario registrado y foto subida correctamente';
+            },
+            (error) => {
+              console.error('Error al subir la foto', error);
+              this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
+            }
+          );
+        } else {
+          console.warn('No se seleccionó ninguna foto para subir.');
+        }
+  
         form.reset();
       },
       (error) => {
@@ -118,23 +144,53 @@ export class ListadoUsuariosComponent implements OnInit {
 
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/heic', 'image/heif'];
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image.heic', 'image.heif'];
 
       if (!allowedTypes.includes(file.type)) {
         this.error = 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.';
+        this.fotoSeleccionadaArchivo = null;
         return;
       }
 
-      // Si el archivo es válido, puedes procesarlo aquí
-      const reader = new FileReader();
-      reader.onload = () => {
-        // Aquí puedes guardar la foto en una variable o enviarla al servidor
-        this.fotoSeleccionada = reader.result as string; // Guardar la foto como base64 si es necesario
-      };
-      reader.readAsDataURL(file);
-
+      this.fotoSeleccionadaArchivo = file; // Guardar el archivo seleccionado
+      console.log('Foto seleccionada:', file);
       this.error = ''; // Limpiar cualquier mensaje de error previo
     }
+  }
+
+  subirFotoUsuario(documento_identidad: string): void {
+    if (!this.fotoSeleccionadaArchivo) {
+      console.error('No hay foto seleccionada para subir.');
+      this.cargando = false; // Añade esta línea
+      return;
+    }
+  
+    this.usuariosService.subirFoto(documento_identidad.toUpperCase(), this.fotoSeleccionadaArchivo).subscribe({
+      next: (fotoResponse) => {
+        console.log('Foto subida:', fotoResponse);
+  
+        // Actualizar el campo foto del usuario con la URL devuelta
+        const updatedData = { foto: fotoResponse.foto };
+        this.usuariosService.actualizarUsuario(documento_identidad.toUpperCase(), updatedData).subscribe({
+          next: () => {
+            console.log('Campo foto actualizado correctamente');
+            this.mensaje = 'Usuario registrado correctamente con foto';
+            this.limpiarFormulario();
+            this.cargando = false;
+          },
+          error: (err) => {
+            console.error('Error al actualizar el campo foto:', err);
+            this.error = 'Usuario registrado, pero hubo un error al asociar la foto.';
+            this.cargando = false;
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error al subir la foto:', err);
+        this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
+        this.cargando = false;
+      }
+    });
   }
 
   // metodo para verificar la unicidad antes de actualizar
@@ -282,7 +338,15 @@ export class ListadoUsuariosComponent implements OnInit {
     );
   }
 
-
+limpiarFormulario(): void {
+  // Comprobar si fileInput existe antes de intentar acceder a nativeElement
+  if (this.fileInput && this.fileInput.nativeElement) {
+    this.fileInput.nativeElement.value = null; // Limpiar el input de archivo
+  }
+  this.fotoSeleccionadaArchivo = null; // Limpiar la foto seleccionada
+  this.mensaje = ''; // Limpiar el mensaje de éxito
+  this.error = ''; // Limpiar el mensaje de error
+}
 
   seleccionarFoto(fileInput: HTMLInputElement): void {
     fileInput.click();
@@ -312,7 +376,5 @@ export class ListadoUsuariosComponent implements OnInit {
       });
     }
   }
-
-
   
 }
