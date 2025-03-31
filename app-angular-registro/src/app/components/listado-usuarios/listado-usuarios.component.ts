@@ -34,6 +34,7 @@ export class ListadoUsuariosComponent implements OnInit {
 
   // set para rastrear usuarios cuyos datos originales ya se han almacenado
   usuariosConDatosOriginales: Set<string> = new Set();
+  fotoSeleccionada: string | undefined;
 
   constructor(private usuariosService: UsuariosService) {}
 
@@ -87,10 +88,13 @@ export class ListadoUsuariosComponent implements OnInit {
     if (!form.valid) {
       this.error = 'Completa todos los campos.';
       this.mensaje = '';
+      console.error('Formulario inválido:', form.value);
       return;
     }
-  
+
     const userData: Usuario = form.value;
+    console.log('Datos enviados al servidor:', userData);
+
     this.usuariosService.registrarUsuario(userData).subscribe(
       (response) => {
         console.log('Usuario registrado:', response);
@@ -102,10 +106,35 @@ export class ListadoUsuariosComponent implements OnInit {
       },
       (error) => {
         console.error('Error al registrar usuario', error);
+        console.error('Detalles del error:', error.error);
         this.error = error.error?.detail ?? 'Error al registrar usuario';
         this.mensaje = '';
       }
     );
+  }
+
+  onFotoSeleccionada(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/heic', 'image/heif'];
+
+      if (!allowedTypes.includes(file.type)) {
+        this.error = 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.';
+        return;
+      }
+
+      // Si el archivo es válido, puedes procesarlo aquí
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Aquí puedes guardar la foto en una variable o enviarla al servidor
+        this.fotoSeleccionada = reader.result as string; // Guardar la foto como base64 si es necesario
+      };
+      reader.readAsDataURL(file);
+
+      this.error = ''; // Limpiar cualquier mensaje de error previo
+    }
   }
 
   // metodo para verificar la unicidad antes de actualizar

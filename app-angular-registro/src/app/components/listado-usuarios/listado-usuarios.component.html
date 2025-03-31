@@ -2,16 +2,23 @@
   <h2>Listado de Usuarios</h2>
 
   <!-- formulario para registrar un nuevo usuario -->
-  <!-- formulario para registrar un nuevo usuario -->
   <form #userForm="ngForm" (ngSubmit)="registrarUsuario(userForm)">
     <input type="text" name="nombre" ngModel placeholder="Nombre" required>
     <input type="email" name="email" ngModel placeholder="Email" required>
     <input type="text" name="documento_identidad" ngModel placeholder="Documento de identidad" required>
     <input type="date" name="fecha_nacimiento" ngModel required>
+    
+    <!-- Campo para elegir una foto -->
+    <input 
+      type="file" 
+      name="foto" 
+      (change)="onFotoSeleccionada($event)" 
+      accept=".png, .jpg, .jpeg, .heic, .heif" 
+      required
+    >
+    
     <button type="submit">Registrar</button>
   </form>
-
-
 
   <!-- mensajes de exito o error -->
   <div *ngIf="mensaje" style="color: #0197F6;" class="alert alert-success">
