@@ -89,13 +89,19 @@ export class RegistroComponent {
   }
 
   subirFotoUsuario() {
-    this.usuariosService.subirFoto(this.documento_identidad.toUpperCase(), this.foto!).subscribe({
+    if (!this.foto) {
+      console.error('No hay foto seleccionada para subir.');
+      return;
+    }
+
+    // Llamar al método subirFoto del servicio
+    this.usuariosService.subirFoto(this.documento_identidad.toUpperCase(), this.foto).subscribe({
       next: (fotoResponse) => {
         console.log('Foto subida:', fotoResponse);
 
         // Actualizar el campo foto del usuario con la URL devuelta
         const updatedData = { foto: fotoResponse.foto };
-        this.usuariosService.actualizarUsuario(this.documento_identidad, updatedData).subscribe({
+        this.usuariosService.actualizarUsuario(this.documento_identidad.toUpperCase(), updatedData).subscribe({
           next: () => {
             console.log('Campo foto actualizado correctamente');
             this.mensaje = 'Usuario registrado correctamente con foto';
