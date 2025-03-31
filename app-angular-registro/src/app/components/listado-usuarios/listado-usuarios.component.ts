@@ -92,32 +92,41 @@ export class ListadoUsuariosComponent implements OnInit {
       console.error('Formulario inválido:', form.value);
       return;
     }
-  
+
     const userData: Usuario = form.value;
     console.log('Datos enviados al servidor:', userData);
-  
+
+    // Mostrar mensaje de progreso
+    this.mensaje = 'Registrando usuario...';
+    this.error = '';
+
     // Registrar el usuario sin la foto
     this.usuariosService.registrarUsuario(userData).subscribe(
       (response) => {
         console.log('Usuario registrado:', response);
         const nuevoUsuario = response.usuario;
         this.usuarios.push(nuevoUsuario);
-        this.mensaje = response?.mensaje ?? 'Usuario registrado correctamente';
-        this.error = '';
-  
+        this.mensaje = 'Usuario registrado correctamente.';
+
         // Verificar si hay una foto seleccionada
         if (this.fotoSeleccionadaArchivo) {
           console.log('Intentando subir la foto:', this.fotoSeleccionadaArchivo);
-  
+
+          // Actualizar mensaje de progreso
+          this.mensaje = 'Usuario registrado. Subiendo foto...';
+
           this.usuariosService.subirFoto(nuevoUsuario.documento_identidad, this.fotoSeleccionadaArchivo).subscribe(
             (fotoResponse) => {
               console.log('Foto subida:', fotoResponse);
+
               // Actualizar el campo foto del usuario en la lista local
               const index = this.usuarios.findIndex(u => u.documento_identidad === nuevoUsuario.documento_identidad);
               if (index !== -1) {
                 this.usuarios[index].foto = fotoResponse.foto; // Asume que el servidor devuelve la URL de la foto
               }
-              this.mensaje = 'Usuario registrado y foto subida correctamente';
+
+              // Actualizar mensaje de éxito
+              this.mensaje = 'Usuario registrado y foto subida correctamente.';
             },
             (error) => {
               console.error('Error al subir la foto', error);
@@ -126,8 +135,9 @@ export class ListadoUsuariosComponent implements OnInit {
           );
         } else {
           console.warn('No se seleccionó ninguna foto para subir.');
+          this.mensaje = 'Usuario registrado correctamente sin foto.';
         }
-  
+
         form.reset();
       },
       (error) => {
