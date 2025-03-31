@@ -31,6 +31,7 @@
     <table>
       <thead>
         <tr>
+          <th>Foto</th>
           <th>Nombre</th>
           <th>Email</th>
           <th>Documento de identidad</th>
@@ -40,6 +41,21 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of usuarios">
+          <td data-label="Foto">
+            <img 
+              [src]="user.foto && user.foto !== '' ? user.foto : '/ic_no_foto.png'" 
+              alt="Foto del usuario" 
+              class="foto-usuario"
+              (click)="seleccionarFoto(fileInput)"
+            />
+            <input 
+              type="file" 
+              #fileInput 
+              accept="image/*" 
+              style="display: none;" 
+              (change)="actualizarFotoUsuario($event, user)"
+            />
+          </td>
           <td data-label="Nombre" (click)="almacenarDatosOriginales(user)">
             <input [(ngModel)]="user.nombre" placeholder="Nombre" required>
           </td>
@@ -54,7 +70,8 @@
           </td>
           <td data-label="Acciones">
             <button (click)="iniciarActualizacionUsuario(user)">Actualizar</button>
-            <button (click)="eliminarUsuario(user.documento_identidad)" class="btn-danger">Eliminar</button>
+            <button (click)="eliminarUsuario(user.documento_identidad)" class="btn-danger">Eliminar Usuario</button>
+            <button (click)="eliminarFotoUsuario(user.documento_identidad)" class="btn-warning">Eliminar Foto</button>
           </td>
         </tr>
       </tbody>

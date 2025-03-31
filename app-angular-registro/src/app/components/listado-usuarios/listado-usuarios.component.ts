@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from "../../services/usuarios-services/usuarios.service";
@@ -10,6 +10,7 @@ interface Usuario {
   email: string;
   documento_identidad: string;
   fecha_nacimiento: string;
+  foto?: string; // Nuevo campo opcional para la foto
 }
 
 @Component({
@@ -20,6 +21,8 @@ interface Usuario {
   styleUrls: ['./listado-usuarios.component.scss']
 })
 export class ListadoUsuariosComponent implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
   usuarios: Usuario[] = [];
   mensaje: string = '';
   error: string = '';
@@ -230,4 +233,57 @@ export class ListadoUsuariosComponent implements OnInit {
       }
     );
   }
+  
+  eliminarFotoUsuario(documento_identidad: string): void {
+    this.usuariosService.eliminarFoto(documento_identidad).subscribe(
+      () => {
+        // Encuentra el usuario en la lista y actualiza el campo foto a vacío
+        const usuario = this.usuarios.find(user => user.documento_identidad === documento_identidad);
+        if (usuario) {
+          usuario.foto = ''; // Actualiza el campo foto para reflejar el cambio en la tabla
+        }
+        this.mensaje = 'Foto eliminada correctamente';
+        this.error = '';
+      },
+      (error) => {
+        console.error('Error al eliminar la foto', error);
+        this.error = error.error?.detail ?? 'Error al eliminar la foto';
+        this.mensaje = '';
+      }
+    );
+  }
+
+
+
+  seleccionarFoto(fileInput: HTMLInputElement): void {
+    fileInput.click();
+  }
+  
+  actualizarFotoUsuario(event: Event, user: Usuario): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+  
+      // Establece el mensaje de carga personalizado
+      this.mensaje = `Actualizando foto a ${user.nombre}...`;
+      this.error = '';
+  
+      // Llama al servicio para subir la nueva foto
+      this.usuariosService.subirFoto(user.documento_identidad, file).subscribe({
+        next: (response) => {
+          console.log('Foto actualizada:', response);
+          user.foto = response.foto; // Actualiza la foto en la tabla
+          this.mensaje = `Foto actualizada correctamente para ${user.nombre}`;
+        },
+        error: (err) => {
+          console.error('Error al actualizar la foto:', err);
+          this.error = `Hubo un error al actualizar la foto de ${user.nombre}`;
+          this.mensaje = '';
+        }
+      });
+    }
+  }
+
+
+  
 }
