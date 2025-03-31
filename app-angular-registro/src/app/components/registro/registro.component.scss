@@ -9,6 +9,12 @@ body {
     align-items: center;
     height: 70vh;
   }
+
+.mensaje-exito,
+.mensaje-error {
+  padding-top: 10px;
+  font-weight: bold;
+}
   
   .registro-form {
     margin-top: 20px;
