@@ -85,6 +85,13 @@ export class ListadoUsuariosComponent implements OnInit {
     this.guardarCambiosUsuario(usuario);
   }
 
+  resetFileInput(): void {
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+      this.fotoSeleccionadaArchivo = null;
+    }
+  }
+
   registrarUsuario(form: any): void {
     if (!form.valid) {
       this.error = 'Completa todos los campos.';
@@ -127,6 +134,8 @@ export class ListadoUsuariosComponent implements OnInit {
 
               // Actualizar mensaje de éxito
               this.mensaje = 'Usuario registrado y foto subida correctamente.';
+
+              this.resetFileInput(); // Limpiar el input de archivo después de subir la foto
             },
             (error) => {
               console.error('Error al subir la foto', error);
@@ -148,6 +157,8 @@ export class ListadoUsuariosComponent implements OnInit {
       }
     );
   }
+
+
 
   onFotoSeleccionada(event: Event): void {
     const input = event.target as HTMLInputElement;
