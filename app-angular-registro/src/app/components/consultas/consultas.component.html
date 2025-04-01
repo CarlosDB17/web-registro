@@ -1,5 +1,6 @@
 <div class="listado-container" [class.busqueda-activa]="busquedaActiva">
   <h2>Consulta de Usuarios</h2>
+  <input #fileInput type="file" style="display: none;" />
 
   <form (ngSubmit)="buscar()">
     <select [(ngModel)]="tipoBusqueda" name="tipoBusqueda" (change)="limpiarTerminoBusqueda()">
@@ -50,10 +51,19 @@
         <tr *ngFor="let usuario of usuarios">
           <td>
             <img 
-              [src]="usuario.foto && usuario.foto !== '' ? usuario.foto : '/ic_no_foto.png'" 
-              alt="Foto del usuario" 
-              class="foto-usuario"
-            />
+            [src]="usuario.foto && usuario.foto !== '' ? usuario.foto : '/ic_no_foto.png'" 
+            alt="Foto del usuario" 
+            class="foto-usuario"
+            (click)="seleccionarFoto(fileInput)"
+          />
+          <input 
+          type="file" 
+          #fileInput 
+          accept="image/*" 
+          style="display: none;" 
+          (change)="actualizarFotoUsuario($event,usuario)"
+        />
+
           </td>
           <td>
             <input 
