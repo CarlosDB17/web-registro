@@ -303,6 +303,9 @@ export class ListadoUsuariosComponent implements OnInit {
         console.log('Usuario actualizado correctamente');
         this.mensaje = response?.mensaje ?? 'Usuario actualizado correctamente';
         this.error = '';
+    
+        // Refresca la tabla
+        this.obtenerUsuarios();
       },
       (error) => {
         console.error('Error al actualizar usuario', error);
@@ -371,8 +374,11 @@ limpiarFormulario(): void {
       this.usuariosService.subirFoto(user.documento_identidad, file).subscribe({
         next: (response) => {
           console.log('Foto actualizada:', response);
-          user.foto = response.foto; // actualiza la foto en la tabla
+          user.foto = response.foto; // Actualiza la foto en la tabla
           this.mensaje = `Foto actualizada correctamente para ${user.nombre}`;
+      
+          // refresca la tabla
+          this.obtenerUsuarios();
         },
         error: (err) => {
           console.error('Error al actualizar la foto:', err);
