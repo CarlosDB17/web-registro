@@ -178,20 +178,23 @@ export class ListadoUsuariosComponent implements OnInit {
 
   // metodo para verificar la unicidad antes de actualizar
   private guardarCambiosUsuario(usuario: Usuario): void {
+    // convertir el documento de identidad a mayúsculas
+    usuario.documento_identidad = usuario.documento_identidad.toUpperCase();
+
     // primero, verificamos si ha cambiado el documento de identidad
-    if (usuario.documento_identidad !== this.usuarioOriginal.documento_identidad) {
+    if (usuario.documento_identidad !== this.usuarioOriginal.documento_identidad?.toUpperCase()) {
       console.log('Documento de identidad cambiado');
-      console.log('Original:', this.usuarioOriginal.documento_identidad);
+      console.log('Original:', this.usuarioOriginal.documento_identidad?.toUpperCase());
       console.log('Nuevo:', usuario.documento_identidad);
       
       // verificamos si el nuevo documento de identidad ya existe
-      this.usuariosService.buscarPorDocumentoIdentidad(usuario.documento_identidad, this.skip, this.limit).subscribe(
+      this.usuariosService.buscarPorDocumentoExacto(usuario.documento_identidad).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
             this.error = 'El documento de identidad ya está registrado por otro usuario.';
             return;
           }
-          // si no existe,verificar el email
+          // si no existe, verificar el email
           this.verificarYActualizarEmail(usuario);
         },
         (error) => {
@@ -213,14 +216,17 @@ export class ListadoUsuariosComponent implements OnInit {
 
   // metodo para verificar la unicidad del email
   private verificarYActualizarEmail(usuario: Usuario): void {
+    // convertimos el email a minúsculas antes de cualquier operación
+    usuario.email = usuario.email.toLowerCase();
+
     // verificamos si el email ha cambiado
-    if (usuario.email !== this.usuarioOriginal.email) {
+    if (usuario.email !== this.usuarioOriginal.email?.toLowerCase()) {
       console.log('Email cambiado');
-      console.log('Original:', this.usuarioOriginal.email);
+      console.log('Original:', this.usuarioOriginal.email?.toLowerCase());
       console.log('Nuevo:', usuario.email);
       
-      // buscamos si el nuevo email ya existe
-      this.usuariosService.buscarPorEmail(usuario.email, this.skip, this.limit).subscribe(
+      // buscamos si el nuevo email ya existe usando el nuevo método buscarPorEmailExacto
+      this.usuariosService.buscarPorEmailExacto(usuario.email).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
             this.error = 'El email ya está registrado por otro usuario.';
@@ -230,8 +236,14 @@ export class ListadoUsuariosComponent implements OnInit {
           this.realizarActualizacionUsuario(usuario);
         },
         (error) => {
-          console.error('Error al verificar email', error);
-          this.error = error.error?.detail ?? 'Error al verificar email';
+          // si el error es 404, significa que el email no está registrado y podemos continuar
+          if (error.status === 404) {
+            console.log('Email no está registrado, continuando...');
+            this.realizarActualizacionUsuario(usuario);
+          } else {
+            console.error('Error al verificar email', error);
+            this.error = error.error?.detail ?? 'Error al verificar email';
+          }
         }
       );
     } else {

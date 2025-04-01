@@ -79,4 +79,16 @@ buscarPorEmail(email: string, skip: number, limit: number): Observable<{ usuario
   eliminarFoto(documento_identidad: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${documento_identidad}/foto`);
   }
+
+// Buscar usuario por email exacto
+buscarPorEmailExacto(email: string): Observable<Usuario> {
+  return this.http.get<Usuario>(`${this.API_URL}/email-exacto/${email}`);
+}
+
+// Buscar usuario por documento exacto
+buscarPorDocumentoExacto(documento_identidad: string): Observable<Usuario> {
+  return this.http.get<Usuario>(`${this.API_URL}/documento-exacto/${documento_identidad}`);
+}
+
+  
 }
