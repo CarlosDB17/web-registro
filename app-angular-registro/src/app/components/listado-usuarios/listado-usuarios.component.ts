@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from "../../services/usuarios-services/usuarios.service";
+import { ConsultasComponent } from '../consultas/consultas.component';
 
 interface Usuario {
   mensaje: string;
@@ -16,7 +17,7 @@ interface Usuario {
 @Component({
   selector: 'app-listado-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ConsultasComponent],
   templateUrl: './listado-usuarios.component.html',
   styleUrls: ['./listado-usuarios.component.scss']
 })
@@ -27,7 +28,7 @@ export class ListadoUsuariosComponent implements OnInit {
   mensaje: string = '';
   error: string = '';
   cargando: boolean = false;
-  formularioEnviado: boolean = false;
+
   
   // almacena los datos originales del usuario antes de la edicion
   usuarioOriginal: Partial<Usuario> = {};
@@ -92,71 +93,6 @@ export class ListadoUsuariosComponent implements OnInit {
     }
   }
 
-  registrarUsuario(form: any): void {
-    if (!form.valid) {
-      this.error = 'Completa todos los campos.';
-      this.mensaje = '';
-      console.error('Formulario inválido:', form.value);
-      return;
-    }
-
-    const userData: Usuario = form.value;
-    console.log('Datos enviados al servidor:', userData);
-
-    // Mostrar mensaje de progreso
-    this.mensaje = 'Registrando usuario...';
-    this.error = '';
-
-    // Registrar el usuario sin la foto
-    this.usuariosService.registrarUsuario(userData).subscribe(
-      (response) => {
-        console.log('Usuario registrado:', response);
-        const nuevoUsuario = response.usuario;
-        this.usuarios.push(nuevoUsuario);
-        this.mensaje = 'Usuario registrado correctamente.';
-
-        // Verificar si hay una foto seleccionada
-        if (this.fotoSeleccionadaArchivo) {
-          console.log('Intentando subir la foto:', this.fotoSeleccionadaArchivo);
-
-          // Actualizar mensaje de progreso
-          this.mensaje = 'Usuario registrado. Subiendo foto...';
-
-          this.usuariosService.subirFoto(nuevoUsuario.documento_identidad, this.fotoSeleccionadaArchivo).subscribe(
-            (fotoResponse) => {
-              console.log('Foto subida:', fotoResponse);
-
-              // Actualizar el campo foto del usuario en la lista local
-              const index = this.usuarios.findIndex(u => u.documento_identidad === nuevoUsuario.documento_identidad);
-              if (index !== -1) {
-                this.usuarios[index].foto = fotoResponse.foto; // Asume que el servidor devuelve la URL de la foto
-              }
-
-              // Actualizar mensaje de éxito
-              this.mensaje = 'Usuario registrado y foto subida correctamente.';
-
-              this.resetFileInput(); // Limpiar el input de archivo después de subir la foto
-            },
-            (error) => {
-              console.error('Error al subir la foto', error);
-              this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
-            }
-          );
-        } else {
-          console.warn('No se seleccionó ninguna foto para subir.');
-          this.mensaje = 'Usuario registrado correctamente sin foto.';
-        }
-
-        form.reset();
-      },
-      (error) => {
-        console.error('Error al registrar usuario', error);
-        console.error('Detalles del error:', error.error);
-        this.error = error.error?.detail ?? 'Error al registrar usuario';
-        this.mensaje = '';
-      }
-    );
-  }
 
 
 

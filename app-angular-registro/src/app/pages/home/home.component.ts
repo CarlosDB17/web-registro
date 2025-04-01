@@ -50,7 +50,7 @@ export default class HomeComponent {
   title = 'app-angular-registro';
   // define el titulo de la aplicacion
 
-  seccionActual: string = 'registro';
+  seccionActual: string = 'listado';
   // define la seccion actual por defecto
   camaraActiva: boolean = false; // Indica si la cámara está activa
 

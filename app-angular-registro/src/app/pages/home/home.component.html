@@ -4,7 +4,7 @@
     <div class="navigation-buttons">
       <button (click)="mostrarSeccion('registro')" [class.active]="seccionActual === 'registro'">Registro</button>
       <button (click)="mostrarSeccion('listado')" [class.active]="seccionActual === 'listado'">Listado de Usuarios</button>
-      <button (click)="mostrarSeccion('consultas')" [class.active]="seccionActual === 'consultas'">Consultas</button>
+      <!-- <button (click)="mostrarSeccion('consultas')" [class.active]="seccionActual === 'consultas'">Consultas</button> -->
       <button (click)="mostrarSeccion('qr')">Escanear QR</button>
       <button (click)="logOut()">Cerrar sesión</button>
     </div>
@@ -17,7 +17,7 @@
       (desactivarCamara)="desactivarCamara()">
     </app-registro>
     <app-listado-usuarios *ngIf="seccionActual === 'listado'"></app-listado-usuarios>
-    <app-consultas *ngIf="seccionActual === 'consultas'"></app-consultas>
+    <!-- <app-consultas *ngIf="seccionActual === 'consultas'"></app-consultas> -->
     <app-qr-scanner *ngIf="seccionActual === 'qr'"></app-qr-scanner>
   </div>
 </div>
