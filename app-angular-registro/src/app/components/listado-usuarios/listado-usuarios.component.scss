@@ -262,3 +262,21 @@ form {
 .pagination-controls span {
   font-weight: bold;
 }
+
+.error-message {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  padding: 10px;
+  background-color: #fadbd8;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.success-message {
+  color: #27ae60;
+  margin-bottom: 1rem;
+  padding: 10px;
+  background-color: #d4efdf;
+  border-radius: 5px;
+  text-align: center;
+}

@@ -24,6 +24,10 @@
     {{ mensajeError }}
   </div>
 
+  <div *ngIf="mensajeExito" class="success-message">
+    {{ mensajeExito }}
+  </div>
+
   <div *ngIf="buscando" class="loading">
     Buscando usuarios...
   </div>
@@ -51,10 +55,38 @@
               class="foto-usuario"
             />
           </td>
-          <td>{{ usuario.nombre }}</td>
-          <td>{{ usuario.email }}</td>
-          <td>{{ usuario.documento_identidad }}</td>
-          <td>{{ formatearFecha(usuario.fecha_nacimiento) }}</td>
+          <td>
+            <input 
+              type="text" 
+              [(ngModel)]="usuario.nombre" 
+              placeholder="Editar nombre"
+              (focus)="almacenarDatosOriginales(usuario)"
+            />
+          </td>
+          <td>
+            <input 
+              type="email" 
+              [(ngModel)]="usuario.email" 
+              placeholder="Editar email"
+              (focus)="almacenarDatosOriginales(usuario)"
+            />
+          </td>
+          <td>
+            <input 
+              type="text" 
+              [(ngModel)]="usuario.documento_identidad" 
+              placeholder="Editar documento"
+              (focus)="almacenarDatosOriginales(usuario)"
+            />
+          </td>
+          <td>
+            <input 
+              type="date" 
+              [(ngModel)]="usuario.fecha_nacimiento" 
+              (focus)="almacenarDatosOriginales(usuario)"
+              placeholder="Editar fecha de nacimiento"
+            />
+          </td>
           <td data-label="Acciones">
             <button (click)="iniciarActualizacionUsuario(usuario)">Actualizar</button>
             <button (click)="eliminarUsuario(usuario.documento_identidad)" class="btn-danger">Eliminar Usuario</button>

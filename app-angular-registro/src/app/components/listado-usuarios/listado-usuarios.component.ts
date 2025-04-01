@@ -315,22 +315,24 @@ export class ListadoUsuariosComponent implements OnInit {
   }
   
   eliminarFotoUsuario(documento_identidad: string): void {
-    this.usuariosService.eliminarFoto(documento_identidad).subscribe(
-      () => {
-        // encuentra el usuario en la lista y actualiza el campo foto a vacio
-        const usuario = this.usuarios.find(user => user.documento_identidad === documento_identidad);
-        if (usuario) {
-          usuario.foto = ''; // actualiza el campo foto para reflejar el cambio en la tabla
+    if (confirm('¿Estás seguro de que quieres eliminar la foto de este usuario?')) {
+      this.usuariosService.eliminarFoto(documento_identidad).subscribe(
+        () => {
+          // Encuentra el usuario en la lista y actualiza el campo foto a vacío
+          const usuario = this.usuarios.find(user => user.documento_identidad === documento_identidad);
+          if (usuario) {
+            usuario.foto = ''; // Actualiza el campo foto para reflejar el cambio en la tabla
+          }
+          this.mensaje = 'Foto eliminada correctamente';
+          this.error = '';
+        },
+        (error) => {
+          console.error('Error al eliminar la foto', error);
+          this.error = error.error?.detail ?? 'Error al eliminar la foto';
+          this.mensaje = '';
         }
-        this.mensaje = 'Foto eliminada correctamente';
-        this.error = '';
-      },
-      (error) => {
-        console.error('Error al eliminar la foto', error);
-        this.error = error.error?.detail ?? 'Error al eliminar la foto';
-        this.mensaje = '';
-      }
-    );
+      );
+    }
   }
 limpiarFormulario(): void {
   this.fileInput.nativeElement.value = ''; // limpiar el input de archivo
