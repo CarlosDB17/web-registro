@@ -206,22 +206,33 @@ export class RegistroComponent {
   }
   
   eliminarFoto(): void {
+    // Limpiar la foto anterior
     if (this.fotoUrl) {
-      console.log('Liberando URL de la foto:', this.fotoUrl);
-      URL.revokeObjectURL(this.fotoUrl); // Liberar la URL de la foto
-      this.fotoUrl = null;
+      console.log('Liberando URL de la foto anterior:', this.fotoUrl);
+      URL.revokeObjectURL(this.fotoUrl); // Liberar la URL anterior
+      this.fotoUrl = null; // Limpiar la URL de la foto
     }
-    this.foto = null; // Eliminar la foto seleccionada
+  
+    // Forzar la limpieza del atributo src del <img>
+    if (this.fotoPreview && this.fotoPreview.nativeElement) {
+      this.fotoPreview.nativeElement.src = ''; // Limpiar el atributo src
+      console.log('Atributo src del <img> limpiado.');
+    }
+  
+    this.foto = null; // Eliminar la foto seleccionada o capturada
     this.fotoCapturada = false; // Reiniciar el estado de la foto capturada
-
+  
     // Des-seleccionar la foto en caso de que haya sido seleccionada desde el PC
     const inputFileElement = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (inputFileElement) {
       inputFileElement.value = ''; // Reiniciar el valor del input file
       console.log('Input file reiniciado.');
     }
-
+  
     console.log('Foto eliminada.');
+  
+    // Forzar la detección de cambios
+    this.cdr.detectChanges();
   }
 
 
