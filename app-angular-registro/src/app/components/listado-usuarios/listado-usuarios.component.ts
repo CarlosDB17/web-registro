@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from "../../services/usuarios-services/usuarios.service";
 import { ConsultasComponent } from '../consultas/consultas.component';
+import { ComunicacionService } from '../../services/comunicacion-services/comunicacion.service';
+
 
 interface Usuario {
   mensaje: string;
@@ -43,14 +45,25 @@ export class ListadoUsuariosComponent implements OnInit {
   fotoSeleccionada: string | undefined;
   fotoSeleccionadaArchivo: File | null = null;
 
-  constructor(private usuariosService: UsuariosService) {}
+  constructor(
+    private usuariosService: UsuariosService,
+    private comunicacionService: ComunicacionService
+  ) {}
+  
 
   ngOnInit(): void {
+  // Suscribirse al evento de usuario editado
+  this.comunicacionService.usuarioEditado$.subscribe(() => {
+    this.obtenerUsuarios();
+  });
+
+
     this.obtenerUsuarios();
   }
 
   // Método para obtener usuarios con paginación
   obtenerUsuarios(): void {
+    
     this.cargando = true;
     this.usuariosService.obtenerUsuarios(this.skip, this.limit).subscribe({
       next: (response: any) => {

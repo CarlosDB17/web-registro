@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from '../../services/usuarios-services/usuarios.service';
+import { ComunicacionService } from '../../services/comunicacion-services/comunicacion.service';
+
 
 interface Usuario {
   usuario: any;
@@ -42,7 +44,10 @@ export class ConsultasComponent implements OnInit {
   usuariosConDatosOriginales: Set<string> = new Set();
   fotoSeleccionadaArchivo: File | null = null;
 
-  constructor(private usuariosService: UsuariosService) {}
+  constructor(
+    private usuariosService: UsuariosService,
+    private comunicacionService: ComunicacionService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -393,6 +398,9 @@ export class ConsultasComponent implements OnInit {
           console.log('Foto actualizada:', response);
           user.foto = response.foto; // Actualiza la foto en la tabla
           this.mensajeExito = `Foto actualizada correctamente para ${user.nombre}`;
+          
+           // Notificar al servicio que un usuario fue editado
+        this.comunicacionService.notificarUsuarioEditado();
         },
         error: (err) => {
           console.error('Error al actualizar la foto:', err);
