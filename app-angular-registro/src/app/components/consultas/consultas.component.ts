@@ -137,4 +137,8 @@ export class ConsultasComponent implements OnInit {
       return fecha;
     }
   }
+
+
+
+  
 }

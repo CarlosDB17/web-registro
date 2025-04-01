@@ -39,6 +39,7 @@
           <th>Email</th>
           <th>Documento de identidad</th>
           <th>Fecha de Nacimiento</th>
+          <th>Acciones</th> <!-- nueva columna para acciones -->
         </tr>
       </thead>
       <tbody>
@@ -54,6 +55,11 @@
           <td>{{ usuario.email }}</td>
           <td>{{ usuario.documento_identidad }}</td>
           <td>{{ formatearFecha(usuario.fecha_nacimiento) }}</td>
+          <td data-label="Acciones">
+            <button (click)="iniciarActualizacionUsuario(usuario)">Actualizar</button>
+            <button (click)="eliminarUsuario(usuario.documento_identidad)" class="btn-danger">Eliminar Usuario</button>
+            <button (click)="eliminarFotoUsuario(usuario.documento_identidad)" class="btn-warning">Eliminar Foto</button>
+          </td>
         </tr>
       </tbody>
     </table>
