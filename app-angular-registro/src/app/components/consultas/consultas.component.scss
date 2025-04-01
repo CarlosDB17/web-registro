@@ -131,3 +131,36 @@
       }
     }
   }
+
+
+  
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-controls button {
+  background-color: #0197F6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 10px;
+
+  &:hover {
+    background-color: #0175C2;
+  }
+
+  &:disabled {
+    background-color: #b3d4fc; /* color más oscuro para botones deshabilitados */
+    cursor: not-allowed; /* cambia el cursor para indicar que no es clickeable */
+  }
+}
+
+.pagination-controls span {
+  font-weight: bold;
+}

@@ -7,7 +7,7 @@ interface Usuario {
   usuario: any;
   nombre: string;
   email: string;
-  documento_identidad: string; // cambiado de dni a documento_identidad
+  documento_identidad: string;
   fecha_nacimiento: string;
 }
 
@@ -19,49 +19,51 @@ interface Usuario {
   imports: [CommonModule, FormsModule]
 })
 export class ConsultasComponent implements OnInit {
-  tipoBusqueda: string = 'documento_identidad'; // cambiado de dni a documento_identidad
-  terminoBusqueda: string = ''; // termino ingresado para buscar
-  usuarios: Usuario[] = []; // lista de usuarios encontrados
-  mensajeError: string = ''; // mensaje de error
-  buscando: boolean = false; // indica si se esta buscando
+  tipoBusqueda: string = 'documento_identidad';
+  terminoBusqueda: string = '';
+  usuarios: Usuario[] = [];
+  mensajeError: string = '';
+  buscando: boolean = false;
 
-  constructor(private usuariosService: UsuariosService) { }
+  // Variables de paginación
+  skip: number = 0;
+  limit: number = 3;
+  totalUsuarios: number = 0;
 
-  ngOnInit(): void {
-    // metodo que se ejecuta al inicializar el componente
-  }
+  constructor(private usuariosService: UsuariosService) {}
+
+  ngOnInit(): void {}
 
   buscar(): void {
-    // realiza la busqueda segun el tipo seleccionado
     if (!this.terminoBusqueda.trim()) {
-      this.mensajeError = 'por favor, introduce un termino de busqueda';
+      this.mensajeError = 'Por favor, introduce un término de búsqueda';
       return;
     }
 
     this.mensajeError = '';
     this.buscando = true;
-    
+
     const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
 
     switch (this.tipoBusqueda) {
-      case 'documento_identidad': // cambiado de dni a documento_identidad
-      // busca usuarios por documento_identidad
-      this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas).subscribe({
-        next: (usuarios) => {
-        this.usuarios = Array.isArray(usuarios) ? usuarios : [usuarios]; // me aseguro que siempre sea un array
-        this.buscando = false;
-        },
-        error: (error) => {
-        this.manejarError(error);
-        }
-      });
-      break;
-      
+      case 'documento_identidad':
+        this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas, this.skip, this.limit).subscribe({
+          next: (response) => {
+            this.usuarios = response.usuarios;
+            this.totalUsuarios = response.total; // Total de usuarios devuelto por la API
+            this.buscando = false;
+          },
+          error: (error) => {
+            this.manejarError(error);
+          }
+        });
+        break;
+
       case 'nombre':
-        // busca usuarios por nombre
-        this.usuariosService.buscarPorNombre(this.terminoBusqueda).subscribe({
-          next: (usuarios) => {
-            this.usuarios = usuarios;
+        this.usuariosService.buscarPorNombre(this.terminoBusqueda, this.skip, this.limit).subscribe({
+          next: (response) => {
+            this.usuarios = response.usuarios;
+            this.totalUsuarios = response.total; // Total de usuarios devuelto por la API
             this.buscando = false;
           },
           error: (error) => {
@@ -69,13 +71,12 @@ export class ConsultasComponent implements OnInit {
           }
         });
         break;
-      
+
       case 'email':
-        // busca usuarios por email
-        this.usuariosService.buscarPorEmail(this.terminoBusqueda).subscribe({
-          next: (usuarios) => {
-            console.log('respuesta del servicio:', usuarios); 
-            this.usuarios = Array.isArray(usuarios) ? usuarios : [usuarios]; // asegura que siempre sea un array
+        this.usuariosService.buscarPorEmail(this.terminoBusqueda, this.skip, this.limit).subscribe({
+          next: (response) => {
+            this.usuarios = response.usuarios;
+            this.totalUsuarios = response.total; // Total de usuarios devuelto por la API
             this.buscando = false;
           },
           error: (error) => {
@@ -83,42 +84,51 @@ export class ConsultasComponent implements OnInit {
           }
         });
         break;
+    }
+  }
+
+  // Método para calcular el total de páginas
+  getTotalPaginas(): number {
+    return Math.ceil(this.totalUsuarios / this.limit);
+  }
+
+  // Método para cambiar de página
+  cambiarPagina(direccion: number): void {
+    const nuevoSkip = this.skip + direccion * this.limit;
+    if (nuevoSkip >= 0 && nuevoSkip < this.totalUsuarios) {
+      this.skip = nuevoSkip;
+      this.buscar(); // Realiza la búsqueda nuevamente con la nueva página
     }
   }
 
   manejarError(error: any): void {
-    // maneja los errores de la busqueda
     this.buscando = false;
 
     if (error.status === 404 || (error.status === 500 && error.error?.detail?.includes('404'))) {
-      this.mensajeError = 'no se encontraron usuarios con ese criterio';
+      this.mensajeError = 'No se encontraron usuarios con ese criterio';
       this.usuarios = [];
     } else {
-      this.mensajeError = 'error al buscar usuarios: ' + (error.message || 'error desconocido');
+      this.mensajeError = 'Error al buscar usuarios: ' + (error.message || 'Error desconocido');
     }
 
-    console.error('error en la busqueda:', error);
+    console.error('Error en la búsqueda:', error);
   }
 
   limpiarResultados(): void {
-    // limpia los resultados de la busqueda
     this.usuarios = [];
     this.mensajeError = '';
     this.terminoBusqueda = '';
   }
 
-  limpiarTerminoBusqueda() {
-    // limpia el termino de busqueda y los resultados
+  limpiarTerminoBusqueda(): void {
     this.terminoBusqueda = '';
     this.usuarios = [];
     this.mensajeError = '';
   }
-  
 
   formatearFecha(fecha: string): string {
-    // formatea una fecha en formato legible
-    if (!fecha) return 'n/a';
-    
+    if (!fecha) return 'N/A';
+
     try {
       const fechaObj = new Date(fecha);
       return fechaObj.toLocaleDateString('es-ES');

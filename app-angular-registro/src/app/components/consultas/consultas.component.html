@@ -49,5 +49,12 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Controles de paginación -->
+      <div class="pagination-controls">
+        <button (click)="cambiarPagina(-1)" [disabled]="skip === 0">Anterior</button>
+        <span>Página {{ (skip / limit) + 1 }} de {{ getTotalPaginas() }}</span>
+        <button (click)="cambiarPagina(1)" [disabled]="skip + limit >= totalUsuarios">Siguiente</button>
+      </div>
     </div>
   </div>

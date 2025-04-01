@@ -185,7 +185,7 @@ export class ListadoUsuariosComponent implements OnInit {
       console.log('Nuevo:', usuario.documento_identidad);
       
       // verificamos si el nuevo documento de identidad ya existe
-      this.usuariosService.buscarPorDocumentoIdentidad(usuario.documento_identidad).subscribe(
+      this.usuariosService.buscarPorDocumentoIdentidad(usuario.documento_identidad, this.skip, this.limit).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
             this.error = 'El documento de identidad ya está registrado por otro usuario.';
@@ -220,7 +220,7 @@ export class ListadoUsuariosComponent implements OnInit {
       console.log('Nuevo:', usuario.email);
       
       // buscamos si el nuevo email ya existe
-      this.usuariosService.buscarPorEmail(usuario.email).subscribe(
+      this.usuariosService.buscarPorEmail(usuario.email, this.skip, this.limit).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
             this.error = 'El email ya está registrado por otro usuario.';
