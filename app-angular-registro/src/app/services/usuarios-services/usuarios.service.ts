@@ -17,15 +17,15 @@ interface Usuario {
   providedIn: 'root'
 })
 export class UsuariosService {
-  private API_URL = "https://pf25-carlos-db-v5-302016834907.europe-west1.run.app/usuarios";
-  //private API_URL = "http://127.0.0.1:8000/usuarios";
+  //private API_URL = "https://pf25-carlos-db-v5-302016834907.europe-west1.run.app/usuarios";
+  private API_URL = "http://127.0.0.1:8000/usuarios";
 
   constructor(private http: HttpClient) {}
 
-  // Obtener usuarios
-  obtenerUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.API_URL);
-  }
+ // Obtener usuarios con paginación
+obtenerUsuarios(skip: number, limit: number): Observable<{ usuarios: Usuario[]; total: number }> {
+  return this.http.get<{ usuarios: Usuario[]; total: number }>(`${this.API_URL}?skip=${skip}&limit=${limit}`);
+}
 
   // Registrar usuario
   registrarUsuario(userData: Usuario): Observable<Usuario> {

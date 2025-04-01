@@ -230,3 +230,21 @@ form {
     transform: scale(1.1); /* aumenta ligeramente el tamano al pasar el mouse */
   }
 }
+
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-controls button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pagination-controls span {
+  font-weight: bold;
+}

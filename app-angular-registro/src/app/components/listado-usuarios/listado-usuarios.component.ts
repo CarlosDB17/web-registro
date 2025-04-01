@@ -29,6 +29,11 @@ export class ListadoUsuariosComponent implements OnInit {
   error: string = '';
   cargando: boolean = false;
 
+    // variables de paginación
+    skip: number = 0;
+    limit: number = 3;
+    totalUsuarios: number = 0;
+
   
   // almacena los datos originales del usuario antes de la edicion
   usuarioOriginal: Partial<Usuario> = {};
@@ -41,26 +46,44 @@ export class ListadoUsuariosComponent implements OnInit {
   constructor(private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
-    this.cargarUsuarios();
+    this.obtenerUsuarios();
   }
 
-  cargarUsuarios(): void {
+  // Método para obtener usuarios con paginación
+  obtenerUsuarios(): void {
     this.cargando = true;
-    this.usuariosService.obtenerUsuarios().subscribe(
-      (data) => {
-        this.usuarios = data;
+    this.usuariosService.obtenerUsuarios(this.skip, this.limit).subscribe({
+      next: (response: any) => {
+        this.usuarios = response.usuarios;
+        this.totalUsuarios = response.total; // Total de usuarios devuelto por la API
         this.mensaje = 'Usuarios cargados correctamente';
         this.error = '';
         this.cargando = false;
       },
-      (error) => {
-        console.error('Error al obtener usuarios', error);
-        this.error = error.error?.detail ?? 'Error al cargar usuarios';
+      error: (err) => {
+        console.error('Error al obtener usuarios', err);
+        this.error = err.error?.detail ?? 'Error al cargar usuarios';
         this.mensaje = '';
         this.cargando = false;
       }
-    );
+    });
   }
+
+  // Método para cambiar de página
+  cambiarPagina(direccion: number): void {
+    const nuevoSkip = this.skip + direccion * this.limit;
+    if (nuevoSkip >= 0 && nuevoSkip < this.totalUsuarios) {
+      this.skip = nuevoSkip;
+      this.obtenerUsuarios();
+    }
+  }
+
+  // Método para cargar usuarios (sin paginación, si es necesario)
+  cargarUsuarios(): void {
+    this.obtenerUsuarios();
+  }
+
+
 
   // metodo para almacenar los datos originales al hacer clic en cualquier data-label
   almacenarDatosOriginales(usuario: Usuario): void {
@@ -333,4 +356,9 @@ limpiarFormulario(): void {
     }
   }
   
+
+  getTotalPaginas(): number {
+    return Math.ceil(this.totalUsuarios / this.limit);
+  }
+
 }
