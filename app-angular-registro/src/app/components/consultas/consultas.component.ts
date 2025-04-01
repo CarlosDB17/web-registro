@@ -9,6 +9,7 @@ interface Usuario {
   email: string;
   documento_identidad: string;
   fecha_nacimiento: string;
+  foto?: string; // Nuevo campo opcional para la foto
 }
 
 @Component({

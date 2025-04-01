@@ -164,3 +164,19 @@
 .pagination-controls span {
   font-weight: bold;
 }
+
+
+.foto-usuario {
+  width: 50px; /* ancho de la imagen */
+  height: 50px; /* alto de la imagen */
+  border-radius: 50%; /* hace que la imagen sea circular */
+  object-fit: cover; /* ajusta la imagen para que no se deforme */
+  border: 2px solid #ddd; /* borde alrededor de la imagen */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* sombra para un efecto visual */
+  cursor: pointer; /* cambia el cursor al pasar el mouse */
+  transition: transform 0.2s; /* agrega una animacion suave */
+
+  &:hover {
+    transform: scale(1.1); /* aumenta ligeramente el tamano al pasar el mouse */
+  }
+}
