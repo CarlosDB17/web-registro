@@ -19,9 +19,9 @@ export class RegistroComponent {
   mensaje: string = '';
   error: string = '';
   foto: File | null = null;
-  fotoCapturada: boolean = false; // Indica si la foto fue capturada desde la cámara
+  fotoCapturada: boolean = false; // indica si la foto fue capturada desde la camara
 
-  fotoUrl: string | null = null; // Almacena la URL de la foto capturada
+  fotoUrl: string | null = null; // almacena la URL de la foto capturada
 
   
 
@@ -53,14 +53,14 @@ export class RegistroComponent {
     this.mensaje = '';
     this.error = '';
 
-    // Registrar al usuario sin la foto
+    // registrar al usuario sin la foto
     const usuario = {
       usuario: this.documento_identidad, // usando documento_identidad como nombre de usuario / clave primaria
       nombre: this.nombre,
       email: this.email.toLowerCase(),
       documento_identidad: this.documento_identidad.toUpperCase(), // cambiado dni a documento_identidad
       fecha_nacimiento: this.fechaNacimiento,
-      foto: '', // Inicialmente vacío
+      foto: '', // inicialmente vacio
       mensaje: ''
     };
 
@@ -68,7 +68,7 @@ export class RegistroComponent {
       next: (respuesta) => {
         console.log('Usuario registrado:', respuesta);
 
-        // Si hay una foto seleccionada, subirla
+        // si hay una foto seleccionada, subirla
         if (this.foto) {
           this.subirFotoUsuario();
         } else {
@@ -94,12 +94,12 @@ export class RegistroComponent {
       return;
     }
 
-    // Llamar al método subirFoto del servicio
+    // llamar al método subirFoto del servicio
     this.usuariosService.subirFoto(this.documento_identidad.toUpperCase(), this.foto).subscribe({
       next: (fotoResponse) => {
         console.log('Foto subida:', fotoResponse);
 
-        // Actualizar el campo foto del usuario con la URL devuelta
+        // actualizar el campo foto del usuario con la URL devuelta
         const updatedData = { foto: fotoResponse.foto };
         this.usuariosService.actualizarUsuario(this.documento_identidad.toUpperCase(), updatedData).subscribe({
           next: () => {
@@ -137,15 +137,15 @@ export class RegistroComponent {
     this.email = '';
     this.documento_identidad = ''; 
     this.fechaNacimiento = '';
-    this.foto = null; // Limpia la foto seleccionada o capturada
-    this.fotoCapturada = false; // Reinicia el estado de la foto capturada
+    this.foto = null; // limpia la foto seleccionada o capturada
+    this.fotoCapturada = false; // reinicia el estado de la foto capturada
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.foto = input.files[0];
-      this.fotoCapturada = false; // Marcar que la foto no fue capturada desde la cámara
+      this.fotoCapturada = false; // marcar que la foto no fue capturada desde la camara
       console.log('Archivo seleccionado:', this.foto);
     }
   }
@@ -154,29 +154,29 @@ export class RegistroComponent {
     console.log('Intentando abrir la cámara...');
     if (this.foto) {
       alert('Ya hay una foto seleccionada. Por favor, elimínela antes de abrir la cámara.');
-      return Promise.resolve(); // Salir del método si ya hay una foto seleccionada
+      return Promise.resolve(); // salir del metodo si ya hay una foto seleccionada
     }
   
     try {
-      // Limpiar la foto anterior
+      // limpiar la foto anterior
       if (this.fotoUrl) {
         console.log('Liberando URL de la foto anterior:', this.fotoUrl);
-        URL.revokeObjectURL(this.fotoUrl); // Liberar la URL anterior
-        this.fotoUrl = null; // Limpiar la URL de la foto
+        URL.revokeObjectURL(this.fotoUrl); // borrar la URL anterior
+        this.fotoUrl = null; // borrar la URL de la foto
       }
   
-      // Forzar la limpieza del atributo src del <img>
+      // forzar la limpieza del atributo src del <img>
       if (this.fotoPreview && this.fotoPreview.nativeElement) {
-        this.fotoPreview.nativeElement.src = ''; // Limpiar el atributo src
+        this.fotoPreview.nativeElement.src = ''; // limpiar el atributo src
         console.log('Atributo src del <img> limpiado.');
       }
   
-      this.fotoCapturada = false; // Reiniciar el estado de la foto capturada
-      this.mostrarCamara = true; // Mostrar la cámara
-      this.cdr.detectChanges(); // Forzar la actualización del DOM
+      this.fotoCapturada = false; // reiniciar el estado de la foto capturada
+      this.mostrarCamara = true; // mostrar la camara
+      this.cdr.detectChanges(); // forzar la actualizacion del DOM
       console.log('Estado después de limpiar: fotoUrl =', this.fotoUrl, ', fotoCapturada =', this.fotoCapturada);
   
-      // Acceder a la cámara
+      // acceder a la camara
       return navigator.mediaDevices.getUserMedia({
         video: {
           width: 640,
@@ -186,9 +186,9 @@ export class RegistroComponent {
         console.log('Cámara abierta con éxito, stream:', stream);
         this.stream = stream;
   
-        this.activarCamara.emit(); // Notifica al componente padre que la cámara está activa
+        this.activarCamara.emit(); // notifica al componente padre que la camara esta activa
   
-        // Esperar a que el DOM se actualice
+        // esperar a que el DOM se actualice
         setTimeout(() => {
           if (this.videoElement && this.videoElement.nativeElement) {
             this.videoElement.nativeElement.srcObject = this.stream;
@@ -206,32 +206,32 @@ export class RegistroComponent {
   }
   
   eliminarFoto(): void {
-    // Limpiar la foto anterior
+    // borrar la foto anterior
     if (this.fotoUrl) {
       console.log('Liberando URL de la foto anterior:', this.fotoUrl);
-      URL.revokeObjectURL(this.fotoUrl); // Liberar la URL anterior
-      this.fotoUrl = null; // Limpiar la URL de la foto
+      URL.revokeObjectURL(this.fotoUrl); // borrar la URL anterior
+      this.fotoUrl = null; // borrar la URL de la foto
     }
   
-    // Forzar la limpieza del atributo src del <img>
+    // forzar la limpieza del atributo src del <img>
     if (this.fotoPreview && this.fotoPreview.nativeElement) {
-      this.fotoPreview.nativeElement.src = ''; // Limpiar el atributo src
+      this.fotoPreview.nativeElement.src = ''; // borrar el atributo src
       console.log('Atributo src del <img> limpiado.');
     }
   
-    this.foto = null; // Eliminar la foto seleccionada o capturada
-    this.fotoCapturada = false; // Reiniciar el estado de la foto capturada
+    this.foto = null; // eliminar la foto seleccionada o capturada
+    this.fotoCapturada = false; // reiniciar el estado de la foto capturada
   
-    // Des-seleccionar la foto en caso de que haya sido seleccionada desde el PC
+    // dessseleccionar la foto en caso de que haya sido seleccionada desde el PC/galeria
     const inputFileElement = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (inputFileElement) {
-      inputFileElement.value = ''; // Reiniciar el valor del input file
+      inputFileElement.value = ''; // reiniciar el valor del input file
       console.log('Input file reiniciado.');
     }
   
     console.log('Foto eliminada.');
   
-    // Forzar la detección de cambios
+    // forzar la deteccion de cambios
     this.cdr.detectChanges();
   }
 
@@ -244,37 +244,37 @@ export class RegistroComponent {
       const video = this.videoElement.nativeElement;
       const canvas = this.canvasElement.nativeElement;
   
-      // Configurar el canvas con las dimensiones del video
+      // configurar el canvas con las dimensiones del video
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       console.log('Canvas configurado: width =', canvas.width, ', height =', canvas.height);
   
-      // Dibujar el frame actual del video en el canvas
+      // dibujar el frame actual del video en el canvas
       const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         console.log('Frame dibujado en el canvas.');
   
-        // Convertir el canvas a un archivo
+        // convertir el canvas a un archivo
         canvas.toBlob((blob) => {
           if (blob) {
             this.foto = new File([blob], 'foto.jpg', { type: 'image/jpeg' });
-            this.fotoCapturada = true; // Marcar que la foto fue capturada desde la cámara
+            this.fotoCapturada = true; // marcar que la foto fue capturada desde la camara
             console.log('Foto capturada:', this.foto);
   
-            // Crear un enlace temporal para mostrar la imagen
+            // crear un enlace temporal para mostrar la imagen
             const url = URL.createObjectURL(blob);
             console.log('URL generada para la foto:', url);
   
-            // Asignar la URL a la propiedad fotoUrl
+            // asignar la URL a la propiedad fotoUrl
             if (this.fotoUrl) {
               console.log('Liberando URL anterior:', this.fotoUrl);
-              URL.revokeObjectURL(this.fotoUrl); // Liberar la URL anterior
+              URL.revokeObjectURL(this.fotoUrl); // borrar la URL anterior
             }
             this.fotoUrl = url;
             console.log('Nueva fotoUrl asignada:', this.fotoUrl);
   
-            // Cerrar la cámara después de capturar la foto
+            // cerrar la camara despues de capturar la foto
             this.cerrarCamara();
           } else {
             console.error('No se pudo generar el blob de la foto.');
@@ -295,11 +295,11 @@ export class RegistroComponent {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
       console.log('Stream detenido.');
-      this.desactivarCamara.emit(); // Notifica al componente padre que la cámara está desactivada
+      this.desactivarCamara.emit(); // ntifica al componente padre que la camara esta desactivada
     }
-    this.mostrarCamara = false; // Asegúrate de que esta propiedad se actualice
+    this.mostrarCamara = false; // ocultar la camara
     console.log('Estado después de cerrar la cámara: mostrarCamara =', this.mostrarCamara);
-    this.cdr.detectChanges(); // Forzar la detección de cambios
+    this.cdr.detectChanges(); // forzar la deteccion de cambios
   }
 
 }

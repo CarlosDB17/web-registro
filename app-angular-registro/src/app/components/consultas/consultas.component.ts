@@ -7,7 +7,7 @@ interface Usuario {
   usuario: any;
   nombre: string;
   email: string;
-  documento_identidad: string; // Cambiado de dni a documento_identidad
+  documento_identidad: string; // cambiado de dni a documento_identidad
   fecha_nacimiento: string;
 }
 
@@ -19,7 +19,7 @@ interface Usuario {
   imports: [CommonModule, FormsModule]
 })
 export class ConsultasComponent implements OnInit {
-  tipoBusqueda: string = 'documento_identidad'; // Cambiado de dni a documento_identidad
+  tipoBusqueda: string = 'documento_identidad'; // cambiado de dni a documento_identidad
   terminoBusqueda: string = ''; // termino ingresado para buscar
   usuarios: Usuario[] = []; // lista de usuarios encontrados
   mensajeError: string = ''; // mensaje de error

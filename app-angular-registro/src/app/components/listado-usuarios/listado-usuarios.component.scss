@@ -14,7 +14,7 @@ body {
   // contenedor principal para el listado de usuarios
   display: flex;
   flex-direction: column;
-  max-width: 900px;
+  max-width: 1700px;
   width: 90%;
   margin: 2rem auto;
   padding: 2rem 3rem;
@@ -63,25 +63,28 @@ form {
   }
 }
 
-/* contenedor para hacer la tabla desplazable en pantallas pequeñas */
+/* contenedor para hacer la tabla desplazable en pantallas pequenas */
 .table-responsive {
   overflow-x: auto;
 
   table {
-    width: 100%;
-    border-collapse: collapse;
+    background-color: #ffffff; /* fondo blanco */
+    border-radius: 8px; /* bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* efecto de sombra */
+    width: 100%; /* asegura que la tabla ocupe todo el ancho del contenedor */
+    border-collapse: collapse; /* elimina los espacios entre bordes */
     margin-top: 1rem;
 
     th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
+      padding: 12px; /* espaciado interno */
+      text-align: left; /* alineacion del texto */
+      border-bottom: 1px solid #ddd; /* linea divisoria */
     }
 
     th {
-      background-color: #f5f5f5;
+      background-color: #f4f4f4; /* fondo gris claro para el encabezado */
       color: #333;
-      font-weight: bold;
+      font-weight: bold; /* texto en negrita */
     }
 
     tr:hover {
@@ -101,57 +104,66 @@ form {
     }
 
     button {
-      background-color: #0197F6; /* Azul para el botón "Actualizar" */
+      background-color: #0197F6; /* azul para el boton "actualizar" */
       color: white;
       border: none;
       padding: 6px 10px;
       margin-right: 5px;
       border-radius: 4px;
+      font-weight: bold; /* cambiado de font-style a font-weight */
       cursor: pointer;
 
       &:hover {
-        background-color: #0175C2; /* Azul más oscuro al pasar el mouse */
+        background-color: #0175C2; /* azul mas oscuro al pasar el mouse */
       }
 
       &.btn-danger {
-        background-color: #e74c3c; /* Rojo para "Eliminar Usuario" y "Eliminar Foto" */
+        background-color: #e74c3c; /* rojo para "eliminar usuario" y "eliminar foto" */
         
         &:hover {
-          background-color: #c0392b; /* Rojo más oscuro al pasar el mouse */
+          background-color: #c0392b; /* rojo mas oscuro al pasar el mouse */
         }
       }
 
       &.btn-warning {
-        background-color: #e74c3c; /* Rojo para "Eliminar Foto" */
+        background-color: #e74c3c; /* rojo para "eliminar foto" */
         
         &:hover {
-          background-color: #c0392b; /* Rojo más oscuro al pasar el mouse */
+          background-color: #c0392b; /* rojo mas oscuro al pasar el mouse */
         }
       }
+    }
+
+    td:last-child {
+      display: flex; /* alinea los botones horizontalmente */
+      justify-content: flex-start; /* alinea los botones al inicio */
+      gap: 10px; /* espaciado entre los botones */
+      padding: 8px 0; /* espaciado interno */
+      border: none; /* elimina el borde */
     }
   }
 }
 
-/* estilos para pantallas pequeñas */
+/* estilos para pantallas pequenas */
 @media (max-width: 768px) {
   .listado-container {
-      // reduce el padding del contenedor en pantallas pequeñas
+      // reduce el padding del contenedor en pantallas pequenas
       padding: 1rem;
   }
 
   table th, table td {
-      // reduce el tamaño de fuente y el padding en la tabla
+      // reduce el tamano de fuente y el padding en la tabla
       font-size: 14px;
       padding: 8px;
   }
 
   form input {
-      // ajusta el ancho de los campos de entrada en pantallas pequeñas
+      // ajusta el ancho de los campos de entrada en pantallas pequenas
       min-width: 100%;
   }
 
   form button {
-      // ajusta el ancho de los botones en pantallas pequeñas
+      // ajusta el ancho de los botones en pantallas pequenas
       width: 100%;
       text-align: center;
   }
@@ -195,13 +207,14 @@ form {
     }
 
     td:last-child {
-      display: flex;
-      justify-content: flex-start;
-      gap: 10px;
+      display: flex; /* alinea los botones horizontalmente */
+      justify-content: flex-start; /* alinea los botones al inicio */
+      gap: 10px; /* espaciado entre los botones */
+      padding: 8px 0; /* espaciado interno */
+      border: none; /* elimina el borde */
     }
   }
 }
-
 
 .foto-usuario {
   width: 50px; /* ancho de la imagen */
@@ -214,6 +227,6 @@ form {
   transition: transform 0.2s; /* agrega una animacion suave */
 
   &:hover {
-    transform: scale(1.1); /* aumenta ligeramente el tamaño al pasar el mouse */
+    transform: scale(1.1); /* aumenta ligeramente el tamano al pasar el mouse */
   }
 }

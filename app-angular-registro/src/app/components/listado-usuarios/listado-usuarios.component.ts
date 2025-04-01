@@ -11,7 +11,7 @@ interface Usuario {
   email: string;
   documento_identidad: string;
   fecha_nacimiento: string;
-  foto?: string; // Nuevo campo opcional para la foto
+  foto?: string; 
 }
 
 @Component({
@@ -82,7 +82,7 @@ export class ListadoUsuariosComponent implements OnInit {
 
     console.log('Usuario a actualizar:', usuario);
 
-    // Llamar al metodo para guardar cambios con las validaciones necesarias
+    // llamar al metodo para guardar cambios con las validaciones necesarias
     this.guardarCambiosUsuario(usuario);
   }
 
@@ -110,9 +110,9 @@ export class ListadoUsuariosComponent implements OnInit {
         return;
       }
   
-      this.fotoSeleccionadaArchivo = file; // Guardar el archivo seleccionado
+      this.fotoSeleccionadaArchivo = file; // guardar el archivo seleccionado
       console.log('Foto seleccionada correctamente:', file.name, 'Tamaño:', file.size, 'Tipo:', file.type);
-      this.error = ''; // Limpiar cualquier mensaje de error previo
+      this.error = ''; //limpiar cualquier mensaje de error previo
     } else {
       console.log('No se seleccionó ningún archivo.');
     }
@@ -121,7 +121,7 @@ export class ListadoUsuariosComponent implements OnInit {
   subirFotoUsuario(documento_identidad: string): void {
     if (!this.fotoSeleccionadaArchivo) {
       console.error('No hay foto seleccionada para subir.');
-      this.cargando = false; // Añade esta línea
+      this.cargando = false;
       return;
     }
   
@@ -129,7 +129,7 @@ export class ListadoUsuariosComponent implements OnInit {
       next: (fotoResponse) => {
         console.log('Foto subida:', fotoResponse);
   
-        // Actualizar el campo foto del usuario con la URL devuelta
+        // actualizar el campo foto del usuario con la URL devuelta
         const updatedData = { foto: fotoResponse.foto };
         this.usuariosService.actualizarUsuario(documento_identidad.toUpperCase(), updatedData).subscribe({
           next: () => {
@@ -282,10 +282,10 @@ export class ListadoUsuariosComponent implements OnInit {
   eliminarFotoUsuario(documento_identidad: string): void {
     this.usuariosService.eliminarFoto(documento_identidad).subscribe(
       () => {
-        // Encuentra el usuario en la lista y actualiza el campo foto a vacío
+        // encuentra el usuario en la lista y actualiza el campo foto a vacio
         const usuario = this.usuarios.find(user => user.documento_identidad === documento_identidad);
         if (usuario) {
-          usuario.foto = ''; // Actualiza el campo foto para reflejar el cambio en la tabla
+          usuario.foto = ''; // actualiza el campo foto para reflejar el cambio en la tabla
         }
         this.mensaje = 'Foto eliminada correctamente';
         this.error = '';
@@ -298,7 +298,7 @@ export class ListadoUsuariosComponent implements OnInit {
     );
   }
 limpiarFormulario(): void {
-  this.fileInput.nativeElement.value = ''; // Limpiar el input de archivo
+  this.fileInput.nativeElement.value = ''; // limpiar el input de archivo
   this.fotoSeleccionadaArchivo = null;
   this.mensaje = '';
   this.error = '';
@@ -313,15 +313,15 @@ limpiarFormulario(): void {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
   
-      // Establece el mensaje de carga personalizado
+      // establece el mensaje de carga personalizado
       this.mensaje = `Actualizando foto a ${user.nombre}...`;
       this.error = '';
   
-      // Llama al servicio para subir la nueva foto
+      // llama al servicio para subir la nueva foto
       this.usuariosService.subirFoto(user.documento_identidad, file).subscribe({
         next: (response) => {
           console.log('Foto actualizada:', response);
-          user.foto = response.foto; // Actualiza la foto en la tabla
+          user.foto = response.foto; // actualiza la foto en la tabla
           this.mensaje = `Foto actualizada correctamente para ${user.nombre}`;
         },
         error: (err) => {
