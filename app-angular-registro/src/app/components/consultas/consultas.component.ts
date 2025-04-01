@@ -22,6 +22,8 @@ interface Usuario {
 })
 export class ConsultasComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
+  busquedaActiva: boolean = false;
+
 
   tipoBusqueda: string = 'documento_identidad';
   terminoBusqueda: string = '';
@@ -44,18 +46,26 @@ export class ConsultasComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  realizarBusqueda() {
+    this.busquedaActiva = true; // Activa la clase para expandir el contenedor
+  }
+
+  limpiarBusqueda() {
+    this.busquedaActiva = false; // Desactiva la clase para volver al tamaño original
+  }
+
   buscar(): void {
     if (!this.terminoBusqueda.trim()) {
       this.mensajeError = 'Por favor, introduce un término de búsqueda';
       return;
     }
-
+  
     this.mensajeError = '';
     this.mensajeExito = '';
     this.buscando = true;
-
+  
     const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
-
+  
     switch (this.tipoBusqueda) {
       case 'documento_identidad':
         this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas, this.skip, this.limit).subscribe({
@@ -63,32 +73,35 @@ export class ConsultasComponent implements OnInit {
             this.usuarios = response.usuarios;
             this.totalUsuarios = response.total;
             this.buscando = false;
+            this.realizarBusqueda(); // Activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
           }
         });
         break;
-
+  
       case 'nombre':
         this.usuariosService.buscarPorNombre(this.terminoBusqueda, this.skip, this.limit).subscribe({
           next: (response) => {
             this.usuarios = response.usuarios;
             this.totalUsuarios = response.total;
             this.buscando = false;
+            this.realizarBusqueda(); // Activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
           }
         });
         break;
-
+  
       case 'email':
         this.usuariosService.buscarPorEmail(this.terminoBusqueda, this.skip, this.limit).subscribe({
           next: (response) => {
             this.usuarios = response.usuarios;
             this.totalUsuarios = response.total;
             this.buscando = false;
+            this.realizarBusqueda(); // Activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
@@ -97,6 +110,7 @@ export class ConsultasComponent implements OnInit {
         break;
     }
   }
+  
 
   // Método para calcular el total de páginas
   getTotalPaginas(): number {
@@ -133,6 +147,8 @@ export class ConsultasComponent implements OnInit {
     // Resetear datos de edición
     this.usuarioOriginal = {};
     this.usuariosConDatosOriginales.clear();
+
+    this.limpiarBusqueda(); // Limpiar la búsqueda activa
   }
 
   limpiarTerminoBusqueda(): void {
