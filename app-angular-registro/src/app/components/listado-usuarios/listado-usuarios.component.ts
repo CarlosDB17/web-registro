@@ -61,6 +61,16 @@ export class ListadoUsuariosComponent implements OnInit {
     this.obtenerUsuarios();
   }
 
+  private setMensaje(tipo: 'exito' | 'error', texto: string): void {
+    if (tipo === 'exito') {
+      this.mensaje = texto;
+      this.error = ''; // Limpia el mensaje de error
+    } else if (tipo === 'error') {
+      this.error = texto;
+      this.mensaje = ''; // Limpia el mensaje de éxito
+    }
+  }
+
   // Método para obtener usuarios con paginación
   obtenerUsuarios(): void {
     
@@ -69,14 +79,12 @@ export class ListadoUsuariosComponent implements OnInit {
       next: (response: any) => {
         this.usuarios = response.usuarios;
         this.totalUsuarios = response.total; // Total de usuarios devuelto por la API
-        this.mensaje = 'Usuarios cargados correctamente';
-        this.error = '';
+        this.setMensaje('exito', 'Usuarios cargados correctamente');
         this.cargando = false;
       },
       error: (err) => {
         console.error('Error al obtener usuarios', err);
-        this.error = err.error?.detail ?? 'Error al cargar usuarios';
-        this.mensaje = '';
+        this.setMensaje('error', 'Error al cargar usuarios');
         this.cargando = false;
       }
     });
@@ -112,7 +120,7 @@ export class ListadoUsuariosComponent implements OnInit {
   // metodo publico para iniciar el proceso de actualizacion desde el boton
   iniciarActualizacionUsuario(usuario: Usuario): void {
     if (!this.usuarioOriginal.documento_identidad) {
-      this.error = 'Primero selecciona un campo para editar.';
+      this.setMensaje('error', 'Primero selecciona un campo para editar.');
       return;
     }
 
@@ -140,7 +148,7 @@ export class ListadoUsuariosComponent implements OnInit {
       const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image.heic', 'image.heif'];
   
       if (!allowedTypes.includes(file.type)) {
-        this.error = 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.';
+        this.setMensaje('error', 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.');
         this.fotoSeleccionadaArchivo = null;
         console.log('Formato de archivo no permitido:', file.type);
         return;
@@ -170,20 +178,20 @@ export class ListadoUsuariosComponent implements OnInit {
         this.usuariosService.actualizarUsuario(documento_identidad.toUpperCase(), updatedData).subscribe({
           next: () => {
             console.log('Campo foto actualizado correctamente');
-            this.mensaje = 'Usuario registrado correctamente con foto';
+            this.setMensaje('exito', 'Usuario registrado correctamente con foto');
             this.limpiarFormulario();
             this.cargando = false;
           },
           error: (err) => {
             console.error('Error al actualizar el campo foto:', err);
-            this.error = 'Usuario registrado, pero hubo un error al asociar la foto.';
+            this.setMensaje('error', 'Usuario registrado, pero hubo un error al asociar la foto.');
             this.cargando = false;
           }
         });
       },
       error: (err) => {
         console.error('Error al subir la foto:', err);
-        this.error = 'Usuario registrado, pero hubo un error al subir la foto.';
+        this.setMensaje('error', 'Usuario registrado, pero hubo un error al subir la foto.');
         this.cargando = false;
       }
     });
@@ -204,7 +212,7 @@ export class ListadoUsuariosComponent implements OnInit {
       this.usuariosService.buscarPorDocumentoExacto(usuario.documento_identidad).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
-            this.error = 'El documento de identidad ya está registrado por otro usuario.';
+            this.setMensaje('error', 'El documento de identidad ya está registrado por otro usuario.');
             return;
           }
           // si no existe, verificar el email
@@ -217,7 +225,7 @@ export class ListadoUsuariosComponent implements OnInit {
             this.verificarYActualizarEmail(usuario);
           } else {
             console.error('Error al verificar documento de identidad', error);
-            this.error = error.error?.detail ?? 'Error al verificar documento de identidad';
+            this.setMensaje('error', 'Error al verificar documento de identidad.');
           }
         }
       );
@@ -242,7 +250,8 @@ export class ListadoUsuariosComponent implements OnInit {
       this.usuariosService.buscarPorEmailExacto(usuario.email).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
-            this.error = 'El email ya está registrado por otro usuario.';
+            console.log('Email ya registrado:', usuarioExistente);
+            this.setMensaje('error', 'El email ya está registrado por otro usuario.');
             return;
           }
           // si no existe, procedemos a actualizar el usuario
@@ -255,7 +264,7 @@ export class ListadoUsuariosComponent implements OnInit {
             this.realizarActualizacionUsuario(usuario);
           } else {
             console.error('Error al verificar email', error);
-            this.error = error.error?.detail ?? 'Error al verificar email';
+            this.setMensaje('error', 'Error al verificar email.');
           }
         }
       );
@@ -287,8 +296,7 @@ export class ListadoUsuariosComponent implements OnInit {
 
     // si no hay cambios, no realiza la peticion
     if (Object.keys(cambios).length === 0) {
-      this.mensaje = '';
-      this.error = 'No se han realizado cambios.';
+      this.setMensaje('error', 'No se han realizado cambios.');
       return;
     }
 
@@ -301,16 +309,14 @@ export class ListadoUsuariosComponent implements OnInit {
           this.usuarios[index] = { ...this.usuarios[index], ...cambios };
         }
         console.log('Usuario actualizado correctamente');
-        this.mensaje = response?.mensaje ?? 'Usuario actualizado correctamente';
-        this.error = '';
+        this.setMensaje('exito', 'Usuario actualizado correctamente');
     
         // Refresca la tabla
-        this.obtenerUsuarios();
+        //this.obtenerUsuarios();
       },
       (error) => {
         console.error('Error al actualizar usuario', error);
-        this.mensaje = '';
-        this.error = error.error?.detail ?? 'Error al actualizar usuario';
+        this.setMensaje('error', 'Error al actualizar usuario');
       }
     );
   }
@@ -319,13 +325,11 @@ export class ListadoUsuariosComponent implements OnInit {
     this.usuariosService.eliminarUsuario(documento_identidad).subscribe(
       () => {
         this.usuarios = this.usuarios.filter(user => user.documento_identidad !== documento_identidad);
-        this.mensaje = 'Usuario eliminado correctamente';
-        this.error = '';
+        this.setMensaje('exito', 'Usuario eliminado correctamente.');
       },
       (error) => {
         console.error('Error al eliminar usuario', error);
-        this.error = error.error?.detail ?? 'Error al eliminar usuario';
-        this.mensaje = '';
+        this.setMensaje('error', 'Error al eliminar usuario.');
       }
     );
   }
@@ -339,13 +343,11 @@ export class ListadoUsuariosComponent implements OnInit {
           if (usuario) {
             usuario.foto = ''; // Actualiza el campo foto para reflejar el cambio en la tabla
           }
-          this.mensaje = 'Foto eliminada correctamente';
-          this.error = '';
+          this.setMensaje('exito', 'Foto eliminada correctamente.');
         },
         (error) => {
           console.error('Error al eliminar la foto', error);
-          this.error = error.error?.detail ?? 'Error al eliminar la foto';
-          this.mensaje = '';
+          this.setMensaje('error', 'Error al eliminar la foto.'); 
         }
       );
     }
@@ -367,23 +369,23 @@ limpiarFormulario(): void {
       const file = input.files[0];
   
       // establece el mensaje de carga personalizado
-      this.mensaje = `Actualizando foto a ${user.nombre}...`;
-      this.error = '';
+
+      this.setMensaje('exito', 'Actualizando foto a ${user.nombre}...');
+
   
       // llama al servicio para subir la nueva foto
       this.usuariosService.subirFoto(user.documento_identidad, file).subscribe({
         next: (response) => {
           console.log('Foto actualizada:', response);
           user.foto = response.foto; // Actualiza la foto en la tabla
-          this.mensaje = `Foto actualizada correctamente para ${user.nombre}`;
+          this.setMensaje('exito', `Foto actualizada correctamente para ${user.nombre}`);
       
           // refresca la tabla
           this.obtenerUsuarios();
         },
         error: (err) => {
           console.error('Error al actualizar la foto:', err);
-          this.error = `Hubo un error al actualizar la foto de ${user.nombre}`;
-          this.mensaje = '';
+          this.setMensaje('error', `Hubo un error al actualizar la foto de ${user.nombre}`);
         }
       });
     }
