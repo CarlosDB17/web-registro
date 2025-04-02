@@ -178,13 +178,16 @@ export class ConsultasComponent implements OnInit {
 
   // Método para almacenar los datos originales al hacer clic en cualquier campo editable
   almacenarDatosOriginales(usuario: Usuario): void {
-    if (!this.usuariosConDatosOriginales.has(usuario.documento_identidad)) {
-      this.usuarioOriginal = { ...usuario };
-      this.usuariosConDatosOriginales.add(usuario.documento_identidad);
-      console.log('Datos originales almacenados:', this.usuarioOriginal);
-    } else {
-      console.log('Los datos originales ya fueron almacenados para este usuario.');
+    // Si el documento de identidad original ya existe en el conjunto
+    if (this.usuariosConDatosOriginales.has(this.usuarioOriginal.documento_identidad!)) {
+      // Eliminar el documento de identidad anterior del conjunto
+      this.usuariosConDatosOriginales.delete(this.usuarioOriginal.documento_identidad!);
     }
+  
+    // Almacenar los nuevos datos originales
+    this.usuarioOriginal = { ...usuario };
+    this.usuariosConDatosOriginales.add(usuario.documento_identidad);
+    console.log('Datos originales almacenados:', this.usuarioOriginal);
   }
 
   // Método público para iniciar el proceso de actualización desde el botón
