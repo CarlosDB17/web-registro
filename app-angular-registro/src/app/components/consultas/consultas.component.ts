@@ -326,6 +326,8 @@ export class ConsultasComponent implements OnInit {
           this.terminoBusqueda = cambios.documento_identidad;
           this.buscar();
         }
+        this.comunicacionService.notificarUsuarioEditado(); // Notificar al servicio
+
       },
       (error) => {
         console.error('Error al actualizar usuario', error);
@@ -344,6 +346,7 @@ export class ConsultasComponent implements OnInit {
           this.mensajeExito = 'Usuario eliminado correctamente';
           this.mensajeError = '';
           
+          this.comunicacionService.notificarUsuarioEditado(); // Notificar al servicio
           // Actualizar contador total
           this.totalUsuarios--;
         },
@@ -422,6 +425,7 @@ export class ConsultasComponent implements OnInit {
           }
           this.mensajeExito = 'Foto eliminada correctamente';
           this.mensajeError = '';
+          this.comunicacionService.notificarUsuarioEditado(); // Notificar al servicio
         },
         (error) => {
           console.error('Error al eliminar la foto', error);
