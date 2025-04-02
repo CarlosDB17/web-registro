@@ -157,8 +157,8 @@ export class RegistroComponent {
   abrirCamara(): Promise<void> {
     console.log('Intentando abrir la cámara...');
     if (this.foto) {
-      alert('Ya hay una foto seleccionada. Por favor, elimínela antes de abrir la cámara.');
-      return Promise.resolve(); // salir del metodo si ya hay una foto seleccionada
+      console.log('Ya hay una foto seleccionada. Eliminando la foto anterior...');
+      this.eliminarFoto(); // eliminar la foto anterior
     }
   
     try {
