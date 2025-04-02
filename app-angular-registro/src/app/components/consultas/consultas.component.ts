@@ -92,7 +92,7 @@ export class ConsultasComponent implements OnInit {
             this.usuarios = response.usuarios;
             this.totalUsuarios = response.total;
             this.buscando = false;
-            this.realizarBusqueda(); // Activa la clase para expandir el contenedor
+            this.realizarBusqueda(); // activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
@@ -106,7 +106,7 @@ export class ConsultasComponent implements OnInit {
             this.usuarios = response.usuarios;
             this.totalUsuarios = response.total;
             this.buscando = false;
-            this.realizarBusqueda(); // Activa la clase para expandir el contenedor
+            this.realizarBusqueda(); // activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
@@ -117,12 +117,12 @@ export class ConsultasComponent implements OnInit {
   }
   
 
-  // Método para calcular el total de paginas
+  // metodo para calcular el total de paginas
   getTotalPaginas(): number {
     return Math.ceil(this.totalUsuarios / this.limit);
   }
 
-  // Método para cambiar de pagina
+  // metodo para cambiar de pagina
   cambiarPagina(direccion: number): void {
     const nuevoSkip = this.skip + direccion * this.limit;
     if (nuevoSkip >= 0 && nuevoSkip < this.totalUsuarios) {
@@ -153,7 +153,7 @@ export class ConsultasComponent implements OnInit {
     this.usuarioOriginal = {};
     this.usuariosConDatosOriginales.clear();
 
-    this.limpiarBusqueda(); // Limpiar la búsqueda activa
+    this.limpiarBusqueda(); // limpiar la busqueda activa
   }
 
   limpiarTerminoBusqueda(): void {
@@ -178,9 +178,9 @@ export class ConsultasComponent implements OnInit {
 
   // metodo para almacenar los datos originales al hacer clic en cualquier campo editable
   almacenarDatosOriginales(usuario: Usuario): void {
-    // Si el documento de identidad original ya existe en el conjunto
+    // si el documento de identidad original ya existe en el conjunto
     if (this.usuariosConDatosOriginales.has(this.usuarioOriginal.documento_identidad!)) {
-      // Eliminar el documento de identidad anterior del conjunto
+      // eliminar el documento de identidad anterior del conjunto
       this.usuariosConDatosOriginales.delete(this.usuarioOriginal.documento_identidad!);
     }
   
