@@ -100,24 +100,6 @@ form {
 	}
 }
 
-.error-message {
-	color: #e74c3c;
-	margin-bottom: 1rem;
-	padding: 10px;
-	background-color: #fadbd8;
-	border-radius: 5px;
-	text-align: center;
-}
-
-.success-message {
-	color: #27ae60;
-	margin-bottom: 1rem;
-	padding: 10px;
-	background-color: #d4efdf;
-	border-radius: 5px;
-	text-align: center;
-}
-
 .loading {
 	text-align: center;
 	margin: 1rem 0;
@@ -419,3 +401,50 @@ table {
 
 
 }
+
+
+.mensaje-popup {
+	position: fixed;
+	top: 20px; /* Distancia desde la parte superior */
+	right: 20px; /* Alineado a la derecha */
+	padding: 15px 20px;
+	border-radius: 8px;
+	font-size: 16px;
+	color: #fff;
+	z-index: 1000;
+	opacity: 0;
+	transform: translateY(-20px); /* Efecto de deslizamiento hacia abajo */
+	animation: aparecer 0.5s forwards, desaparecer 0.5s 4.5s forwards; /* Animaciones de entrada y salida */
+  }
+  
+  .mensaje-exito {
+	background-color: #4caf50; /* Verde para mensajes de éxito */
+  }
+  
+  .mensaje-error {
+	background-color: #f44336; /* Rojo para mensajes de error */
+  }
+  
+  /* Animación para aparecer */
+  @keyframes aparecer {
+	from {
+	  opacity: 0;
+	  transform: translateY(-20px);
+	}
+	to {
+	  opacity: 1;
+	  transform: translateY(0);
+	}
+  }
+  
+  /* Animación para desaparecer */
+  @keyframes desaparecer {
+	from {
+	  opacity: 1;
+	  transform: translateY(0);
+	}
+	to {
+	  opacity: 0;
+	  transform: translateY(-20px);
+	}
+  }

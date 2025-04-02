@@ -59,15 +59,19 @@ export class ConsultasComponent implements OnInit {
     this.busquedaActiva = false; // Desactiva la clase para volver al tamaño original
   }
 
+  
+
   buscar(): void {
     if (!this.terminoBusqueda.trim()) {
-      this.mensajeError = 'Por favor, introduce un término de búsqueda';
+      this.setMensaje('error', 'Por favor, introduce un término de búsqueda.');
       return;
     }
   
     this.mensajeError = '';
     this.mensajeExito = '';
     this.buscando = true;
+
+    
   
     const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
   
@@ -116,7 +120,24 @@ export class ConsultasComponent implements OnInit {
     }
   }
   
+  private setMensaje(tipo: 'exito' | 'error', texto: string): void {
+    if (tipo === 'exito') {
+      this.mensajeExito = texto;
+      this.mensajeError = ''; // Limpia el mensaje de error
+    } else if (tipo === 'error') {
+      this.mensajeError = texto;
+      this.mensajeExito = ''; // Limpia el mensaje de éxito
+    }
+  
+    // Hacer que el mensaje desaparezca después de 5 segundos
+    setTimeout(() => {
+      this.mensajeExito = '';
+      this.mensajeError = '';
+    }, 5000);
+  }
 
+
+  
   // metodo para calcular el total de paginas
   getTotalPaginas(): number {
     return Math.ceil(this.totalUsuarios / this.limit);
@@ -135,10 +156,11 @@ export class ConsultasComponent implements OnInit {
     this.buscando = false;
 
     if (error.status === 404 || (error.status === 500 && error.error?.detail?.includes('404'))) {
-      this.mensajeError = 'No se encontraron usuarios con ese criterio';
+      this.setMensaje('error', 'No se encontraron usuarios con ese criterio.');
       this.usuarios = [];
     } else {
-      this.mensajeError = 'Error al buscar usuarios: ' + (error.message || 'Error desconocido');
+      this.setMensaje('error', 'Error al buscar usuarios: ' + (error.message || 'Error desconocido'));
+
     }
 
     console.error('Error en la búsqueda:', error);
@@ -193,8 +215,7 @@ export class ConsultasComponent implements OnInit {
   // metodo publico para iniciar el proceso de actualizacion desde el boton
   iniciarActualizacionUsuario(usuario: Usuario): void {
     if (!this.usuarioOriginal.documento_identidad) {
-      this.mensajeError = 'Primero selecciona un campo para editar.';
-      this.mensajeExito = '';
+      this.setMensaje('error', 'Primero selecciona un campo para editar.');
       return;
     }
 
@@ -219,8 +240,7 @@ export class ConsultasComponent implements OnInit {
       this.usuariosService.buscarPorDocumentoExacto(usuario.documento_identidad).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
-            this.mensajeError = 'El documento de identidad ya está registrado por otro usuario.';
-            this.mensajeExito = '';
+            this.setMensaje('error', 'El documento de identidad ya está registrado por otro usuario.');
             return;
           }
           // si no existe verificar el email
@@ -233,8 +253,8 @@ export class ConsultasComponent implements OnInit {
             this.verificarYActualizarEmail(usuario);
           } else {
             console.error('Error al verificar documento de identidad', error);
-            this.mensajeError = error.error?.detail ?? 'Error al verificar documento de identidad';
-            this.mensajeExito = '';
+
+            this.setMensaje('error', error.error?.detail ?? 'Error al verificar documento de identidad');
           }
         }
       );
@@ -259,8 +279,7 @@ export class ConsultasComponent implements OnInit {
       this.usuariosService.buscarPorEmailExacto(usuario.email).subscribe(
         (usuarioExistente) => {
           if (usuarioExistente) {
-            this.mensajeError = 'El email ya está registrado por otro usuario.';
-            this.mensajeExito = '';
+            this.setMensaje('error', 'El email ya está registrado por otro usuario.');
             return;
           }
           // si no existe actualizamos el usuario
@@ -273,8 +292,7 @@ export class ConsultasComponent implements OnInit {
             this.realizarActualizacionUsuario(usuario);
           } else {
             console.error('Error al verificar email', error);
-            this.mensajeError = error.error?.detail ?? 'Error al verificar email';
-            this.mensajeExito = '';
+            this.setMensaje('error', error.error?.detail ?? 'Error al verificar email');
           }
         }
       );
@@ -306,8 +324,7 @@ export class ConsultasComponent implements OnInit {
 
     // si no hay cambios no realiza la peticion
     if (Object.keys(cambios).length === 0) {
-      this.mensajeExito = '';
-      this.mensajeError = 'No se han realizado cambios.';
+      this.setMensaje('error', 'No se han realizado cambios.');
       return;
     }
 
@@ -320,8 +337,7 @@ export class ConsultasComponent implements OnInit {
           this.usuarios[index] = { ...this.usuarios[index], ...cambios };
         }
         console.log('Usuario actualizado correctamente');
-        this.mensajeExito = response?.mensaje ?? 'Usuario actualizado correctamente';
-        this.mensajeError = '';
+        this.setMensaje('exito', response?.mensaje ?? 'Usuario actualizado correctamente');
         
         // si el documento de identidad ha cambiado y era parte del termino de busqueda, actualizar la busqueda
         if (cambios.documento_identidad && this.tipoBusqueda === 'documento_identidad' && 
@@ -330,12 +346,12 @@ export class ConsultasComponent implements OnInit {
           this.buscar();
         }
         this.comunicacionService.notificarUsuarioEditado(); // notificar al servicio
-
+        
       },
       (error) => {
         console.error('Error al actualizar usuario', error);
-        this.mensajeExito = '';
-        this.mensajeError = error.error?.detail ?? 'Error al actualizar usuario';
+        this.setMensaje('error', error.error?.detail ?? 'Error al actualizar usuario');
+        
       }
     );
   }
@@ -346,8 +362,7 @@ export class ConsultasComponent implements OnInit {
       this.usuariosService.eliminarUsuario(documento_identidad).subscribe(
         () => {
           this.usuarios = this.usuarios.filter(user => user.documento_identidad !== documento_identidad);
-          this.mensajeExito = 'Usuario eliminado correctamente';
-          this.mensajeError = '';
+          this.setMensaje('exito', 'Usuario eliminado correctamente');
           
           this.comunicacionService.notificarUsuarioEditado(); // notificar al servicio
           // actualizar contador total
@@ -355,8 +370,7 @@ export class ConsultasComponent implements OnInit {
         },
         (error) => {
           console.error('Error al eliminar usuario', error);
-          this.mensajeError = error.error?.detail ?? 'Error al eliminar usuario';
-          this.mensajeExito = '';
+          this.setMensaje('error', error.error?.detail ?? 'Error al eliminar usuario');
         }
       );
     }
@@ -371,7 +385,7 @@ export class ConsultasComponent implements OnInit {
       const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image.heic', 'image.heif'];
   
       if (!allowedTypes.includes(file.type)) {
-        this.mensajeError = 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.';
+        this.setMensaje('error', 'Formato de archivo no permitido. Solo se aceptan PNG, JPG, JPEG, HEIC o HEIF.');
         this.fotoSeleccionadaArchivo = null;
         console.log('Formato de archivo no permitido:', file.type);
         return;
@@ -395,23 +409,24 @@ export class ConsultasComponent implements OnInit {
       const file = input.files[0];
   
       // establece el mensaje de carga personalizado
-      this.mensajeExito = `Actualizando foto a ${user.nombre}...`;
-      this.mensajeError = '';
+
+      this.setMensaje('exito', `Actualizando foto a ${user.nombre}...`);
   
       // llama al servicio para subir la nueva foto
       this.usuariosService.subirFoto(user.documento_identidad, file).subscribe({
         next: (response) => {
           console.log('Foto actualizada:', response);
           user.foto = response.foto; // actualiza la foto en la tabla
-          this.mensajeExito = `Foto actualizada correctamente para ${user.nombre}`;
+
+          this.setMensaje('exito', `Foto actualizada correctamente para ${user.nombre}`);
+
           
            // notificar al servicio que un usuario fue editado
         this.comunicacionService.notificarUsuarioEditado();
         },
         error: (err) => {
           console.error('Error al actualizar la foto:', err);
-          this.mensajeError = `Hubo un error al actualizar la foto de ${user.nombre}`;
-          this.mensajeExito = '';
+          this.setMensaje('error', `Hubo un error al actualizar la foto de ${user.nombre}. Revisa el formato.`);
         }
       });
     }
@@ -426,14 +441,14 @@ export class ConsultasComponent implements OnInit {
           if (usuario) {
             usuario.foto = ''; // actualiza el campo foto para reflejar el cambio en la tabla
           }
-          this.mensajeExito = 'Foto eliminada correctamente';
-          this.mensajeError = '';
+          this.setMensaje('exito', 'Foto eliminada correctamente.');
+
           this.comunicacionService.notificarUsuarioEditado(); // notificar al servicio
         },
         (error) => {
           console.error('Error al eliminar la foto', error);
-          this.mensajeError = error.error?.detail ?? 'Error al eliminar la foto';
-          this.mensajeExito = '';
+          this.setMensaje('error', error.error?.detail ?? 'Error al eliminar la foto');
+
         }
       );
     }

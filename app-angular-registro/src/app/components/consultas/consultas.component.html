@@ -21,13 +21,10 @@
     <button type="button" (click)="limpiarResultados()" class="btn-limpiar">Limpiar</button>
   </form>
 
-  <div *ngIf="mensajeError" class="error-message">
-    {{ mensajeError }}
-  </div>
-
-  <div *ngIf="mensajeExito" class="success-message">
-    {{ mensajeExito }}
-  </div>
+<!-- Mensaje de éxito o error con efecto de pop-up -->
+<div *ngIf="mensajeExito || mensajeError" [ngClass]="{'mensaje-exito': mensajeExito, 'mensaje-error': mensajeError}" class="mensaje-popup">
+  {{ mensajeExito || mensajeError }}
+</div>
 
   <div *ngIf="buscando" class="loading">
     Buscando usuarios...

@@ -376,7 +376,7 @@ limpiarFormulario(): void {
   
       // establece el mensaje de carga personalizado
 
-      this.setMensaje('exito', 'Actualizando foto a ${user.nombre}...');
+      this.setMensaje('exito', `Actualizando foto a ${user.nombre}...`);
 
   
       // llama al servicio para subir la nueva foto
