@@ -1,15 +1,15 @@
 body {
-    background-color: #FFFFFF;
-    font-family: Arial, sans-serif;
-  }
-  
-  .navigation-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-  
-    button {
+  background-color: #FFFFFF;
+  font-family: Arial, sans-serif;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+
+  button {
       background-color: #0197F6;
       color: white;
       border: none;
@@ -18,31 +18,34 @@ body {
       cursor: pointer;
       font-size: 16px;
       transition: background-color 0.3s ease, transform 0.2s ease;
-  
+
       &:hover {
-        background-color: #0175C2;
-        transform: scale(1.05);
+          background-color: #0175C2;
+          transform: scale(1.05);
       }
-  
+
       &:active {
-        background-color: #0056A3;
-        transform: scale(0.95);
+          background-color: #0056A3;
+          transform: scale(0.95);
       }
-    }
-  
-    .active {
-      background-color: #0056A3;
-      font-weight: bold;
-    }
   }
-  
-  @media (max-width: 768px) {
-    .navigation-buttons {
+
+  .active-button {
+      background-color: #0056A3; 
+      font-weight: bold; 
+      font-size: 18px; 
+      padding: 14px 28px; 
+      border: 2px solid #004e9c; 
+  }
+}
+
+@media (max-width: 768px) {
+  .navigation-buttons {
       flex-direction: column;
       align-items: center;
-  
+
       button {
-        width: 80%;
+          width: 80%;
       }
-    }
   }
+}

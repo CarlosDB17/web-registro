@@ -1,7 +1,19 @@
 <div class="navigation-buttons">
-    <button (click)="navigateTo('/registro')">Registro</button>
-    <button (click)="navigateTo('/listado')">Listado de Usuarios</button>
-    <!-- <button (click)="navigateTo('/consultas')">Consultas</button> -->
-    <button (click)="navigateTo('/qr')">Escanear QR</button>
+    <button 
+        [ngClass]="{'active-button': currentRoute === '/registro'}" 
+        (click)="navigateTo('/registro')">
+        Registro
+    </button>
+    <button 
+        [ngClass]="{'active-button': currentRoute === '/listado'}" 
+        (click)="navigateTo('/listado')">
+        Listado de Usuarios
+    </button>
+    <!-- <button [ngClass]="{'active-button': currentRoute === '/consultas'}" (click)="navigateTo('/consultas')">Consultas</button> -->
+    <button 
+        [ngClass]="{'active-button': currentRoute === '/qr'}" 
+        (click)="navigateTo('/qr')">
+        Escanear QR
+    </button>
     <button (click)="logOut()">Cerrar sesión</button>
 </div>
