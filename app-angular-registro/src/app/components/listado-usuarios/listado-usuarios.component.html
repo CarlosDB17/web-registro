@@ -6,13 +6,9 @@
 
   <h2>Listado de Usuarios</h2>
 
-<!-- mensajes de exito o error -->
-<div *ngIf="mensaje" class="success-message">
-  {{ mensaje }}
-</div>
-
-<div *ngIf="error" class="error-message">
-  {{ error }}
+<!-- Mensaje de éxito o error con efecto de pop-up -->
+<div *ngIf="mensaje || error" [ngClass]="{'mensaje-exito': mensaje, 'mensaje-error': error}" class="mensaje-popup">
+  {{ mensaje || error }}
 </div>
 
   <!-- mensaje de carga -->
