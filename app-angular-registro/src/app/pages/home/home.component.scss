@@ -83,6 +83,17 @@
     }
   }
   
+
+.navigation-buttons a {
+  text-decoration: none;
+  padding: 10px;
+  color: black;
+}
+
+.navigation-buttons a.active {
+  font-weight: bold;
+  color: blue;
+}
   
   @media (max-width: 768px) {
     .header-container {

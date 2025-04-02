@@ -4,8 +4,31 @@ import { authGuard, publicGuard } from './guards/auth.guards';
 export const routes: Routes = [
   {
     path: '',
+    canActivate: [authGuard], // Protege la ruta raíz
     loadComponent: () => import('./pages/home/home.component').then(m => m.default),
-    canActivate: [authGuard], // Protege esta ruta con authGuard
+    children: [
+      {
+        path: '',
+        redirectTo: 'listado', // Redirige automáticamente a /listado
+        pathMatch: 'full',
+      },
+      {
+        path: 'registro',
+        loadComponent: () => import('./components/registro/registro.component').then(m => m.RegistroComponent),
+      },
+      {
+        path: 'listado',
+        loadComponent: () => import('./components/listado-usuarios/listado-usuarios.component').then(m => m.ListadoUsuariosComponent),
+      },
+      {
+        path: 'qr',
+        loadComponent: () => import('./components/qr-scanner/qr-scanner.component').then(m => m.QrScannerComponent),
+      },
+      {
+        path: 'consultas',
+        loadComponent: () => import('./components/consultas/consultas.component').then(m => m.ConsultasComponent),
+      },
+    ],
   },
   {
     path: 'auth',
@@ -21,5 +44,9 @@ export const routes: Routes = [
         canActivate: [publicGuard], // Protege esta ruta con publicGuard
       },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: '', // Redirige a la página principal si la ruta no existe
   },
 ];

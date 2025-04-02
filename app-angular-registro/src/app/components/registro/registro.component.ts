@@ -3,11 +3,15 @@ import { Component, ViewChild, ElementRef, EventEmitter, Output, ChangeDetectorR
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UsuariosService } from '../../services/usuarios-services/usuarios.service'; 
+import { MenuComponent } from '../menu/menu.component'; // Importa el componente MenuComponent
+import { Router } from '@angular/router'; // importa Router para la navegación
+import { AuthService } from '../../services/auth-services/auth.service'; // importa AuthService para la autenticación
+
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MenuComponent], // agrega el componente MenuComponent a las importaciones
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss'
 })

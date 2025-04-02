@@ -1,23 +1,10 @@
 <div class="container">
   <div class="header-container">
     <h2>Web de Registro Carlos DB</h2>
-    <div class="navigation-buttons">
-      <button (click)="mostrarSeccion('registro')" [class.active]="seccionActual === 'registro'">Registro</button>
-      <button (click)="mostrarSeccion('listado')" [class.active]="seccionActual === 'listado'">Listado de Usuarios</button>
-      <!-- <button (click)="mostrarSeccion('consultas')" [class.active]="seccionActual === 'consultas'">Consultas</button> -->
-      <button (click)="mostrarSeccion('qr')">Escanear QR</button>
-      <button (click)="logOut()">Cerrar sesión</button>
-    </div>
+    <app-menu></app-menu>
   </div>
 
-  <div class="content-container" [class.camara-activa]="camaraActiva">
-    <app-registro 
-      *ngIf="seccionActual === 'registro'" 
-      (activarCamara)="activarCamara()" 
-      (desactivarCamara)="desactivarCamara()">
-    </app-registro>
-    <app-listado-usuarios *ngIf="seccionActual === 'listado'"></app-listado-usuarios>
-    <!-- <app-consultas *ngIf="seccionActual === 'consultas'"></app-consultas> -->
-    <app-qr-scanner *ngIf="seccionActual === 'qr'"></app-qr-scanner>
+  <div class="content-container">
+    <router-outlet></router-outlet>
   </div>
 </div>
