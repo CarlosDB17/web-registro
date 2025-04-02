@@ -69,6 +69,12 @@ export class ListadoUsuariosComponent implements OnInit {
       this.error = texto;
       this.mensaje = ''; // Limpia el mensaje de éxito
     }
+
+    // hacer que el mensaje desaparezca después de 5 segundos
+    setTimeout(() => {
+      this.mensaje = '';
+      this.error = '';
+    }, 5000);
   }
 
   // Método para obtener usuarios con paginación
