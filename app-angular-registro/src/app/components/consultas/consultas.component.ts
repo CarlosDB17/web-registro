@@ -70,8 +70,6 @@ export class ConsultasComponent implements OnInit {
     this.mensajeError = '';
     this.mensajeExito = '';
     this.buscando = true;
-
-    
   
     const terminoBusquedaMayusculas = this.terminoBusqueda.toUpperCase();
   
@@ -79,10 +77,14 @@ export class ConsultasComponent implements OnInit {
       case 'documento_identidad':
         this.usuariosService.buscarPorDocumentoIdentidad(terminoBusquedaMayusculas, this.skip, this.limit).subscribe({
           next: (response) => {
-            this.usuarios = response.usuarios;
-            this.totalUsuarios = response.total;
+            if (response.usuarios.length > 0) {
+              this.usuarios = response.usuarios;
+              this.totalUsuarios = response.total;
+              this.realizarBusqueda(); // Activa la clase solo si hay resultados
+            } else {
+              this.setMensaje('error', 'No se encontraron usuarios con ese criterio.');
+            }
             this.buscando = false;
-            this.realizarBusqueda(); // Activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
@@ -93,10 +95,14 @@ export class ConsultasComponent implements OnInit {
       case 'nombre':
         this.usuariosService.buscarPorNombre(this.terminoBusqueda, this.skip, this.limit).subscribe({
           next: (response) => {
-            this.usuarios = response.usuarios;
-            this.totalUsuarios = response.total;
+            if (response.usuarios.length > 0) {
+              this.usuarios = response.usuarios;
+              this.totalUsuarios = response.total;
+              this.realizarBusqueda(); // Activa la clase solo si hay resultados
+            } else {
+              this.setMensaje('error', 'No se encontraron usuarios con ese criterio.');
+            }
             this.buscando = false;
-            this.realizarBusqueda(); // activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
@@ -107,10 +113,14 @@ export class ConsultasComponent implements OnInit {
       case 'email':
         this.usuariosService.buscarPorEmail(this.terminoBusqueda, this.skip, this.limit).subscribe({
           next: (response) => {
-            this.usuarios = response.usuarios;
-            this.totalUsuarios = response.total;
+            if (response.usuarios.length > 0) {
+              this.usuarios = response.usuarios;
+              this.totalUsuarios = response.total;
+              this.realizarBusqueda(); // Activa la clase solo si hay resultados
+            } else {
+              this.setMensaje('error', 'No se encontraron usuarios con ese criterio.');
+            }
             this.buscando = false;
-            this.realizarBusqueda(); // activa la clase para expandir el contenedor
           },
           error: (error) => {
             this.manejarError(error);
