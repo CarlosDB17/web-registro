@@ -201,7 +201,7 @@ export class RegistroComponent {
       // Retrasar el desplazamiento para asegurarse de que el DOM esté actualizado
       setTimeout(() => {
         this.desplazarHaciaRegistroContainer(); // Desplazar la vista
-      }, 300); // Ajusta el tiempo si es necesario
+      }, 200); // Ajustar el tiempo si es necesario
   
       console.log('Estado después de limpiar: fotoUrl =', this.fotoUrl, ', fotoCapturada =', this.fotoCapturada);
   
