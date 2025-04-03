@@ -32,7 +32,16 @@ export class RegistroComponent {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
   @ViewChild('fotoPreview') fotoPreview!: ElementRef;
+  @ViewChild('registroContainer') registroContainer!: ElementRef;
 
+  private desplazarHaciaRegistroContainer(): void {
+    window.scrollTo({
+      top: document.body.scrollHeight, // Desplaza hasta el final de la página
+      behavior: 'smooth' // Desplazamiento suave
+
+    });
+    console.log('Desplazando hacia el contenedor de registro...');
+  }
 
   @Output() activarCamara = new EventEmitter<void>();
   @Output() desactivarCamara = new EventEmitter<void>();
@@ -43,6 +52,16 @@ export class RegistroComponent {
   cargando: boolean = false;
 
   constructor(private usuariosService: UsuariosService, private cdr: ChangeDetectorRef) {}
+
+  get estadoRegistroContainer(): string {
+    if (this.mostrarCamara && !this.fotoCapturada) {
+      return 'camara-abierta';
+    } else if (this.fotoCapturada) {
+      return 'foto-capturada';
+    } else {
+      return 'estado-inicial';
+    }
+  }
 
   registrarUsuario() {
     if (!this.nombre || !this.email || !this.documento_identidad || !this.fechaNacimiento) {
@@ -177,7 +196,13 @@ export class RegistroComponent {
   
       this.fotoCapturada = false; // reiniciar el estado de la foto capturada
       this.mostrarCamara = true; // mostrar la camara
-      this.cdr.detectChanges(); // forzar la actualizacion del DOM
+      this.cdr.detectChanges(); // forzar la actualización del DOM
+  
+      // Retrasar el desplazamiento para asegurarse de que el DOM esté actualizado
+      setTimeout(() => {
+        this.desplazarHaciaRegistroContainer(); // Desplazar la vista
+      }, 300); // Ajusta el tiempo si es necesario
+  
       console.log('Estado después de limpiar: fotoUrl =', this.fotoUrl, ', fotoCapturada =', this.fotoCapturada);
   
       // acceder a la camara
@@ -239,9 +264,6 @@ export class RegistroComponent {
     this.cdr.detectChanges();
   }
 
-
-  
-
   capturarFoto(): void {
     console.log('Intentando capturar foto...');
     if (this.videoElement && this.canvasElement) {
@@ -280,6 +302,7 @@ export class RegistroComponent {
   
             // cerrar la camara despues de capturar la foto
             this.cerrarCamara();
+            this.desplazarHaciaRegistroContainer(); // Desplazar la vista
           } else {
             console.error('No se pudo generar el blob de la foto.');
           }
@@ -299,11 +322,12 @@ export class RegistroComponent {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
       console.log('Stream detenido.');
-      this.desactivarCamara.emit(); // ntifica al componente padre que la camara esta desactivada
+      this.desactivarCamara.emit(); // notifica al componente padre que la camara esta desactivada
     }
     this.mostrarCamara = false; // ocultar la camara
     console.log('Estado después de cerrar la cámara: mostrarCamara =', this.mostrarCamara);
     this.cdr.detectChanges(); // forzar la deteccion de cambios
+    this.desplazarHaciaRegistroContainer(); // Desplazar la vista
   }
 
 }

@@ -9,7 +9,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'listado', // Redirige automáticamente a /listado
+        redirectTo: 'registro', // Redirige automáticamente a /listado
         pathMatch: 'full',
       },
       {

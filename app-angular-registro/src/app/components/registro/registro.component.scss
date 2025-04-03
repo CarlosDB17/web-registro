@@ -7,7 +7,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    transition: height 0.3s ease; /* Transición suave entre alturas */
+    
+    &.estado-inicial {
+      height: 70vh;
+    }
+  
+    &.camara-abierta {
+      height: 95vh;
+    }
+  
+    &.foto-capturada {
+      height: 105vh;
+    }
   }
 
 .mensaje-exito,

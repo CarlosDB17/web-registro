@@ -1,6 +1,4 @@
-
-
-<div class="registro-container">
+<div class="registro-container" [ngClass]="estadoRegistroContainer" #registroContainer>
   <form [class.shake]="error" (ngSubmit)="registrarUsuario()" class="registro-form" #form="ngForm">
     <h2>Registro</h2>
     
@@ -28,9 +26,6 @@
           <button type="button" (click)="eliminarFoto()" class="btn-eliminar-foto">Eliminar Foto</button>
         </div>
     </div>
-
-
-    
     
     <div class="camera-container">
       <div *ngIf="mostrarCamara">
