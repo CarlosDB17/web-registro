@@ -15,5 +15,10 @@
         (click)="navigateTo('/qr')">
         Escanear QR
     </button>
+    <button 
+        [ngClass]="{'active-button': currentRoute === '/csv'}" 
+        (click)="navigateTo('/csv')">
+        CSV
+    </button>
     <button (click)="logOut()">Cerrar sesión</button>
 </div>

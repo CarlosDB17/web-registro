@@ -28,6 +28,10 @@ export const routes: Routes = [
         path: 'consultas',
         loadComponent: () => import('./components/consultas/consultas.component').then(m => m.ConsultasComponent),
       },
+      {
+        path: 'csv',
+        loadComponent: () => import('./components/csv/csv.component').then(m => m.CsvComponent),
+      },
     ],
   },
   {
