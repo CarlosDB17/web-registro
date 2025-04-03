@@ -81,7 +81,10 @@
       th, td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ddd; /* Línea separatoria */
+        vertical-align: middle; /* Centra el contenido verticalmente */
+        word-wrap: break-word; /* Permite que el texto largo se ajuste */
+        white-space: normal; /* Permite que el texto se divida en varias líneas */
       }
   
       th {
@@ -93,48 +96,23 @@
       tr:hover {
         background-color: #f9f9f9;
       }
-  
-      input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-  
-        &:focus {
-          border-color: #0197F6;
-          outline: none;
-        }
+
+      /* Ajustar el ancho de las columnas */
+      th:nth-child(1), td:nth-child(1) { /* Columna "Nombre" */
+        width: 25%;
       }
-  
-      button {
-        background-color: #0197F6;
-        color: white;
-        border: none;
-        padding: 6px 10px;
-        margin-right: 5px;
-        border-radius: 4px;
-        font-weight: bold;
-        cursor: pointer;
-  
-        &:hover {
-          background-color: #0175C2;
-        }
-  
-        &.btn-danger {
-          background-color: #e74c3c;
-  
-          &:hover {
-            background-color: #c0392b;
-          }
-        }
+
+      th:nth-child(2), td:nth-child(2) { /* Columna "Email" */
+        width: 35%;
       }
-  
-      td:last-child {
-        display: flex;
-        justify-content: flex-start;
-        gap: 10px;
-        padding: 8px 0;
-        border: none;
+
+      th:nth-child(3), td:nth-child(3) { /* Columna "Documento de Identidad" */
+        width: 20%;
+      }
+
+      th:nth-child(4), td:nth-child(4) { /* Columna "Fecha de Nacimiento" */
+        width: 20%;
+        text-align: center; /* Centra el texto de la fecha */
       }
     }
   }
@@ -196,3 +174,36 @@
       }
     }
   }
+
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-controls button {
+    background-color: #0197F6; /* Azul para el botón */
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Tamaño del botón */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* Tamaño de fuente */
+    margin: 0 10px; /* Espaciado entre los botones */
+
+    &:hover {
+        background-color: #0175C2; /* Azul más oscuro al pasar el mouse */
+    }
+
+    &:disabled {
+        background-color: #b3d4fc; /* Color más claro para botones deshabilitados */
+        cursor: not-allowed; /* Cambia el cursor para indicar que no es clickeable */
+    }
+}
+
+.pagination-controls span {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0 10px; /* Espaciado entre el texto y los botones */
+}

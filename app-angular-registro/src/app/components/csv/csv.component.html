@@ -11,7 +11,7 @@
 
     <!-- Contenedor para la tabla -->
     <div class="table-responsive">
-        <table mat-table [dataSource]="usuarios" class="mat-elevation-z8" *ngIf="usuarios.length > 0">
+        <table mat-table [dataSource]="usuariosPaginados" class="mat-elevation-z8" *ngIf="usuariosPaginados.length > 0">
             <!-- Definir columnas -->
             <ng-container matColumnDef="nombre">
                 <th mat-header-cell *matHeaderCellDef> Nombre </th>
@@ -38,6 +38,13 @@
             <!-- Filas de la tabla -->
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
+    </div>
+
+    <!-- Controles de paginación -->
+    <div class="pagination-controls" *ngIf="usuarios.length > 3">
+        <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 0">Anterior</button>
+        <span>Página {{ paginaActual + 1 }} de {{ getTotalPaginas() }}</span>
+        <button (click)="cambiarPagina(1)" [disabled]="paginaActual + 1 >= getTotalPaginas()">Siguiente</button>
     </div>
 
     <!-- Contenedor para el botón -->

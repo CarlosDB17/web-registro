@@ -14,7 +14,12 @@ import { NgIf } from '@angular/common';
 })
 export class CsvComponent {
   usuarios: any[] = [];
+  usuariosPaginados: any[] = [];
   displayedColumns: string[] = ['nombre', 'email', 'documento_identidad', 'fecha_nacimiento'];
+
+  // Variables para la paginación
+  paginaActual: number = 0;
+  limitePorPagina: number = 3;
 
   constructor(private usuariosService: UsuariosService) {}
 
@@ -32,6 +37,7 @@ export class CsvComponent {
             documento_identidad: row.documento_identidad?.trim(),
             fecha_nacimiento: this.formatFecha(row.fecha_nacimiento?.trim())
           })).filter(usuario => this.validarUsuario(usuario)); // Filtrar usuarios válidos
+          this.actualizarUsuariosPaginados();
         },
         error: (error) => {
           console.error('Error al leer el archivo CSV:', error);
@@ -40,18 +46,36 @@ export class CsvComponent {
     }
   }
 
-  // Formatear la fecha al formato dd-mm-yyyy para mostrar en la tabla
-formatFechaMostrar(fecha: string): string {
-  const date = new Date(fecha);
-  if (isNaN(date.getTime())) {
-    console.error(`Fecha inválida: ${fecha}`);
-    return '';
+  // Actualizar los usuarios mostrados en la página actual
+  actualizarUsuariosPaginados(): void {
+    const inicio = this.paginaActual * this.limitePorPagina;
+    const fin = inicio + this.limitePorPagina;
+    this.usuariosPaginados = this.usuarios.slice(inicio, fin);
   }
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son base 0
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
-}
+
+  // Cambiar de página
+  cambiarPagina(direccion: number): void {
+    this.paginaActual += direccion;
+    this.actualizarUsuariosPaginados();
+  }
+
+  // Obtener el total de páginas
+  getTotalPaginas(): number {
+    return Math.ceil(this.usuarios.length / this.limitePorPagina);
+  }
+
+  // Formatear la fecha al formato dd-mm-yyyy para mostrar en la tabla
+  formatFechaMostrar(fecha: string): string {
+    const date = new Date(fecha);
+    if (isNaN(date.getTime())) {
+      console.error(`Fecha inválida: ${fecha}`);
+      return '';
+    }
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son base 0
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
 
   // Validar un usuario individual
   validarUsuario(usuario: any): boolean {
@@ -90,6 +114,7 @@ formatFechaMostrar(fecha: string): string {
         console.log('Usuarios importados con éxito:', response);
         alert('Usuarios importados con éxito.');
         this.usuarios = []; // Limpiar la tabla después de la importación
+        this.actualizarUsuariosPaginados(); // Actualizar la tabla paginada
       },
       error: (error) => {
         console.error('Error al importar usuarios:', error);
