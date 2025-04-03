@@ -1,7 +1,7 @@
 <div class="csv-container">
     <h2>Importar Usuarios desde CSV</h2>
 
-    <!-- Contenedor para el input de archivo -->
+    <!-- contenedor para el input de archivo -->
     <div class="csv-input-container">
         <label class="custom-file-upload">
             <input type="file" accept=".csv" (change)="onFileSelected($event)" />
@@ -9,10 +9,10 @@
         </label>
     </div>
 
-    <!-- Contenedor para la tabla -->
+    <!-- contenedor para la tabla -->
     <div class="table-responsive">
         <table mat-table [dataSource]="usuariosPaginados" class="mat-elevation-z8" *ngIf="usuariosPaginados.length > 0">
-            <!-- Definir columnas -->
+            <!-- definir columnas -->
             <ng-container matColumnDef="nombre">
                 <th mat-header-cell *matHeaderCellDef> Nombre </th>
                 <td mat-cell *matCellDef="let usuario"> {{ usuario.nombre }} </td>
@@ -33,24 +33,24 @@
                 <td mat-cell *matCellDef="let usuario"> {{ formatFechaMostrar(usuario.fecha_nacimiento) }} </td>
             </ng-container>
 
-            <!-- Encabezado de la tabla -->
+            <!-- encabezado de la tabla -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <!-- Filas de la tabla -->
+            <!-- filas de la tabla -->
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
     </div>
 
-    <!-- Controles de paginación -->
+    <!-- controles de paginacion -->
     <div class="pagination-controls" *ngIf="usuarios.length > 3">
         <button (click)="cambiarPagina(-1)" [disabled]="paginaActual === 0">Anterior</button>
-        <span>Página {{ paginaActual + 1 }} de {{ getTotalPaginas() }}</span>
+        <span>Pagina {{ paginaActual + 1 }} de {{ getTotalPaginas() }}</span>
         <button (click)="cambiarPagina(1)" [disabled]="paginaActual + 1 >= getTotalPaginas()">Siguiente</button>
     </div>
 
-    <!-- Contenedor para el botón -->
+    <!-- contenedor para el boton -->
     <div class="csv-button-container" *ngIf="usuarios.length > 0">
         <button mat-raised-button color="primary" (click)="importarUsuarios()">
-            Confirmar Importación
+            Confirmar Importacion
         </button>
     </div>
 </div>

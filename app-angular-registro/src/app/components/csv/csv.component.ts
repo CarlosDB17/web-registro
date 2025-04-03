@@ -17,13 +17,13 @@ export class CsvComponent {
   usuariosPaginados: any[] = [];
   displayedColumns: string[] = ['nombre', 'email', 'documento_identidad', 'fecha_nacimiento'];
 
-  // Variables para la paginación
+  // variables para la paginacion
   paginaActual: number = 0;
   limitePorPagina: number = 3;
 
   constructor(private usuariosService: UsuariosService) {}
 
-  // Leer y parsear el archivo CSV
+  // leer y parsear el archivo csv
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
@@ -36,7 +36,7 @@ export class CsvComponent {
             email: row.email?.trim(),
             documento_identidad: row.documento_identidad?.trim(),
             fecha_nacimiento: this.formatFecha(row.fecha_nacimiento?.trim())
-          })).filter(usuario => this.validarUsuario(usuario)); // Filtrar usuarios válidos
+          })).filter(usuario => this.validarUsuario(usuario)); // filtrar usuarios validos
           this.actualizarUsuariosPaginados();
         },
         error: (error) => {
@@ -46,64 +46,64 @@ export class CsvComponent {
     }
   }
 
-  // Actualizar los usuarios mostrados en la página actual
+  // actualizar los usuarios mostrados en la pagina actual
   actualizarUsuariosPaginados(): void {
     const inicio = this.paginaActual * this.limitePorPagina;
     const fin = inicio + this.limitePorPagina;
     this.usuariosPaginados = this.usuarios.slice(inicio, fin);
   }
 
-  // Cambiar de página
+  // cambiar de pagina
   cambiarPagina(direccion: number): void {
     this.paginaActual += direccion;
     this.actualizarUsuariosPaginados();
   }
 
-  // Obtener el total de páginas
+  // obtener el total de paginas
   getTotalPaginas(): number {
     return Math.ceil(this.usuarios.length / this.limitePorPagina);
   }
 
-  // Formatear la fecha al formato dd-mm-yyyy para mostrar en la tabla
+  // formatear la fecha al formato dd-mm-yyyy para mostrar en la tabla
   formatFechaMostrar(fecha: string): string {
     const date = new Date(fecha);
     if (isNaN(date.getTime())) {
-      console.error(`Fecha inválida: ${fecha}`);
+      console.error(`Fecha invalida: ${fecha}`);
       return '';
     }
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son base 0
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // los meses son base 0
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
 
-  // Validar un usuario individual
+  // validar un usuario individual
   validarUsuario(usuario: any): boolean {
     return usuario.nombre && usuario.email && usuario.documento_identidad && usuario.fecha_nacimiento;
   }
 
-  // Formatear la fecha al formato esperado por la API (YYYY-MM-DD)
+  // formatear la fecha al formato esperado por la api (yyyy-mm-dd)
   formatFecha(fecha: string): string {
     const date = new Date(fecha);
     if (isNaN(date.getTime())) {
-      console.error(`Fecha inválida: ${fecha}`);
+      console.error(`Fecha invalida: ${fecha}`);
       return '';
     }
-    return date.toISOString().split('T')[0]; // Retorna en formato YYYY-MM-DD
+    return date.toISOString().split('T')[0]; // retorna en formato yyyy-mm-dd
   }
 
-  // Validar todos los usuarios antes de enviarlos
+  // validar todos los usuarios antes de enviarlos
   validarUsuarios(): boolean {
     for (const usuario of this.usuarios) {
       if (!this.validarUsuario(usuario)) {
-        alert('Todos los campos son obligatorios y deben tener un formato válido.');
+        alert('Todos los campos son obligatorios y deben tener un formato valido.');
         return false;
       }
     }
     return true;
   }
 
-  // Enviar los datos a la API usando el servicio
+  // enviar los datos a la api usando el servicio
   importarUsuarios(): void {
     if (!this.validarUsuarios()) {
       return;
@@ -111,10 +111,10 @@ export class CsvComponent {
 
     this.usuariosService.importarUsuarios(this.usuarios).subscribe({
       next: (response) => {
-        console.log('Usuarios importados con éxito:', response);
-        alert('Usuarios importados con éxito.');
-        this.usuarios = []; // Limpiar la tabla después de la importación
-        this.actualizarUsuariosPaginados(); // Actualizar la tabla paginada
+        console.log('Usuarios importados con exito:', response);
+        alert('Usuarios importados con exito.');
+        this.usuarios = []; // limpiar la tabla despues de la importacion
+        this.actualizarUsuariosPaginados(); // actualizar la tabla paginada
       },
       error: (error) => {
         console.error('Error al importar usuarios:', error);
