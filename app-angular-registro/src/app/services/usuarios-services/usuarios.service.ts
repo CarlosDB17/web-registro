@@ -18,7 +18,8 @@ interface Usuario {
 })
 export class UsuariosService {
   //private API_URL = "https://pf25-carlos-db-v5-302016834907.europe-west1.run.app/usuarios";
-  private API_URL = "http://127.0.0.1:8000/usuarios";
+  private API_URL = "https://pf25-carlos-db-v6-302016834907.europe-west1.run.app/usuarios";
+  //private API_URL = "http://127.0.0.1:8000/usuarios";
 
   constructor(private http: HttpClient) {}
 
