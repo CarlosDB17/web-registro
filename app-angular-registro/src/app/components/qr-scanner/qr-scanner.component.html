@@ -60,8 +60,14 @@
         </div>
       </div>
 
-      <div class="mensaje-container">
-        <div *ngIf="mensaje" [ngClass]="{'mensaje-exito': !error, 'mensaje-error': error}">
+      <!-- Mensaje de verificación de datos -->
+      <div *ngIf="verificandoDatos" class="verificando-container">
+        <div class="spinner"></div>
+        <span class="verificando-mensaje">{{ mensajeVerificacion }}</span>
+      </div>
+
+      <div class="mensaje-container" *ngIf="!verificandoDatos && mensaje">
+        <div [ngClass]="{'mensaje-exito': !error, 'mensaje-error': error}">
           {{ mensaje }}
         </div>
       </div>

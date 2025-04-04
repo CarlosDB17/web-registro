@@ -251,6 +251,33 @@ select {
   }
 }
 
+.verificando-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 15px;
+  margin: 15px 0;
+  background-color: rgba(41, 128, 185, 0.1);
+  border-radius: 5px;
+  gap: 10px;
+  
+  .spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(1, 151, 246, 0.2);
+    border-top-color: #0197F6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .verificando-mensaje {
+    font-weight: 500;
+    color: #2980b9;
+    font-size: 15px;
+  }
+}
+
 button {
   background-color: #0197F6;
   color: white;
