@@ -1,180 +1,229 @@
+// Import mixins (create this file or include at the top of each component)
+// @import '../styles/responsive-mixins';
+
 body {
-    background-color: #FFFFFF;
-    font-family: Arial, sans-serif;
+  background-color: #FFFFFF;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.registro-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: height 0.3s ease;
+  width: 100%;
+  padding: 1rem;
+  
+  &.estado-inicial {
+    height: 70vh;
+  }
+
+  &.camara-abierta {
+    height: 95vh;
+  }
+
+  &.foto-capturada {
+    height: 105vh;
   }
   
-  .registro-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: height 0.3s ease; /* Transición suave entre alturas */
+  @media (max-width: 768px) {
+    padding: 0.5rem;
     
     &.estado-inicial {
-      height: 70vh;
+      height: auto;
+      min-height: 80vh;
     }
-  
-    &.camara-abierta {
-      height: 95vh;
-    }
-  
+    
+    &.camara-abierta,
     &.foto-capturada {
-      height: 105vh;
+      height: auto;
+      min-height: 100vh;
     }
   }
+}
 
 .mensaje-exito,
 .mensaje-error {
   padding-top: 10px;
   font-weight: bold;
 }
+
+.registro-form {
+  margin-top: 20px;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 550px;
+  text-align: center;
   
-  .registro-form {
-    margin-top: 20px;
-    padding-top: 20px;
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 550px;
-    text-align: center;
-  }
-  
-  h2 {
-    margin-bottom: 1rem;
-    color: #0197F6;
-  }
-  
-  label {
-    display: block;
-    text-align: left;
-    margin: 10px 0 5px;
-    font-weight: bold;
-  }
-  
-  input {
+  @media (max-width: 768px) {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 1.5rem;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  button {
-    background-color: #0197F6;
-    color: white;
-    border: none;
-    padding: 10px;
-    padding-top: 10px;
-    width: 100%;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+  @media (max-width: 480px) {
+    padding: 1rem;
   }
+}
+
+h2 {
+  margin-bottom: 1rem;
+  color: #0197F6;
+}
+
+label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   
-  button:hover {
+  @media (max-width: 768px) {
+    padding: 10px; // Larger for better touch
+  }
+}
+
+button {
+  background-color: #0197F6;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  min-height: 44px; // Better for touch
+  
+  &:hover {
     background-color: #0175C2;
   }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.5s ease;
+}
+
+.btn-camara {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 10px;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.foto-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.input-camera-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
   
-
-  @keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
-  }
-  
-  .shake {
-    animation: shake 0.5s ease;
-  }
-
-
-  .btn-camara {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-top: 10px;
-  }
-  
-
-
-  .foto-container {
-    display: flex;
+  @media (max-width: 480px) {
     flex-direction: column;
+    align-items: flex-start;
   }
+}
 
-  .input-camera-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px; 
-  }
+.icono-camara {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  margin-bottom: 0;
+  padding: 4px 0;
+}
 
-  .icono-camara {
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    margin-bottom: 0; 
-    padding: 4px 0; 
-  }
-
-
-  .camera-container {
-    position: relative;
-    text-align: center;
+.camera-container {
+  position: relative;
+  text-align: center;
+  width: 100%;
   
-    video, img {
+  video, img {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    
+    @media (min-width: 768px) {
       max-width: 50%;
-      border-radius: 4px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
+  }
   
-    .camera-controls {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-  
-      button {
-
-        padding: 8px 16px;
-        border-radius: 4px;
-        border: none;
-        background: #007bff;
-        color: white;
-        cursor: pointer;
-  
-        &:hover {
-          background: #0056b3;
-        }
+  .camera-controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    
+    button {
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: none;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      min-height: 44px;
+      
+      @media (max-width: 480px) {
+        width: 100%;
+      }
+      
+      &:hover {
+        background: #0056b3;
       }
     }
-
-    .camera-error {
-      color: red;
-      font-size: 14px;
-      margin-top: 10px;
-    }
   }
 
-
-  .registro-boton-container {
-    margin-top: 10px; /* Espacio adicional entre el botón y los controles de la cámara */
-    text-align: center; /* Centrar el botón */
+  .camera-error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
   }
+}
 
+.registro-boton-container {
+  margin-top: 10px;
+  text-align: center;
+}
 
-  .btn-eliminar-foto {
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.btn-eliminar-foto {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-height: 44px;
   
-    &:hover {
-      background-color: #c0392b;
-    }
+  &:hover {
+    background-color: #c0392b;
   }
+}
