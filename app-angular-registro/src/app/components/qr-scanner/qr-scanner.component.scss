@@ -384,3 +384,21 @@ zxing-scanner {
     opacity: 1;
   }
 }
+
+.qr-invalid-message {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #c0392b;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}

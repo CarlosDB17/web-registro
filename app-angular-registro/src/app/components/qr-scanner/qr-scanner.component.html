@@ -36,6 +36,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Mensaje de QR inválido -->
+    <div *ngIf="mostrarMensajeQRInvalido" class="qr-invalid-message">
+      {{ mensajeQRInvalido }}
+    </div>
   </div>
 
   <div *ngIf="mostrarResultado" class="resultado-container" #resultadoContainer>

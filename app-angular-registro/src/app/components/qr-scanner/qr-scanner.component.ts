@@ -56,6 +56,10 @@ export class QrScannerComponent implements OnInit, AfterViewInit {
   // bandera para evitar procesar múltiples códigos en intervalos cortos
   procesando: boolean = false;
 
+  // Mensaje de error cuando un QR no es válido
+  mensajeQRInvalido: string = '';
+  mostrarMensajeQRInvalido: boolean = false;
+
   constructor(
     private usuariosService: UsuariosService,
     private cdr: ChangeDetectorRef
@@ -172,8 +176,22 @@ export class QrScannerComponent implements OnInit, AfterViewInit {
     // Validar el formato del código QR
     if (!this.esCodigoQRValido(result)) {
       console.log('Código QR no válido, ignorando...');
+      this.mostrarMensajeQRInvalido = true;
+      this.mensajeQRInvalido = 'Código QR no válido, ignorando...';
+      
+      // Ocultar el mensaje después de 3 segundos
+      setTimeout(() => {
+        this.mostrarMensajeQRInvalido = false;
+        this.mensajeQRInvalido = '';
+        this.cdr.detectChanges();
+      }, 3000);
+      
       return;
     }
+
+    // Limpiar mensajes de error de QR inválido
+    this.mostrarMensajeQRInvalido = false;
+    this.mensajeQRInvalido = '';
 
     // Marcar como procesando y almacenar el último código procesado
     this.procesando = true;
