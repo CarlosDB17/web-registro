@@ -1,7 +1,8 @@
 // usuarios.service.ts (updated)
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 interface Usuario {
   mensaje: string;
@@ -96,6 +97,24 @@ buscarPorDocumentoExacto(documento_identidad: string): Observable<Usuario> {
   // Método para importar usuarios
   importarUsuarios(usuarios: Usuario[]): Observable<{ resultados: { usuario: string; status: string }[] }> {
     return this.http.post<{ resultados: { usuario: string; status: string }[] }>(`${this.API_URL}/multiples`, usuarios);
+  }
+
+  // Método para verificar si un usuario ya existe por su documento de identidad
+  verificarUsuarioExistente(documento_identidad: string): Observable<boolean> {
+    return this.http.get<any>(`${this.API_URL}/${documento_identidad}/`).pipe(
+      map(response => {
+        // Si obtenemos respuesta, el usuario existe
+        return true;
+      }),
+      catchError(error => {
+        // Si el error es 404, el usuario no existe
+        if (error.status === 404) {
+          return of(false);
+        }
+        // Para otros errores, reenviar el error
+        throw error;
+      })
+    );
   }
 
 }

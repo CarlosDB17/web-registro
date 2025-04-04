@@ -1,22 +1,74 @@
-<div class="scanner-title">
-  <h2>Aún en desarrollo</h2>
-</div>
+<div class="qr-scanner-container" [ngClass]="estadoScannerContainer">
+  <div class="scanner-title">
+    <h2>Escáner QR</h2>
+    <p class="scanner-subtitle">Escanea el código QR para registrar al usuario</p>
+  </div>
 
-<div class="scanner-container">
-  <select *ngIf="availableDevices.length > 1" [(ngModel)]="selectedDevice">
-    <option *ngFor="let device of availableDevices" [ngValue]="device">
-      {{ device.label || 'Cámara desconocida' }}
-    </option>
-  </select>
+  <div class="scanner-box">
+    <select *ngIf="availableDevices.length > 1" [(ngModel)]="selectedDevice" (change)="onDeviceSelectChange()">
+      <option *ngFor="let device of availableDevices" [ngValue]="device">
+        {{ device.label || 'Cámara desconocida' }}
+      </option>
+    </select>
 
-  <zxing-scanner
-    [formats]="formats"
-    [device]="selectedDevice"
-    (scanSuccess)="onCodeResult($event)"
-    [enable]="true">
-  </zxing-scanner>
-</div>
+    <div class="scanner-frame">
+      <zxing-scanner
+        [formats]="formats"
+        [device]="selectedDevice"
+        (scanSuccess)="onCodeResult($event)"
+        (scanError)="onScanError($event)"
+        (scanComplete)="onScanComplete($event)"
+        (camerasFound)="onCamerasFound($event)"
+        [enable]="scannerEnabled">
+      </zxing-scanner>
+      <div class="scanner-overlay" *ngIf="!scannerEnabled">
+        <div class="scanner-paused">
+          <span>Escáner en pausa</span>
+          <button class="btn-reanudar" (click)="reanudarEscaner()">Reanudar</button>
+        </div>
+      </div>
+      
+      <!-- Mensaje de lectura de QR -->
+      <div class="reading-overlay" *ngIf="leyendoQR">
+        <div class="reading-message">
+          <div class="spinner"></div>
+          <span>Leyendo QR...</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div *ngIf="mensaje" class="mensaje">
-  {{ mensaje }}
+  <div *ngIf="mostrarResultado" class="resultado-container" #resultadoContainer>
+    <div class="resultado-box">
+      <h3>Datos del Usuario</h3>
+      <div class="datos-usuario">
+        <div class="dato-row">
+          <span class="dato-label">Nombre:</span>
+          <span class="dato-value">{{ userData?.nombre || 'No disponible' }}</span>
+        </div>
+        <div class="dato-row">
+          <span class="dato-label">Email:</span>
+          <span class="dato-value">{{ userData?.email || 'No disponible' }}</span>
+        </div>
+        <div class="dato-row">
+          <span class="dato-label">Documento:</span>
+          <span class="dato-value">{{ userData?.documento_identidad || 'No disponible' }}</span>
+        </div>
+        <div class="dato-row">
+          <span class="dato-label">Fecha de nacimiento:</span>
+          <span class="dato-value">{{ userData?.fecha_nacimiento || 'No disponible' }}</span>
+        </div>
+      </div>
+
+      <div class="mensaje-container">
+        <div *ngIf="mensaje" [ngClass]="{'mensaje-exito': !error, 'mensaje-error': error}">
+          {{ mensaje }}
+        </div>
+      </div>
+
+      <div class="scanner-controls">
+        <button class="btn-escanear-otro" (click)="escanearOtro()">Escanear otro código</button>
+      </div>
+    </div>
+  </div>
 </div>
