@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="listado-container" [class.busqueda-activa]="busquedaActiva">
   <h2>Consulta de Usuarios</h2>
   <input #fileInput type="file" style="display: none;" />
@@ -46,23 +47,22 @@
       </thead>
       <tbody>
         <tr *ngFor="let usuario of usuarios">
-          <td>
+          <td data-label="Foto">
             <img 
-            [src]="usuario.foto && usuario.foto !== '' ? usuario.foto : '/ic_no_foto.png'" 
-            alt="Foto del usuario" 
-            class="foto-usuario"
-            (click)="seleccionarFoto(fileInput)"
-          />
-          <input 
-          type="file" 
-          #fileInput 
-          accept="image/*" 
-          style="display: none;" 
-          (change)="actualizarFotoUsuario($event,usuario)"
-        />
-
+              [src]="usuario.foto && usuario.foto !== '' ? usuario.foto : '/ic_no_foto.png'" 
+              alt="Foto del usuario" 
+              class="foto-usuario"
+              (click)="seleccionarFoto(fileInput)"
+            />
+            <input 
+              type="file" 
+              #fileInput 
+              accept="image/*" 
+              style="display: none;" 
+              (change)="actualizarFotoUsuario($event,usuario)"
+            />
           </td>
-          <td>
+          <td data-label="Nombre">
             <input 
               type="text" 
               [(ngModel)]="usuario.nombre" 
@@ -72,7 +72,7 @@
               (focus)="almacenarDatosOriginales(usuario)"
             />
           </td>
-          <td>
+          <td data-label="Email">
             <input 
               type="email" 
               [(ngModel)]="usuario.email" 
@@ -82,7 +82,7 @@
               (focus)="almacenarDatosOriginales(usuario)"
             />
           </td>
-          <td>
+          <td data-label="Documento de identidad">
             <input 
               type="text" 
               [(ngModel)]="usuario.documento_identidad" 
@@ -92,7 +92,7 @@
               (focus)="almacenarDatosOriginales(usuario)"
             />
           </td>
-          <td>
+          <td data-label="Fecha de Nacimiento">
             <input 
               type="date" 
               [(ngModel)]="usuario.fecha_nacimiento" 
@@ -103,8 +103,8 @@
           </td>
           <td data-label="Acciones">
             <button (click)="iniciarActualizacionUsuario(usuario)">Actualizar</button>
-            <button (click)="eliminarUsuario(usuario.documento_identidad)" class="btn-danger">Eliminar Usuario</button>
             <button (click)="eliminarFotoUsuario(usuario.documento_identidad)" class="btn-warning">Eliminar Foto</button>
+            <button (click)="eliminarUsuario(usuario.documento_identidad)" class="btn-danger">Eliminar Usuario</button>
           </td>
         </tr>
       </tbody>

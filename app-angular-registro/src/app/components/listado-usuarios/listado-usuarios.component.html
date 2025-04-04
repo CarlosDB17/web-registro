@@ -1,4 +1,4 @@
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Agregar el componente app-consultas -->
 <app-consultas></app-consultas>
 
@@ -60,8 +60,8 @@
           </td>
           <td data-label="Acciones">
             <button (click)="iniciarActualizacionUsuario(user)">Actualizar</button>
-            <button (click)="eliminarUsuario(user.documento_identidad)" class="btn-danger">Eliminar Usuario</button>
             <button (click)="eliminarFotoUsuario(user.documento_identidad)" class="btn-warning">Eliminar Foto</button>
+            <button (click)="eliminarUsuario(user.documento_identidad)" class="btn-danger">Eliminar Usuario</button>
           </td>
         </tr>
       </tbody>

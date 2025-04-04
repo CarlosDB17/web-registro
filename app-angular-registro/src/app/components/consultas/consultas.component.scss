@@ -1,3 +1,7 @@
+// Variables para breakpoints
+$mobile: 480px;
+$tablet: 768px;
+
 .listado-container {
 	display: flex;
 	flex-direction: column;
@@ -8,7 +12,18 @@
 	background: #FFFFFF;
 	border-radius: 10px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	transition: max-width 0.5s ease; // Animación suave para max-width
+	transition: max-width 0.5s ease;
+	
+	@media (max-width: $tablet) {
+		max-width: 100%;
+		padding: 1.5rem;
+		margin: 1rem auto;
+	}
+	
+	@media (max-width: $mobile) {
+		padding: 1rem;
+		margin: 0.5rem auto;
+	}
 }
 
 .input-tabla {
@@ -24,7 +39,11 @@
 }
 
 .listado-container.busqueda-activa {
-	max-width: 1700px; // Estado cuando hay una búsqueda activa
+	max-width: 1700px;
+	
+	@media (max-width: $tablet) {
+		max-width: 100%;
+	}
 }
 
 h2 {
@@ -51,11 +70,20 @@ form {
 			border-color: #0197F6;
 			outline: none;
 		}
+		
+		@media (max-width: $tablet) {
+			min-width: 100%;
+		}
 	}
 
 	select {
 		min-width: 150px;
 		max-width: 200px;
+		
+		@media (max-width: $tablet) {
+			min-width: 100%;
+			max-width: 100%;
+		}
 	}
 
 	button {
@@ -66,6 +94,7 @@ form {
 		border-radius: 5px;
 		cursor: pointer;
 		font-size: 16px;
+		min-height: 44px; // Mejor para uso táctil
 
 		&:hover {
 			background-color: #0175C2;
@@ -97,6 +126,16 @@ form {
 				color: white;
 			}
 		}
+		
+		@media (max-width: $tablet) {
+			width: 100%;
+			margin-top: 5px;
+		}
+	}
+	
+	@media (max-width: $tablet) {
+		flex-direction: column;
+		gap: 8px;
 	}
 }
 
@@ -114,49 +153,53 @@ form {
 		color: #333;
 		margin-bottom: 1rem;
 	}
+	
+	@media (max-width: $mobile) {
+		margin-top: 0.5rem;
+	}
 }
 
-/* Estilos de tabla responsiva - tomados del listado-usuarios */
-.table-responsive table .input-tabla {
+/* Tabla responsiva */
+.table-responsive {
 	overflow-x: auto;
-
+	width: 100%;
+	
 	table {
-		background-color: #ffffff;
-		border-radius: 8px;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		width: 100%;
 		border-collapse: collapse;
+		background: #fff;
+		border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 		margin-top: 1rem;
-
-		th,
-		td {
+		
+		th, td {
 			padding: 12px;
 			text-align: left;
 			border-bottom: 1px solid #ddd;
 		}
-
+		
 		th {
 			background-color: #f4f4f4;
 			color: #333;
 			font-weight: bold;
 		}
-
+		
 		tr:hover {
 			background-color: #f9f9f9;
 		}
-
+		
 		input {
 			width: 100%;
 			padding: 8px;
 			border: 1px solid #ddd;
 			border-radius: 4px;
-
+			
 			&:focus {
 				border-color: #0197F6;
 				outline: none;
 			}
 		}
-
+		
 		button {
 			background-color: #0197F6;
 			color: white;
@@ -166,34 +209,88 @@ form {
 			border-radius: 4px;
 			font-weight: bold;
 			cursor: pointer;
-
+			min-height: 44px;
+			min-width: 44px;
+			
 			&:hover {
 				background-color: #0175C2;
 			}
-
+			
 			&.btn-danger {
 				background-color: #e74c3c;
-
+				
 				&:hover {
 					background-color: #c0392b;
 				}
 			}
-
+			
 			&.btn-warning {
 				background-color: #e74c3c;
-
+				
 				&:hover {
 					background-color: #c0392b;
 				}
 			}
 		}
-
+		
 		td:last-child {
 			display: flex;
 			justify-content: flex-start;
 			gap: 10px;
 			padding: 8px 0;
 			border: none;
+		}
+		
+		// Vista móvil para las tablas
+		@media (max-width: $tablet) {
+			thead {
+				display: none;
+			}
+			
+			tbody, tr, td {
+				display: block;
+				width: 100%;
+			}
+			
+			tr {
+				margin-bottom: 15px;
+				border: 1px solid #ddd;
+				border-radius: 8px;
+				padding: 8px;
+			}
+			
+			td {
+				position: relative;
+				padding-left: 50%;
+				text-align: right;
+				border-bottom: 1px dotted #ddd;
+				min-height: 44px;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				
+				&::before {
+					content: attr(data-label);
+					position: absolute;
+					left: 12px;
+					width: 45%;
+					font-weight: bold;
+					text-align: left;
+				}
+				
+				&:last-child {
+					border-bottom: none;
+					padding-left: 12px;
+					flex-wrap: wrap;
+					justify-content: center;
+					
+					button {
+						flex: 1;
+						margin: 2px;
+						min-width: 44px;
+					}
+				}
+			}
 		}
 	}
 }
@@ -207,8 +304,7 @@ table {
 	border-radius: 8px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-	th,
-	td {
+	th, td {
 		padding: 12px;
 		text-align: left;
 		border-bottom: 1px solid #ddd;
@@ -233,6 +329,7 @@ table {
 		border-radius: 4px;
 		font-weight: bold;
 		cursor: pointer;
+		min-height: 44px;
 
 		&:hover {
 			background-color: #0175C2;
@@ -254,6 +351,43 @@ table {
 			}
 		}
 	}
+	
+	// Vista móvil para las tablas normales
+	@media (max-width: $tablet) {
+		display: block;
+		
+		thead, tbody, th, td, tr {
+			display: block;
+		}
+		
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		
+		tr {
+			margin-bottom: 15px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+		}
+		
+		td {
+			border: none;
+			position: relative;
+			padding-left: 50%;
+			min-height: 44px;
+			
+			&::before {
+				content: attr(data-label);
+				position: absolute;
+				left: 12px;
+				width: 45%;
+				font-weight: bold;
+				text-align: left;
+			}
+		}
+	}
 }
 
 .pagination-controls {
@@ -261,30 +395,44 @@ table {
 	justify-content: center;
 	align-items: center;
 	margin-top: 20px;
-}
-
-.pagination-controls button {
-	background-color: #0197F6;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 16px;
-	margin: 0 10px;
-
-	&:hover {
-		background-color: #0175C2;
+	flex-wrap: wrap;
+	
+	button {
+		background-color: #0197F6;
+		color: white;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 16px;
+		margin: 5px 10px;
+		min-height: 44px;
+		min-width: 44px;
+	
+		&:hover {
+			background-color: #0175C2;
+		}
+	
+		&:disabled {
+			background-color: #b3d4fc;
+			cursor: not-allowed;
+		}
+		
+		@media (max-width: $mobile) {
+			padding: 8px 12px;
+			font-size: 14px;
+			margin: 3px 5px;
+		}
 	}
-
-	&:disabled {
-		background-color: #b3d4fc;
-		cursor: not-allowed;
+	
+	span {
+		font-weight: bold;
+		margin: 0 5px;
 	}
-}
-
-.pagination-controls span {
-	font-weight: bold;
+	
+	@media (max-width: $mobile) {
+		margin-top: 10px;
+	}
 }
 
 .foto-usuario {
@@ -300,151 +448,61 @@ table {
 	&:hover {
 		transform: scale(1.1);
 	}
+	
+	@media (max-width: $mobile) {
+		width: 40px;
+		height: 40px;
+	}
 }
-
-/* Estilos responsivos para pantallas pequeñas */
-@media (max-width: 768px) {
-	.listado-container {
-		padding: 1rem;
-	}
-
-	form {
-		flex-direction: column;
-
-		select,
-		input {
-			min-width: 100%;
-		}
-
-		button {
-			width: 100%;
-			text-align: center;
-		}
-	}
-
-	/* Estilos de tabla responsiva */
-	.table-responsive table .input-tabla {
-		width: 100%;
-		padding: 8px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-
-		&:focus {
-			border-color: #0197F6;
-			outline: none;
-		}
-
-
-		thead {
-			display: none;
-		}
-
-		tbody {
-			display: block;
-		}
-
-		tr {
-			display: flex;
-			flex-direction: column;
-			margin-bottom: 1rem;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			padding: 10px;
-			background-color: #fff;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-		}
-
-		td {
-			display: flex;
-			justify-content: space-between;
-			padding: 8px 0;
-			border: none;
-		}
-
-		td::before {
-			content: attr(data-label);
-			font-weight: bold;
-			color: #333;
-			flex: 1;
-		}
-
-		td:last-child {
-			display: flex;
-			justify-content: flex-start;
-			gap: 10px;
-			padding: 8px 0;
-			border: none;
-		}
-	}
-
-
-	input {
-		// estilos para los campos de entrada del formulario
-		flex: 1;
-		min-width: 200px;
-		padding: 10px;
-		border: 1px solid #ccc;
-		border-radius: 5px;
-
-		&:focus {
-			border-color: #0197F6;
-			outline: none;
-		}
-	}
-
-	@media (max-width: 768px) {
-		input {
-			// estilos para pantallas pequeñas
-			min-width: 100%;
-		}
-	}
-
-
-}
-
 
 .mensaje-popup {
 	position: fixed;
-	top: 20px; /* Distancia desde la parte superior */
-	right: 20px; /* Alineado a la derecha */
+	top: 20px;
+	right: 20px;
 	padding: 15px 20px;
 	border-radius: 8px;
 	font-size: 16px;
 	color: #fff;
 	z-index: 1000;
 	opacity: 0;
-	transform: translateY(-20px); /* Efecto de deslizamiento hacia abajo */
-	animation: aparecer 0.5s forwards, desaparecer 0.5s 4.5s forwards; /* Animaciones de entrada y salida */
-  }
-  
-  .mensaje-exito {
-	background-color: #4caf50; /* Verde para mensajes de éxito */
-  }
-  
-  .mensaje-error {
-	background-color: #f44336; /* Rojo para mensajes de error */
-  }
-  
-  /* Animación para aparecer */
-  @keyframes aparecer {
+	transform: translateY(-20px);
+	animation: aparecer 0.5s forwards, desaparecer 0.5s 4.5s forwards;
+	max-width: 90%;
+	
+	@media (max-width: $mobile) {
+		font-size: 14px;
+		padding: 12px 16px;
+		right: 10px;
+		top: 10px;
+	}
+}
+
+.mensaje-exito {
+	background-color: #4caf50;
+}
+
+.mensaje-error {
+	background-color: #f44336; 
+}
+
+@keyframes aparecer {
 	from {
-	  opacity: 0;
-	  transform: translateY(-20px);
+		opacity: 0;
+		transform: translateY(-20px);
 	}
 	to {
-	  opacity: 1;
-	  transform: translateY(0);
+		opacity: 1;
+		transform: translateY(0);
 	}
-  }
-  
-  /* Animación para desaparecer */
-  @keyframes desaparecer {
+}
+
+@keyframes desaparecer {
 	from {
-	  opacity: 1;
-	  transform: translateY(0);
+		opacity: 1;
+		transform: translateY(0);
 	}
 	to {
-	  opacity: 0;
-	  transform: translateY(-20px);
+		opacity: 0;
+		transform: translateY(-20px);
 	}
-  }
+}
